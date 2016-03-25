@@ -1,4 +1,4 @@
-package user;
+package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,12 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.Customer;
 
+import controller.CustomerController;
+
 /**
  * Servlet implementation class login
  */
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	CustomerController custController = new CustomerController();
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -36,8 +39,7 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-//		response.getWriter().append("Get Served at: ").append(request.getContextPath());
+		//	response.getWriter().append("Get Served at: ").append(request.getContextPath());
 		processRequest(request, response);
 	}
 
@@ -45,9 +47,7 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-//		doGet(request, response);
-//		response.getWriter().append("Post Served at: ").append(request.getContextPath());
+		//	response.getWriter().append("Post Served at: ").append(request.getContextPath());
 		processRequest(request, response);
 	}
 	
@@ -57,7 +57,6 @@ public class LoginServlet extends HttpServlet {
 		String action = request.getParameter("action");
 
         if (action != null) {
-            // call different action depends on the action parameter
             if (action.equalsIgnoreCase("login")) {
                 this.loginUser(request, response);
             }
@@ -105,61 +104,34 @@ public class LoginServlet extends HttpServlet {
             
             if (email != null && !email.equalsIgnoreCase("") && 
             		password != null && !password.equalsIgnoreCase("")) {
-	            // make connection to db and retrieve data from the table
-	            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-	            Connection con = DriverManager.getConnection("jdbc:sqlserver://w2ksa.cs.cityu.edu.hk:1433;databaseName=aiad053_db", "aiad053", "aiad053");
-	            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [customer] WHERE [email] = ? AND [password] = ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-	            pstmt.setString(1, email);
-	            pstmt.setString(2, password);
 	            
-	            ResultSet rs = pstmt.executeQuery();
-	            		
-	            // total number of records
-	            int numRow = 0;
-	            if (rs != null && rs.last() != false) {
-	                numRow = rs.getRow();
-	                rs.beforeFirst();
-	            }
-	            
-	            out.println("<p>Total "+numRow+" entries.</p>");
-	            out.println("<div><table style='width:100%'>");
-	            out.println("<thead>");
-	            out.println("<th align='left'>Customer ID</th><th align='left'>First Name</th><th align='left'>Last Name</th><th align='left'>Email</th>");
-	            out.println("</thead>");
-	            out.println("<tbody>");
-           
-	            // list of data
-	            while(rs != null && rs.next() != false){
-	            	String customer_id = rs.getString("customer_id");
-	                String first_name = rs.getString("first_name");
-	                String last_name = rs.getString("last_name");
-	                
-	            	out.println("<tr>");
-	                out.println("<td>" + this.htmlEncode(customer_id) + "</td>");
-	                out.println("<td>" + this.htmlEncode(first_name) + "</td>");
-	                out.println("<td>" + this.htmlEncode(last_name) + "</td>");
-	                out.println("<td>" + email + "</td>");
+            	boolean valid = custController.authenticate(email, password);
+            	
+            	if(valid){
+            		Customer customer = custController.getCustomer(email, password);
+		            out.println("<div><table style='width:100%'>");
+		            out.println("<thead>");
+		            out.println("<th align='left'>Customer ID</th><th align='left'>First Name</th><th align='left'>Last Name</th><th align='left'>Email</th>");
+		            out.println("</thead>");
+		            out.println("<tbody>");
+		            out.println("<tr>");
+	                out.println("<td>" + customer.getCustomerId() + "</td>");
+	                out.println("<td>" + this.htmlEncode(customer.getFirstName()) + "</td>");
+	                out.println("<td>" + this.htmlEncode(customer.getLastName()) + "</td>");
+	                out.println("<td>" + customer.getEmail() + "</td>");
 	                out.println("</tr>");
-	            }
-
-	            out.println("</tbody>");
-	            out.println("</table></div>");
-	            out.println("</fieldset>");
-	            out.println("</div>");
-	            out.println("</body>");
-	            out.println("</html>");
-            
-	            if (rs != null) {
-	                rs.close();
-	            }
-	            if (con != null) {
-	                con.close();
-	            }
+		            out.println("</tbody>");
+		            out.println("</table></div>");
+            	}else{
+            		out.println("<h1>Invalid Credentials</h1>");
+            	}
+            }else{
+	            out.println("<h1>Invalid Credentials</h1>");
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            out.println("</fieldset>");
+            out.println("</div>");
+            out.println("</body>");
+            out.println("</html>");
         } finally {
             out.close();
         }
