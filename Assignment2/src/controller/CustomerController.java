@@ -1,30 +1,29 @@
 package controller;
 
-import service.AuthenticationService;
-import dao.CustomerDAOImpl;
+import service.CustomerService;
 import model.Customer;
 
 public class CustomerController {
-	AuthenticationService authService = new AuthenticationService();
-	CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+//	AuthenticationService authService = new AuthenticationService();
+	CustomerService customerService = new CustomerService();
 	
 	public boolean authenticate(String email, String password){
-		return authService.authenticateCustomer(email, password);
+		return customerService.getCustomer(email, password) != null;
 	}
 	
 	public Customer getCustomer(String email, String password){
-		return customerDAO.getCustomer(email, password);
+		return customerService.getCustomer(email, password);
 	}
 	
 	public boolean createCustomer(Customer customer){
-		return customerDAO.createCustomer(customer);
+		return customerService.createCustomer(customer);
 	}
 	
 	public boolean updateCustomer(Customer customer){
-		return customerDAO.updateCustomer(customer);
+		return customerService.updateCustomer(customer);
 	}
 	
 	public boolean deleteCustomer(Customer customer){
-		return customerDAO.deleteCustomer(customer);
+		return customerService.deleteCustomer(customer);
 	}
 }
