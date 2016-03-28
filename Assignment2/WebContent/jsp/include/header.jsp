@@ -12,17 +12,17 @@
 </div>
 <div class="ui attached menu">
 	<div class="header item">
-		Hotel Go
+		Hotel Pro
 	</div>
 	<c:if test="true">
-		<div class="item">
+		<a href="#" class="item">
 			Booking
-		</div>
+		</a>
 	</c:if>
 	<c:if test="${scopeSession.loginUser.isManager}">
-		<div class="item">
+		<a href="#" class="item">
 			Manage
-		</div>
+		</a>
 	</c:if>
 	<div class="right menu">
 		<c:if test="${scopeSession.loginUser!=null}">
@@ -37,7 +37,7 @@
 			</a>
 		</c:if>
 		<c:if test="${scopeSession.loginUser==null}">
-			<a href="${pageContext.request.contextPath}/auth/login" class="item" id="loginItem">
+			<a class="item" id="btnLogin">
 				Login
 			</a>
 		</c:if>
