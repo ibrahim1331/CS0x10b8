@@ -10,7 +10,7 @@
 		removeAbandoned="true"
 		username="aiad053"
 		password="aiad053"
-		driverClassName="com.microsoft.sqlserver.jdbc.SqlServerDriver"
+		driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
 		url="jdbc:sqlserver://w2ksa.cs.cityu.edu.hk:1433;databaseName=aiad053_db;"
 	/>
 </Context>

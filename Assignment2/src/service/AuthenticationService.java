@@ -1,19 +1,18 @@
 package service;
 
-import dao.CustomerDAO;
-import dao.CustomerDAOImpl;
-import model.Customer;
+import dao.UserDAOImpl;
+import model.User;
 
 public class AuthenticationService {
-	CustomerDAO customerDAO = new CustomerDAOImpl();
 	
-	public boolean authenticateCustomer(String email, String password){
+	public boolean authenticateUser(String email, String password){
+		UserDAOImpl UserDAO = new UserDAOImpl();
 		
 		boolean valid = false;
 		
-		Customer customer = customerDAO.getCustomer(email, password);
+		User user = UserDAO.getUser(email, password);
 		
-		if(customer != null){
+		if(user != null){
 			valid = true;
 		}
 		
