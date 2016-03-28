@@ -10,13 +10,28 @@ $(document).ready(function(){
 	.form({
 		fields:{
 			email: 'email',
-			password: ['empty', 'minLength[8]']	
+			password: 'empty'	
 		},
 		inline: true
 	})
 	.on("submit", function(e){
 		e.preventDefault();
-		if($(this).form("is valid")){
+		var form = $(this);
+		if(form.form("is valid")){
+			$.ajax({
+				url: "auth/login",
+				method: "post",
+				data: {
+					email: form.form("get value","email"),
+					password: form.form("get value","password")
+				}
+			}).then(function(data){
+				console.log(data);
+				window.location.href=data;
+			}, function(jqXHR){
+				console.log(jqXHR);
+				form.form("add errors", [jqXHR.responseText]);
+			})
 			console.log("login submit");
 		}
 	});
@@ -25,7 +40,7 @@ $(document).ready(function(){
 	.form({
 		fields:{
 			email: 'email',
-			password: ['empty','minLength[8]'],
+			password: 'empty',
 			title: 'empty',
 			firstname: 'empty',
 			lastname: 'empty',
@@ -35,11 +50,26 @@ $(document).ready(function(){
 	})
 	.on("submit", function(e){
 		e.preventDefault();
-		if($(this).form("is valid")){
+		
+		var form = $(this);
+		if(form.form("is valid")){
 			console.log("register submit");
-			$(this).form("add errors",[
-			   "This email is already registered."
-			])
+			$.ajax({
+				url: "auth/register",
+				method: "post",
+				data: {
+					email: form.form("get value","email"),
+					password: form.form("get value","password"),
+					gender: form.form("get value","gender"),
+					title: form.form("get value","title"),
+					firstname: form.form("get value","firstname"),
+					lastname: form.form("get value","lastname"),
+				}
+			}).then(function(data){
+				window.location.href=data;
+			},function(jqXHR){
+				form.form("add errors",[jqXHR.responseText]);
+			})
 		}
 	});
 	

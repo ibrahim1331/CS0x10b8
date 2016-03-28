@@ -25,18 +25,18 @@
 		</a>
 	</c:if>
 	<div class="right menu">
-		<c:if test="${scopeSession.loginUser!=null}">
+		<c:if test="${not empty sessionScope.loginUser}">
 			<a href="#" class="item" id="userItem">
 				<i class="user icon"></i>
-				<span>${scopeSession.loginUser.username}</span>
+				<span>${sessionScope.loginUser.firstName} ${sessionScope.loginUser.lastName}</span>
 			</a>
 		</c:if>
-		<c:if test="${scopeSession.loginUser!=null}">
+		<c:if test="${not empty sessionScope.loginUser}">
 			<a href="${pageContext.request.contextPath}/auth/logout" class="item" id="logoutItem">
 				Logout
 			</a>
 		</c:if>
-		<c:if test="${scopeSession.loginUser==null}">
+		<c:if test="${empty sessionScope.loginUser}">
 			<a class="item" id="btnLogin">
 				Login
 			</a>

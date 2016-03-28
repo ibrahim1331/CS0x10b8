@@ -1,17 +1,10 @@
 package model;
 
-public class LoginUser {
-	private String username;
+public class LoginUser extends User{
 	private boolean isNormalUser = true;
 	private boolean isManager = false;
 	private boolean isChiefManager = false;
 	
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
 	public boolean isNormalUser() {
 		return isNormalUser;
 	}

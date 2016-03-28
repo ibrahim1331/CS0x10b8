@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,6 +23,17 @@
 	</div>
 </div>
 
+<div class="ui attached segment">
+	${sessionScope.loginUser.lastName}
+</div>
+<div class="ui attached segment">
+	sessionScope.loginUser==null : ${empty sessionScope.loginUser}
+</div>
+<div class="ui attached segment">
+	sessionScope.loginUser!=null : ${not empty sessionScope.loginUser}
+</div>
+
+
 <%-- ui modal for login/register --%>
 <div class="ui modal" id="modalLoginReg">
   <div class="content">
@@ -40,10 +53,8 @@
   			</div>
   			<button class="ui green button" type="submit">Login</button>
   			<button class="ui reset button">Reset</button>
+  			<div class="ui error message"></div>
   		</form>
-  		<div class="ui dimmer">
-		  	<div class="ui loader"></div>
-		</div>
   	</div>
   	<div class="ui bottom attached tab register segment" data-tab="register">
   		<form class="ui form" method="post" name="register">
@@ -54,6 +65,14 @@
   			<div class="eight wide field">
   				<label>Password</label>
   				<input type="password" name="password"/>
+  			</div>
+  			<div class="four wide field">
+  				<label>Gender</label>
+  				<select class="ui dropdown" name="gender">
+  					<option></option>
+  					<option value="female">Female</option>
+  					<option value="male">Male</option>
+  				</select>
   			</div>
   			<div class="fields">
   				<div class="four wide field">
@@ -83,9 +102,6 @@
   			<button class="ui reset button">Reset</button>
   			<div class="ui error message"></div>
   		</form>
-  		<div class="ui dimmer">
-		  	<div class="ui loader"></div>
-		</div>
   	</div>
   </div>
 </div>

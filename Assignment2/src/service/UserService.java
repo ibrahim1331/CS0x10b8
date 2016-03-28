@@ -1,46 +1,49 @@
 package service;
 
-import service.AuthenticationService;
-
 import java.util.List;
 
+import dao.UserDAO;
 import dao.UserDAOImpl;
 import model.User;
 
 
 public class UserService {
 	AuthenticationService authService = new AuthenticationService();
-	UserDAOImpl UserDAO = new UserDAOImpl();
+	UserDAO userDAO = new UserDAOImpl();
 	
 	public boolean authenticate(String email, String password){
-		return authService.authenticateUser(email, password);
+		return userDAO.getUser(email, password)!=null;
 	}
 	
 	public List<User> getAllCustomers(){
-		return UserDAO.getAllCustomers();
+		return userDAO.getAllCustomers();
 	}
 	
 	public List<User> getAllManagers(){
-		return UserDAO.getAllManagers();
+		return userDAO.getAllManagers();
 	}
 	
 	public List<User> getAllChiefManagers(){
-		return UserDAO.getAllChiefManagers();
+		return userDAO.getAllChiefManagers();
 	}
 	
 	public User getUser(String email, String password){
-		return UserDAO.getUser(email, password);
+		return userDAO.getUser(email, password);
+	}
+	
+	public User getUser(String email){
+		return userDAO.getUser(email);
 	}
 	
 	public boolean createUser(User user){
-		return UserDAO.createUser(user);
+		return userDAO.createUser(user);
 	}
 	
 	public boolean updateUser(User user){
-		return UserDAO.updateUser(user);
+		return userDAO.updateUser(user);
 	}
 	
 	public boolean deleteUser(User user){
-		return UserDAO.deleteUser(user);
+		return userDAO.deleteUser(user);
 	}
 }
