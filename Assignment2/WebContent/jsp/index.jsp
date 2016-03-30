@@ -79,8 +79,10 @@
   					<label>Title</label>
   					<select class="ui dropdown" name="title">
   						<option></option>
-  						<option value="Mr">Mister</option>
-  						<option value="Ms">Miss</option>
+  						<option value="Mr">Mr</option>
+  						<option value="Miss">Miss</option>
+  						<option value="Mrs">Mrs</option>
+  						<option value="Ms">Ms</option>
   					</select>
   				</div>
 	  			<div class="six wide field">
