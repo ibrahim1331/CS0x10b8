@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,14 +43,13 @@ public class UserDAOImpl implements UserDAO {
                 con.close();
             }
             
-            return customers;
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 		
-		return null;
+		return customers;
 	}
 
 	@Override
@@ -79,14 +77,13 @@ public class UserDAOImpl implements UserDAO {
                 con.close();
             }
             
-            return managers;
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 		
-		return null;
+		return managers;
 	}
 	
 	@Override
@@ -114,14 +111,13 @@ public class UserDAOImpl implements UserDAO {
                 con.close();
             }
             
-            return chief_managers;
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 		
-		return null;
+		return chief_managers;
 	}
 	
 	/**
@@ -310,6 +306,13 @@ public class UserDAOImpl implements UserDAO {
                 if (rows > 0) {
                 	saved = true;
                 }
+                
+                if (pstmt != null) {
+                	pstmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             }
         } catch (SQLException ex) {
         	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -347,6 +350,13 @@ public class UserDAOImpl implements UserDAO {
                 if (rows > 0) {
                 	updated = true;
                 }
+                
+                if (pstmt != null) {
+                	pstmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             }
         } catch (SQLException ex) {
         	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -375,6 +385,13 @@ public class UserDAOImpl implements UserDAO {
 
                 if (rows > 0) {
                 	deleted = true;
+                }
+                
+                if (pstmt != null) {
+                	pstmt.close();
+                }
+                if (con != null) {
+                    con.close();
                 }
             }
         } catch (SQLException ex) {

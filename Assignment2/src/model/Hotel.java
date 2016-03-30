@@ -5,10 +5,10 @@ public class Hotel {
 	private String name;
 	private String location;
 	private String address;
-	private int no_of_rooms;
+	private int noOfRooms;
 	private int rating;
 	
-	public int getHotel_id() {
+	public int getHotelId() {
 		return hotel_id;
 	}
 	public String getName() {
@@ -20,14 +20,14 @@ public class Hotel {
 	public String getAddress() {
 		return address;
 	}
-	public int getNo_of_rooms() {
-		return no_of_rooms;
+	public int getNoOfRooms() {
+		return noOfRooms;
 	}
 	public int getRating() {
 		return rating;
 	}
 	
-	public void setHotel_id(int hotel_id) {
+	public void setHotelId(int hotel_id) {
 		this.hotel_id = hotel_id;
 	}
 	public void setName(String name) {
@@ -39,8 +39,8 @@ public class Hotel {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public void setNo_of_rooms(int no_of_rooms) {
-		this.no_of_rooms = no_of_rooms;
+	public void setNoOfRooms(int noOfRooms) {
+		this.noOfRooms = noOfRooms;
 	}
 	public void setRating(int rating) {
 		this.rating = rating;
