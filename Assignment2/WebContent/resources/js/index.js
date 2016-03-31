@@ -19,7 +19,7 @@ $(document).ready(function(){
 		var form = $(this);
 		if(form.form("is valid")){
 			$.ajax({
-				url: "/Assignment2/auth/login",
+				url: "./auth/login",
 				method: "post",
 				data: {
 					email: form.form("get value","email"),
@@ -55,7 +55,7 @@ $(document).ready(function(){
 		if(form.form("is valid")){
 			console.log("register submit");
 			$.ajax({
-				url: "/Assignment2/auth/register",
+				url: "./auth/register",
 				method: "post",
 				data: {
 					email: form.form("get value","email"),

@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.UserDAO;
+import dao.UserDAOImpl;
 import enums.Role;
 import model.User;
-import service.UserService;
 
 /**
  * responsible for routing /login /logout /register under /auth
@@ -20,11 +20,12 @@ import service.UserService;
  *
  */
 public class AuthenticationController extends HttpServlet {
+	UserDAO userDAO = new UserDAOImpl();
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	UserService userService = new UserService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -60,9 +61,9 @@ public class AuthenticationController extends HttpServlet {
 		String password = req.getParameter("password");
 		
 		if(email!=null && password!=null){
-			if(userService.getUser(email, password)!=null){
+			if(userDAO.getUser(email, password)!=null){
 				//login success
-				User user = userService.getUser(email, password);
+				User user = userDAO.getUser(email, password);
 				req.getSession().setAttribute("loginUser", user);
 				res.setContentType("text/html");
 				res.getWriter().print(req.getContextPath()+"/");
@@ -104,14 +105,14 @@ public class AuthenticationController extends HttpServlet {
 			user.setPassword(password);
 			user.setTitle(title);
 			user.setIsRegistered(true);
-			user.setRole(Role.Customer.toString());
+			user.setRole(Role.Customer.getValue());
 			
-			if(userService.getUser(email)!=null){
+			if(userDAO.getUser(email)!=null){
 				res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				res.setContentType("text/html");
 				res.getWriter().print("This email is registered.");
-			} else if(userService.createUser(user)){
-				user = userService.getUser(email, password);
+			} else if(userDAO.createUser(user)){
+				user = userDAO.getUser(email, password);
 				req.getSession().setAttribute("loginUser", user);
 				res.setContentType("text/html");
 				res.getWriter().print(req.getContextPath()+"/");

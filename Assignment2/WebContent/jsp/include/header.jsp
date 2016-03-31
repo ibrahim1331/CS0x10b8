@@ -11,9 +11,9 @@
 	</div>
 </div>
 <div class="ui attached menu">
-	<div class="header item">
+	<a href="${pageContext.request.contextPath}/" class="header item">
 		Hotel Pro
-	</div>
+	</a>
 	<c:if test="true">
 		<a href="#" class="item">
 			Booking
@@ -26,7 +26,7 @@
 	</c:if>
 	<div class="right menu">
 		<c:if test="${not empty sessionScope.loginUser}">
-			<a href="#" class="item" id="userItem">
+			<a href="${pageContext.request.contextPath}/user" class="item" id="userItem">
 				<i class="user icon"></i>
 				<span>${sessionScope.loginUser.firstName} ${sessionScope.loginUser.lastName}</span>
 			</a>

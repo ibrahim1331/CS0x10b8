@@ -134,9 +134,30 @@ public class UserDAOImpl implements UserDAO {
 			user.setLastName(rs.getString("last_name"));
 			user.setEmail(rs.getString("email"));
 			user.setPassword(rs.getString("password"));
+			user.setGender(rs.getString("gender"));
+			user.setRole(rs.getInt("role"));
 			user.setIsRegistered(rs.getBoolean("is_registered"));
 			users.add(user);
 		}
+	}
+	
+	private User populateUser(ResultSet rs) throws SQLException{
+		User user = null;
+		
+		if (rs != null && rs.next()) {
+			user = new User();
+        	user.setUserId(rs.getInt("user_id"));
+        	user.setTitle(rs.getString("title"));
+        	user.setFirstName(rs.getString("first_name"));
+        	user.setLastName(rs.getString("last_name"));
+        	user.setEmail(rs.getString("email"));
+        	user.setPassword(rs.getString("password"));
+        	user.setGender(rs.getString("gender"));
+        	user.setRole(rs.getInt("role"));
+        	user.setIsRegistered(rs.getBoolean("is_registered"));
+        }
+		
+		return user;
 	}
 	
 	@Override
@@ -154,16 +175,19 @@ public class UserDAOImpl implements UserDAO {
             // execute the SQL statement
             ResultSet rs= pstmt.executeQuery();
 
-            if (rs != null && rs.next()) {
-            	user = new User();
-            	user.setUserId(rs.getInt("user_id"));
-            	user.setTitle(rs.getString("title"));
-            	user.setFirstName(rs.getString("first_name"));
-            	user.setLastName(rs.getString("last_name"));
-            	user.setEmail(rs.getString("email"));
-            	user.setPassword(rs.getString("password"));
-            	user.setIsRegistered(rs.getBoolean("is_registered"));
-            }
+//            if (rs != null && rs.next()) {
+//            	user = new User();
+//            	user.setUserId(rs.getInt("user_id"));
+//            	user.setTitle(rs.getString("title"));
+//            	user.setFirstName(rs.getString("first_name"));
+//            	user.setLastName(rs.getString("last_name"));
+//            	user.setEmail(rs.getString("email"));
+//            	user.setPassword(rs.getString("password"));
+//            	user.setGender(rs.getString("gender"));
+//            	user.setIsRegistered(rs.getBoolean("is_registered"));
+//            }
+            
+            user = this.populateUser(rs);
             
             if (rs != null) {
                 rs.close();
@@ -203,16 +227,19 @@ public class UserDAOImpl implements UserDAO {
             // execute the SQL statement
             ResultSet rs= pstmt.executeQuery();
 
-            if (rs != null && rs.next()) {
-            	user = new User();
-            	user.setUserId(rs.getInt("user_id"));
-            	user.setTitle(rs.getString("title"));
-            	user.setFirstName(rs.getString("first_name"));
-            	user.setLastName(rs.getString("last_name"));
-            	user.setEmail(rs.getString("email"));
-            	user.setPassword(rs.getString("password"));
-            	user.setIsRegistered(rs.getBoolean("is_registered"));
-            }
+//            if (rs != null && rs.next()) {
+//            	user = new User();
+//            	user.setUserId(rs.getInt("user_id"));
+//            	user.setTitle(rs.getString("title"));
+//            	user.setFirstName(rs.getString("first_name"));
+//            	user.setLastName(rs.getString("last_name"));
+//            	user.setEmail(rs.getString("email"));
+//            	user.setPassword(rs.getString("password"));
+//            	user.setGender(rs.getString("gender"));
+//            	user.setIsRegistered(rs.getBoolean("is_registered"));
+//            }
+            
+            user = this.populateUser(rs);
             
             if (rs != null) {
                 rs.close();
@@ -249,16 +276,19 @@ public class UserDAOImpl implements UserDAO {
             // execute the SQL statement
             ResultSet rs= pstmt.executeQuery();
 
-            if (rs != null && rs.next()) {
-            	user = new User();
-            	user.setUserId(rs.getInt("user_id"));
-            	user.setTitle(rs.getString("title"));
-            	user.setFirstName(rs.getString("first_name"));
-            	user.setLastName(rs.getString("last_name"));
-            	user.setEmail(rs.getString("email"));
-            	user.setPassword(rs.getString("password"));
-            	user.setIsRegistered(rs.getBoolean("is_registered"));
-            }
+//            if (rs != null && rs.next()) {
+//            	user = new User();
+//            	user.setUserId(rs.getInt("user_id"));
+//            	user.setTitle(rs.getString("title"));
+//            	user.setFirstName(rs.getString("first_name"));
+//            	user.setLastName(rs.getString("last_name"));
+//            	user.setEmail(rs.getString("email"));
+//            	user.setPassword(rs.getString("password"));
+//            	user.setGender(rs.getString("gender"));
+//            	user.setIsRegistered(rs.getBoolean("is_registered"));
+//            }
+            
+            user = this.populateUser(rs);
             
             if (rs != null) {
                 rs.close();

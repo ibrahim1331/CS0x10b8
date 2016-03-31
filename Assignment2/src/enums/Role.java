@@ -14,4 +14,11 @@ public enum Role {
 	public int getValue() {
 		return value;
 	}
+	
+	public static Role fromInt(int i){
+		for(Role r : Role.values()){
+			if(r.value == i) return r;
+		}
+		return null;
+	}
 }
