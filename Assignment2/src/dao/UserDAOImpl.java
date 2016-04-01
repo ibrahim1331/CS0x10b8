@@ -15,6 +15,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import model.User;
+import utils.DBHelper;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -23,25 +24,16 @@ public class UserDAOImpl implements UserDAO {
 		ArrayList<User> customers = new ArrayList<User>();
 		
 		try {
-            Context initCtx = new InitialContext();
-            Context envCtx = (Context)initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-            Connection con = ds.getConnection();
+            Connection con = DBHelper.getConnection();
 	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = stmt.executeQuery("SELECT * FROM [user] WHERE role='1' ORDER BY [user_id] ASC");
            
             // populate the customer ArrayList
             populateUserArray(customers, rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            DBHelper.close(con);
+            DBHelper.close(stmt);
+            DBHelper.close(rs);
             
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,25 +49,16 @@ public class UserDAOImpl implements UserDAO {
 		ArrayList<User> managers = new ArrayList<User>();
 		
 		try {
-            Context initCtx = new InitialContext();
-            Context envCtx = (Context)initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-            Connection con = ds.getConnection();
+			Connection con = DBHelper.getConnection();
 	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = stmt.executeQuery("SELECT * FROM [user] WHERE role='2' ORDER BY [user_id] ASC");
            
             // populate the managers ArrayList
             populateUserArray(managers, rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            DBHelper.close(con);
+            DBHelper.close(stmt);
+            DBHelper.close(rs);
             
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,25 +74,16 @@ public class UserDAOImpl implements UserDAO {
 		ArrayList<User> chief_managers = new ArrayList<User>();
 		
 		try {
-            Context initCtx = new InitialContext();
-            Context envCtx = (Context)initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-            Connection con = ds.getConnection();
+			Connection con = DBHelper.getConnection();
 	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = stmt.executeQuery("SELECT * FROM [user] WHERE role='3' ORDER BY [user_id] ASC");
            
             // populate the chief managers ArrayList
             populateUserArray(chief_managers, rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            DBHelper.close(con);
+            DBHelper.close(stmt);
+            DBHelper.close(rs);
             
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -165,39 +139,18 @@ public class UserDAOImpl implements UserDAO {
 		User user = null;
 		
 		try {
-			Context initCtx = new InitialContext();
-            Context envCtx = (Context)initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-            Connection con = ds.getConnection();
+            Connection con = DBHelper.getConnection();
             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [user] WHERE [user_id] = ?");
             pstmt.setInt(1, id);
             
             // execute the SQL statement
             ResultSet rs= pstmt.executeQuery();
-
-//            if (rs != null && rs.next()) {
-//            	user = new User();
-//            	user.setUserId(rs.getInt("user_id"));
-//            	user.setTitle(rs.getString("title"));
-//            	user.setFirstName(rs.getString("first_name"));
-//            	user.setLastName(rs.getString("last_name"));
-//            	user.setEmail(rs.getString("email"));
-//            	user.setPassword(rs.getString("password"));
-//            	user.setGender(rs.getString("gender"));
-//            	user.setIsRegistered(rs.getBoolean("is_registered"));
-//            }
             
             user = this.populateUser(rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-            	pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
         } catch (SQLException ex) {
         	user = null;
         	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -214,42 +167,19 @@ public class UserDAOImpl implements UserDAO {
 		User user = null;
 		
 		try {
-			Context initCtx = new InitialContext();
-            Context envCtx = (Context)initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-            Connection con = ds.getConnection();
-//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//            Connection con = DriverManager.getConnection("jdbc:sqlserver://w2ksa.cs.cityu.edu.hk:1433;databaseName=aiad053_db", "aiad053", "aiad053");
+            Connection con = DBHelper.getConnection();
             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [user] WHERE [email] = ? AND [password] = ?");
             pstmt.setString(1, email);
             pstmt.setString(2, password);
             
             // execute the SQL statement
             ResultSet rs= pstmt.executeQuery();
-
-//            if (rs != null && rs.next()) {
-//            	user = new User();
-//            	user.setUserId(rs.getInt("user_id"));
-//            	user.setTitle(rs.getString("title"));
-//            	user.setFirstName(rs.getString("first_name"));
-//            	user.setLastName(rs.getString("last_name"));
-//            	user.setEmail(rs.getString("email"));
-//            	user.setPassword(rs.getString("password"));
-//            	user.setGender(rs.getString("gender"));
-//            	user.setIsRegistered(rs.getBoolean("is_registered"));
-//            }
             
             user = this.populateUser(rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-            	pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
         } catch (SQLException ex) {
         	user = null;
         	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -266,39 +196,18 @@ public class UserDAOImpl implements UserDAO {
 		User user = null;
 		
 		try {
-			Context initCtx = new InitialContext();
-            Context envCtx = (Context)initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-            Connection con = ds.getConnection();
+			Connection con = DBHelper.getConnection();
             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [user] WHERE [email] = ?");
             pstmt.setString(1, email);
             
             // execute the SQL statement
             ResultSet rs= pstmt.executeQuery();
-
-//            if (rs != null && rs.next()) {
-//            	user = new User();
-//            	user.setUserId(rs.getInt("user_id"));
-//            	user.setTitle(rs.getString("title"));
-//            	user.setFirstName(rs.getString("first_name"));
-//            	user.setLastName(rs.getString("last_name"));
-//            	user.setEmail(rs.getString("email"));
-//            	user.setPassword(rs.getString("password"));
-//            	user.setGender(rs.getString("gender"));
-//            	user.setIsRegistered(rs.getBoolean("is_registered"));
-//            }
             
             user = this.populateUser(rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-            	pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
         } catch (SQLException ex) {
         	user = null;
         	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -316,10 +225,7 @@ public class UserDAOImpl implements UserDAO {
 		
 		try {
             if (user != null) {
-            	Context initCtx = new InitialContext();
-                Context envCtx = (Context)initCtx.lookup("java:comp/env");
-                DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-                Connection con = ds.getConnection();
+            	Connection con = DBHelper.getConnection();
             	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [user] ([title], [first_name], [last_name], [gender], [email], [password], [role], [is_registered]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 pstmt.setString(1, user.getTitle());
                 pstmt.setString(2, user.getFirstName());
@@ -337,12 +243,7 @@ public class UserDAOImpl implements UserDAO {
                 	saved = true;
                 }
                 
-                if (pstmt != null) {
-                	pstmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
+                DBHelper.close(con);
             }
         } catch (SQLException ex) {
         	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -359,10 +260,7 @@ public class UserDAOImpl implements UserDAO {
 		
 		try {
             if (user != null) {
-            	Context initCtx = new InitialContext();
-                Context envCtx = (Context)initCtx.lookup("java:comp/env");
-                DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-                Connection con = ds.getConnection();
+            	Connection con = DBHelper.getConnection();
                 PreparedStatement pstmt = con.prepareStatement("UPDATE [user] SET [title]= ?, [first_name]= ?, [last_name]= ?, [gender]= ?, [email]= ?, [password]= ?, [role]= ?, [is_registered]= ? WHERE [user_id] = ?");
                 pstmt.setString(1, user.getTitle());
                 pstmt.setString(2, user.getFirstName());
@@ -381,12 +279,8 @@ public class UserDAOImpl implements UserDAO {
                 	updated = true;
                 }
                 
-                if (pstmt != null) {
-                	pstmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
+                DBHelper.close(con);
+                DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
         	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -403,10 +297,7 @@ public class UserDAOImpl implements UserDAO {
 		
 		try {
             if (user != null) {
-            	Context initCtx = new InitialContext();
-                Context envCtx = (Context)initCtx.lookup("java:comp/env");
-                DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-                Connection con = ds.getConnection();
+            	Connection con = DBHelper.getConnection();
                 PreparedStatement pstmt = con.prepareStatement("DELETE FROM [user] WHERE [user_id] = ?");
                 pstmt.setInt(1, user.getUserId());
                 
@@ -417,12 +308,8 @@ public class UserDAOImpl implements UserDAO {
                 	deleted = true;
                 }
                 
-                if (pstmt != null) {
-                	pstmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
+                DBHelper.close(con);
+                DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
         	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
