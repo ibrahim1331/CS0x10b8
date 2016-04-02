@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 
 public class DBHelper {
 	
-	
 	public static Connection getConnection() throws SQLException, NamingException{
 		Context initCtx = new InitialContext();
         Context envCtx = (Context)initCtx.lookup("java:comp/env");
