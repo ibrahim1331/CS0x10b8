@@ -13,6 +13,8 @@ import dao.UserDAO;
 import dao.UserDAOImpl;
 import enums.Role;
 import model.User;
+import service.AuthenticationService;
+import service.ValidationService;
 
 /**
  * responsible for routing /login /logout /register under /auth
@@ -21,6 +23,8 @@ import model.User;
  */
 public class AuthenticationController extends HttpServlet {
 	UserDAO userDAO = new UserDAOImpl();
+	AuthenticationService authServ = new AuthenticationService();
+	ValidationService validServ = new ValidationService();
 	
 	/**
 	 * 
@@ -61,7 +65,7 @@ public class AuthenticationController extends HttpServlet {
 		String password = req.getParameter("password");
 		
 		if(email!=null && password!=null){
-			if(userDAO.getUser(email, password)!=null){
+			if(authServ.authenticateUser(email, password)){
 				//login success
 				User user = userDAO.getUser(email, password);
 				req.getSession().setAttribute("loginUser", user);
@@ -97,29 +101,35 @@ public class AuthenticationController extends HttpServlet {
 		
 		if(email!=null && password!=null && title!=null 
 				&& firstName!=null && lastName!=null && gender!=null){
-			User user = new User();
-			user.setEmail(email);
-			user.setFirstName(firstName);
-			user.setLastName(lastName);
-			user.setGender(gender);
-			user.setPassword(password);
-			user.setTitle(title);
-			user.setIsRegistered(true);
-			user.setRole(Role.Customer.getValue());
-			
-			if(userDAO.getUser(email)!=null){
-				res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				res.setContentType("text/html");
-				res.getWriter().print("This email is registered.");
-			} else if(userDAO.createUser(user)){
-				user = userDAO.getUser(email, password);
-				req.getSession().setAttribute("loginUser", user);
-				res.setContentType("text/html");
-				res.getWriter().print(req.getContextPath()+"/");
-			} else {
-				res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				res.setContentType("text/html");
-				res.getWriter().print("Unable to create user. Please try later.");
+			if(validServ.validateEmail(email)){
+				User user = new User();
+				user.setEmail(email);
+				user.setFirstName(firstName);
+				user.setLastName(lastName);
+				user.setGender(gender);
+				user.setPassword(password);
+				user.setTitle(title);
+				user.setIsRegistered(true);
+				user.setRole(Role.Customer.getValue());
+				
+				if(userDAO.getUser(email)!=null){
+					res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					res.setContentType("text/html");
+					res.getWriter().print("This email is registered.");
+				} else if(userDAO.createUser(user)){
+					user = userDAO.getUser(email, password);
+					req.getSession().setAttribute("loginUser", user);
+					res.setContentType("text/html");
+					res.getWriter().print(req.getContextPath()+"/");
+				} else {
+					res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					res.setContentType("text/html");
+					res.getWriter().print("Unable to create user. Please try later.");
+				}
+			}else{
+				res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				res.setContentType("text/html;charset=utf-8");
+				res.getWriter().print("email is not in valid format");
 			}
 		} else {
 			res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
