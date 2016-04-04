@@ -45,10 +45,10 @@
   </welcome-file-list>
   
   <resource-ref>
+  	<description>MS Sql Server Connection</description>
   	<res-ref-name>jdbc/hotelbooking</res-ref-name>
-  	<res-sharing-scope>Shareable</res-sharing-scope>
   	<res-type>javax.sql.DataSource</res-type>
   	<res-auth>Container</res-auth>
-  	<description>MS Sql Server Connection</description>
+  	<res-sharing-scope>Shareable</res-sharing-scope>
   </resource-ref>
 </web-app>
