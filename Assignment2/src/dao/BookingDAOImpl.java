@@ -39,9 +39,9 @@ public class BookingDAOImpl implements BookingDAO{
             DBHelper.close(rs);
             
         } catch (SQLException ex) {
-            Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return bookings;
@@ -66,10 +66,10 @@ public class BookingDAOImpl implements BookingDAO{
             DBHelper.close(rs);
         } catch (SQLException ex) {
         	booking = null;
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
         	booking = null;
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return booking;
@@ -115,9 +115,9 @@ public class BookingDAOImpl implements BookingDAO{
             DBHelper.close(pstmt);
             DBHelper.close(rs);
         } catch (SQLException ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return bookings;
@@ -142,9 +142,9 @@ public class BookingDAOImpl implements BookingDAO{
             DBHelper.close(pstmt);
             DBHelper.close(rs);
         } catch (SQLException ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return bookings;
@@ -191,9 +191,9 @@ public class BookingDAOImpl implements BookingDAO{
             DBHelper.close(stmt);
             DBHelper.close(rs);
         } catch (SQLException ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return bookings;
@@ -263,9 +263,9 @@ public class BookingDAOImpl implements BookingDAO{
             DBHelper.close(stmt);
             DBHelper.close(rs);
         } catch (SQLException ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return bookings;
@@ -341,11 +341,11 @@ public class BookingDAOImpl implements BookingDAO{
             
             return bookings;
 		}catch(JSONException ex){
-			Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (SQLException ex) {
-			Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (NamingException ex) {
-			Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 		
 		return null;
@@ -368,6 +368,7 @@ public class BookingDAOImpl implements BookingDAO{
 			bookings.add(booking);
 		}
 	}
+	
 	
 	@Override
 	public boolean createBooking(Booking booking) {
@@ -399,13 +400,14 @@ public class BookingDAOImpl implements BookingDAO{
                 DBHelper.close(con);
             }
         } catch (SQLException ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return saved;
 	}
+	
 
 	@Override
 	public boolean updateBooking(Booking booking) {
@@ -438,13 +440,14 @@ public class BookingDAOImpl implements BookingDAO{
                 DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return updated;
 	}
+	
 
 	@Override
 	public boolean deleteBooking(Booking booking) {
@@ -467,9 +470,9 @@ public class BookingDAOImpl implements BookingDAO{
                 DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(BookingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return deleted;
