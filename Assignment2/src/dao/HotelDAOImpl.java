@@ -39,6 +39,8 @@ public class HotelDAOImpl implements HotelDAO{
             	hotel.setAddress(rs.getString("address"));
             	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
             	hotel.setRating(rs.getInt("rating"));
+            	hotel.setDescription(rs.getString("description"));
+            	hotel.setDateJoined(rs.getTimestamp("join_date"));
     			hotels.add(hotel);
     		}
             
@@ -84,6 +86,8 @@ public class HotelDAOImpl implements HotelDAO{
             	hotel.setAddress(rs.getString("address"));
             	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
             	hotel.setRating(rs.getInt("rating"));
+            	hotel.setDescription(rs.getString("description"));
+            	hotel.setDateJoined(rs.getTimestamp("join_date"));
             }
             
             if (rs != null) {
@@ -115,12 +119,14 @@ public class HotelDAOImpl implements HotelDAO{
                 Context envCtx = (Context)initCtx.lookup("java:comp/env");
                 DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
                 Connection con = ds.getConnection();
-            	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [hotel] ([name], [location], [address], [no_of_rooms], [rating]) VALUES (?, ?, ?, ?, ?)");
+            	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [hotel] ([name], [location], [address], [no_of_rooms], [rating], [description], [join_date]) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 pstmt.setString(1, hotel.getName());
                 pstmt.setString(2, hotel.getLocation());
                 pstmt.setString(3, hotel.getAddress());
                 pstmt.setInt(4, hotel.getNoOfRooms());
-                pstmt.setInt(5, hotel.getRating());
+                pstmt.setFloat(5, hotel.getRating());
+                pstmt.setString(6, hotel.getDescription());
+                pstmt.setTimestamp(7, hotel.getDateJoined());
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();
@@ -155,13 +161,15 @@ public class HotelDAOImpl implements HotelDAO{
                 Context envCtx = (Context)initCtx.lookup("java:comp/env");
                 DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
                 Connection con = ds.getConnection();
-            	PreparedStatement pstmt = con.prepareStatement("UPDATE [hotel] SET [name]= ?, [location]= ?, [address]= ?, [no_of_rooms]= ?, [rating]= ? WHERE [hotel_id] = ?");
+            	PreparedStatement pstmt = con.prepareStatement("UPDATE [hotel] SET [name]= ?, [location]= ?, [address]= ?, [no_of_rooms]= ?, [rating]= ?, [description]= ?, [join_date]= ? WHERE [hotel_id] = ?");
                 pstmt.setString(1, hotel.getName());
                 pstmt.setString(2, hotel.getLocation());
                 pstmt.setString(3, hotel.getAddress());
                 pstmt.setInt(4, hotel.getNoOfRooms());
-                pstmt.setInt(5, hotel.getRating());
-                pstmt.setInt(6, hotel.getHotelId());
+                pstmt.setFloat(5, hotel.getRating());
+                pstmt.setString(6, hotel.getDescription());
+                pstmt.setTimestamp(7, hotel.getDateJoined());
+                pstmt.setInt(8, hotel.getHotelId());
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();

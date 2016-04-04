@@ -1,12 +1,16 @@
 package model;
 
+import java.sql.Timestamp;
+
 public class Hotel {
 	private int hotel_id;
 	private String name;
 	private String location;
 	private String address;
+	private String description;
 	private int noOfRooms;
-	private int rating;
+	private float rating;
+	private Timestamp dateJoined;
 	
 	public int getHotelId() {
 		return hotel_id;
@@ -23,7 +27,7 @@ public class Hotel {
 	public int getNoOfRooms() {
 		return noOfRooms;
 	}
-	public int getRating() {
+	public float getRating() {
 		return rating;
 	}
 	
@@ -44,6 +48,18 @@ public class Hotel {
 	}
 	public void setRating(int rating) {
 		this.rating = rating;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public Timestamp getDateJoined() {
+		return dateJoined;
+	}
+	public void setDateJoined(Timestamp dateJoined) {
+		this.dateJoined = dateJoined;
 	}
 		
 }
