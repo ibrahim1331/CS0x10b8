@@ -103,9 +103,11 @@ $(document).ready(function(){
 	<div class="ui container">
 		<div class="ui grid">
 			<div class="eight wide centered column">
-				<div class="ui fluid action input">
-					<input type="text" placeholder="Search..." />
-					<button class="ui button">Search</button>
+				<div class="ui fluid action input ">
+					<form  action="search" method="post">
+						<input type="text" name="city" placeholder="Search..." />
+						<button type="submit" class="ui button" >Search</button>
+					</form>
 				</div>
 			</div>
 		</div>
