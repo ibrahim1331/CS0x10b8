@@ -1,5 +1,5 @@
-# CS4280_Assignment2
-####This is for the Assignment 2 for the CS4280 course.
+# 0x10b8
+####This is for the Assignment 2 for course.
 
 Update the **README.md** file to check the *commit*.
 
