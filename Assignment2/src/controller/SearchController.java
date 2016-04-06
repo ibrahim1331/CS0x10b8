@@ -25,17 +25,24 @@ public class SearchController extends HttpServlet{
 	
 	private void processRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String result;
+		String result, fromDate, toDate;
 		result = req.getParameter("city");
-		System.out.print(result);
+		fromDate = req.getParameter("fromDate");
+		toDate = req.getParameter("toDate");
+		
+		System.out.print(result + " " + fromDate + " " + " " + toDate);
 		hotel=impl.getHotelById(Integer.parseInt(result));
 		System.out.print(hotel.getName());
 		req.setAttribute("name", hotel.getName());
 		gotoPage("/jsp/result.jsp",req,res);
 	}
+
+	
 	
 	private void gotoPage(String address, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(address);
 		dispatcher.forward(req, res);
 	}
+	
+	
 }
