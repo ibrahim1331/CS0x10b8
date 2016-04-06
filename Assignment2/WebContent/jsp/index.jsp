@@ -100,18 +100,36 @@ $(document).ready(function(){
 <jsp:include page="include/header.jsp"></jsp:include>
 <div class="ui attached segment">
 	<h1 class="ui centered header">Hotel Pro. The most advanced hotel booking website.</h1>
-	<div class="ui container">
-		<div class="ui grid">
-			<div class="eight wide centered column">
-				<div class="ui fluid action input ">
-					<form  action="search" method="post">
-						<input type="text" name="city" placeholder="Search..." />
-						<button type="submit" class="ui button" >Search</button>
-					</form>
+		<div class="ui container">
+			<form action="search" method="post">
+				<div class="ui three column centered grid">
+					<div class="centered row">
+						<div class="column">
+							<div class="ui fluid action input">
+								<input type="text" name="city" placeholder="Search..." />
+								<button type="submit" class="ui button" >Search</button>	
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="column">
+							<p>Check-in date</p>
+							<div class="ui fluid input">
+								<input type="text" name="fromDate" placeholder="From" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="column">
+							<p>Check-out date</p>
+							<div class="ui fluid input">
+								<input type="text" name="toDate" placeholder="To" />
+							</div>					
+						</div>
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
-	</div>
 </div>
 
 <%-- ui modal for login/register --%>
