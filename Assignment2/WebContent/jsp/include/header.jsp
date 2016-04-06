@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" 
            uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="enums.Role" %>
 <%-- HEADER --%>
 <div class="ui attached icon red message">
 	<i class="warning icon"></i>
@@ -19,7 +20,7 @@
 			Booking
 		</a>
 	</c:if>
-	<c:if test="${scopeSession.loginUser.isManager}">
+	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Manager}">
 		<a href="#" class="item">
 			Manage
 		</a>

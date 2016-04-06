@@ -7,10 +7,9 @@
 <jsp:include page="include/include.jsp"></jsp:include>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.message .close')
-	  .on('click', function() {
+	$('.message .close').on('click', function() {
 	    $(this).closest('.message').transition('fade');
-	  });
+	});
 	
 	$(".ui.dropdown").dropdown();
 	
