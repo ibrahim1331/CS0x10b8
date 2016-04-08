@@ -20,9 +20,9 @@ public class AuthenticationService {
 			valid = true;
 		}
 		
-		BookingDAO bookingDAO = new BookingDAOImpl();
+//		BookingDAO bookingDAO = new BookingDAOImpl();
 		
-		System.out.println(bookingDAO.getBookings("{'booking_id':1,'no_of_people':3}", "{'booking_id':'desc'}").toString());
+//		System.out.println(bookingDAO.getBookings("{'booking_id':2,'no_of_people':3}", "{'booking_id':'desc'}"));
 		
 		return valid;
 	}

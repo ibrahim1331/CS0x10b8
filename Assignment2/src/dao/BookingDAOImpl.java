@@ -7,21 +7,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import model.Booking;
 import model.Hotel;
 import model.User;
 import utils.DBHelper;
 
-public class BookingDAOImpl implements BookingDAO{
+import service.ValidationService;
 
+public class BookingDAOImpl implements BookingDAO{
+	ValidationService validServ = new ValidationService();
+	
 	@Override
 	public List<Booking> getAllBookings() {
 		ArrayList<Booking> bookings = new ArrayList<Booking>();
@@ -276,47 +282,59 @@ public class BookingDAOImpl implements BookingDAO{
 		try{
 			ArrayList<Booking> bookings = new ArrayList<Booking>();
 			
-			JSONObject filterObj  = null;
-			JSONObject orderByObj = null;
+			JsonParser parser = new JsonParser();
+			JsonObject filterObj = null;
+			JsonObject orderByObj = null;
 			String queryString = "SELECT * FROM [booking]";
 			Connection con = DBHelper.getConnection();
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 			
 			if(!filter.equals(""))
-				filterObj = new JSONObject(filter);
+				filterObj = parser.parse(filter).getAsJsonObject();
 			if(!orderBy.equals(""))
-				orderByObj = new JSONObject(orderBy);
+				orderByObj = parser.parse(orderBy).getAsJsonObject();
 			
 			if(filterObj != null){
 				queryString += " WHERE ";
-				for(int i = 0; i < JSONObject.getNames(filterObj).length; i++){
-					if(i == JSONObject.getNames(filterObj).length - 1)
-						queryString += JSONObject.getNames(filterObj)[i] + "= ?";
+				Set<Entry<String, JsonElement>> filterEntrySet = filterObj.entrySet();
+				int i = 0;
+				for(Entry<String, JsonElement> filterEntry : filterEntrySet){
+					if(i == filterEntrySet.size() - 1)
+						queryString += filterEntry.getKey() + " = ?";
 					else
-						queryString += JSONObject.getNames(filterObj)[i] + "= ? AND ";
+						queryString += filterEntry.getKey() + " = ? AND ";
+					i++;
 				}
 
 				if(orderByObj != null){
 					queryString += " ORDER BY ";
-					for(int i = 0; i < JSONObject.getNames(orderByObj).length; i++){
-						if(i == JSONObject.getNames(orderByObj).length - 1)
-							queryString += JSONObject.getNames(orderByObj)[i] + " " + orderByObj.getString(JSONObject.getNames(orderByObj)[i]);
+					Set<Entry<String, JsonElement>> orderByEntrySet = orderByObj.entrySet();
+					i = 0;
+					for(Entry<String, JsonElement> orderByEntry : orderByEntrySet){
+						if(i == orderByEntrySet.size() - 1)
+							queryString += orderByEntry.getKey() + " " + orderByEntry.getValue().getAsString();
 						else
-							queryString += JSONObject.getNames(orderByObj)[i] + " " + orderByObj.getString(JSONObject.getNames(orderByObj)[i]) + ", ";
+							queryString += orderByEntry.getKey() + " " + orderByEntry.getValue().getAsString() + ", ";
 					}
 				}
 				
 				queryString += ";";
 				
+				System.out.println(queryString);
+				
 				pstmt = con.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-	            
-	            for(int i = 0; i < JSONObject.getNames(filterObj).length; i++){
-	            	if(filterObj.get(JSONObject.getNames(filterObj)[i]) instanceof Integer)
-	            		pstmt.setInt(i + 1, (Integer) filterObj.get(JSONObject.getNames(filterObj)[i]));
-	            	else if(filterObj.get(JSONObject.getNames(filterObj)[i]) instanceof String)
-	            		pstmt.setString(i + 1, (String) filterObj.get(JSONObject.getNames(filterObj)[i]));
-				}
+				
+				i = 1;
+	            for(Entry<String, JsonElement> filterEntry : filterEntrySet){
+	            	if(validServ.isInteger(filterEntry.getValue().getAsString())){
+	            		pstmt.setInt(i, filterEntry.getValue().getAsInt());
+	            	}
+	            	else{
+	            		pstmt.setString(i, filterEntry.getValue().getAsString());
+	            	}
+	            	i++;
+	            }
 			}else{
 				pstmt = con.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			}
@@ -324,24 +342,13 @@ public class BookingDAOImpl implements BookingDAO{
 			// execute the SQL statement
             rs= pstmt.executeQuery();
 			
-			// total number of records
-            int numRow = 0;
-            if (rs != null && rs.last() != false) {
-                numRow = rs.getRow();
-                rs.beforeFirst();
-            }
-            
-            if(numRow > 1){
-            	populateBookingArray(bookings, rs);
-            }
+        	populateBookingArray(bookings, rs);
             
             DBHelper.close(con);
             DBHelper.close(pstmt);
             DBHelper.close(rs);
             
             return bookings;
-		}catch(JSONException ex){
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (SQLException ex) {
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (NamingException ex) {
@@ -368,7 +375,6 @@ public class BookingDAOImpl implements BookingDAO{
 			bookings.add(booking);
 		}
 	}
-	
 	
 	@Override
 	public boolean createBooking(Booking booking) {
@@ -408,7 +414,6 @@ public class BookingDAOImpl implements BookingDAO{
 		return saved;
 	}
 	
-
 	@Override
 	public boolean updateBooking(Booking booking) {
 		boolean updated = false;
@@ -447,7 +452,6 @@ public class BookingDAOImpl implements BookingDAO{
 		
 		return updated;
 	}
-	
 
 	@Override
 	public boolean deleteBooking(Booking booking) {

@@ -108,7 +108,52 @@ public class HotelDAOImpl implements HotelDAO{
 		
 		return hotel;
 	}
+	
+	public Hotel getHotelByName(String name) {
+		Hotel hotel = null;
+		
+		try{
+			Context initCtx = new InitialContext();
+            Context envCtx = (Context)initCtx.lookup("java:comp/env");
+            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
+            Connection con = ds.getConnection();
+	        PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [hotel] WHERE [name] = ?");
+            pstmt.setString(1, name);
+            
+            // execute the SQL statement
+            ResultSet rs= pstmt.executeQuery();
 
+            if (rs != null && rs.next()) {
+            	hotel = new Hotel();
+            	hotel.setHotelId(rs.getInt("hotel_id"));
+            	hotel.setName(rs.getString("name"));
+            	hotel.setLocation(rs.getString("location"));
+            	hotel.setAddress(rs.getString("address"));
+            	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
+            	hotel.setRating(rs.getInt("rating"));
+            	hotel.setDescription(rs.getString("description"));
+            	hotel.setDateJoined(rs.getTimestamp("join_date"));
+            }
+            
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+            	pstmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+            
+		}catch(SQLException e){
+			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
+		} catch (NamingException e) {
+			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
+		}
+		
+		return hotel;
+	}
+	
 	@Override
 	public boolean createHotel(Hotel hotel) {
 		boolean saved = false;

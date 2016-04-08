@@ -10,11 +10,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.NamingException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import model.Hotel;
 import model.Room;
 import utils.DBHelper;
@@ -155,80 +150,6 @@ public class RoomDAOImpl implements RoomDAO{
 
 	@Override
 	public List<Room> getRooms(String filter, String orderBy) {
-		try{
-			ArrayList<Room> rooms = new ArrayList<Room>();
-			
-			JSONObject filterObj  = null;
-			JSONObject orderByObj = null;
-			String queryString = "SELECT * FROM [room]";
-			Connection con = DBHelper.getConnection();
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			
-			if(!filter.equals(""))
-				filterObj = new JSONObject(filter);
-			if(!orderBy.equals(""))
-				orderByObj = new JSONObject(orderBy);
-			
-			if(filterObj != null){
-				queryString += " WHERE ";
-				for(int i = 0; i < JSONObject.getNames(filterObj).length; i++){
-					if(i == JSONObject.getNames(filterObj).length - 1)
-						queryString += JSONObject.getNames(filterObj)[i] + "= ?";
-					else
-						queryString += JSONObject.getNames(filterObj)[i] + "= ? AND ";
-				}
-
-				if(orderByObj != null){
-					queryString += " ORDER BY ";
-					for(int i = 0; i < JSONObject.getNames(orderByObj).length; i++){
-						if(i == JSONObject.getNames(orderByObj).length - 1)
-							queryString += JSONObject.getNames(orderByObj)[i] + " " + orderByObj.getString(JSONObject.getNames(orderByObj)[i]);
-						else
-							queryString += JSONObject.getNames(orderByObj)[i] + " " + orderByObj.getString(JSONObject.getNames(orderByObj)[i]) + ", ";
-					}
-				}
-				
-				queryString += ";";
-				
-				pstmt = con.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-	            
-	            for(int i = 0; i < JSONObject.getNames(filterObj).length; i++){
-	            	if(filterObj.get(JSONObject.getNames(filterObj)[i]) instanceof Integer)
-	            		pstmt.setInt(i + 1, (Integer) filterObj.get(JSONObject.getNames(filterObj)[i]));
-	            	else if(filterObj.get(JSONObject.getNames(filterObj)[i]) instanceof String)
-	            		pstmt.setString(i + 1, (String) filterObj.get(JSONObject.getNames(filterObj)[i]));
-				}
-			}else{
-				pstmt = con.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			}
-			
-			// execute the SQL statement
-            rs= pstmt.executeQuery();
-			
-			// total number of records
-            int numRow = 0;
-            if (rs != null && rs.last() != false) {
-                numRow = rs.getRow();
-                rs.beforeFirst();
-            }
-            
-            if(numRow > 1){
-            	populateRoomArray(rooms, rs);
-            }
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-            
-            return rooms;
-		}catch(JSONException ex){
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		} catch (SQLException ex) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		} catch (NamingException ex) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		}
 		
 		return null;
 	}

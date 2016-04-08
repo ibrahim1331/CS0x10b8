@@ -12,4 +12,12 @@ public class ValidationService {
 		
 		return matcher.matches();
 	}
+	
+	public boolean isInteger(String value){
+		String regEx = "\\d+";
+		Pattern pattern = Pattern.compile(regEx);
+		Matcher matcher = pattern.matcher(value);
+		
+		return matcher.matches();
+	}
 }

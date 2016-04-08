@@ -10,6 +10,8 @@ public interface HotelDAO {
 	
 	Hotel getHotelById(int id);
 	
+	Hotel getHotelByName(String name);
+	
 	boolean createHotel(Hotel hotel);
 	
 	boolean updateHotel(Hotel hotel);
