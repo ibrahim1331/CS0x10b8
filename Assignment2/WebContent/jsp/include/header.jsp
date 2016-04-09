@@ -22,7 +22,12 @@
 	</c:if>
 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Manager}">
 		<a href="#" class="item">
-			Manage
+			Manage Users
+		</a>
+	</c:if>
+	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Chief_Manager}">
+		<a href="#" class="item">
+			Manage Hotels
 		</a>
 	</c:if>
 	<div class="right menu">
