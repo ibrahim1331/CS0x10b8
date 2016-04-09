@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>Assignment2</display-name>
+    
+  <!-- Servlet -->
+  <servlet>
+  	<servlet-name>AuthController</servlet-name>
+  	<servlet-class>controller.AuthenticationController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>UserController</servlet-name>
+  	<servlet-class>controller.UserController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>SearchController</servlet-name>
+  	<servlet-class>controller.SearchController</servlet-class>
+  </servlet>
+  
+  <!-- Servlet Mapping -->
+  
+  <servlet-mapping>
+  	<servlet-name>AuthController</servlet-name>
+  	<url-pattern>/auth/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>UserController</servlet-name>
+  	<url-pattern>/user/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>SearchController</servlet-name>
+  	<url-pattern>/search/*</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Filter -->
+  <filter>
+  	<filter-name>LoginFilter</filter-name>
+  	<filter-class>filter.LoginFilter</filter-class>
+  </filter>
+  
+  <!-- Filter Mapping -->
+  <filter-mapping>
+  	<filter-name>LoginFilter</filter-name>
+  	<url-pattern>/user/*</url-pattern>
+  	<url-pattern>/booking/*</url-pattern>
+  </filter-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>jsp/index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <resource-ref>
+  	<description>MS Sql Server Connection</description>
+  	<res-ref-name>jdbc/hotelbooking</res-ref-name>
+  	<res-type>javax.sql.DataSource</res-type>
+  	<res-auth>Container</res-auth>
+  	<res-sharing-scope>Shareable</res-sharing-scope>
+  </resource-ref>
+</web-app>
