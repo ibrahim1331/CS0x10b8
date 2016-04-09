@@ -321,8 +321,6 @@ public class BookingDAOImpl implements BookingDAO{
 				
 				queryString += ";";
 				
-				System.out.println(queryString);
-				
 				pstmt = con.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				
 				i = 1;
