@@ -5,12 +5,37 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<jsp:include page="include/include.jsp"></jsp:include>
+<title>Result</title>
 </head>
 <body>
-
-<p>Name of the hotel.</p>
-<c:out value="${name}"/>
+<div class="ui attached segment">
+	<h1 class="ui centered header">Result</h1>
+	<table class ="ui celled table">
+		<thead>
+			<tr>
+				<th>Hotel Name</th>
+				<th>Location</th>
+				<th>No of rooms</th>
+				<th>Address</th>
+				<th>Rating</th>
+				<th> </th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${requestScope.hotels}" var="hotel">
+				<tr>
+					<td><c:out value="${hotel.name}"></c:out></td>
+					<td><c:out value="${hotel.location}"></c:out></td>
+					<td><c:out value="${hotel.noOfRooms}"></c:out></td>
+					<td><c:out value="${hotel.address}"></c:out></td>
+					<td><c:out value="${hotel.rating}"></c:out></td>
+					<td><button class="ui button">Book</button> </td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+</div>
 
 </body>
 </html>

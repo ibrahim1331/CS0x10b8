@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +16,8 @@ import model.Hotel;
 public class SearchController extends HttpServlet{
 	
 	HotelDAOImpl impl = new HotelDAOImpl();
-	Hotel hotel = new Hotel();
+	ArrayList <Hotel> hotels = new ArrayList<>();
+	
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
 		this.processRequest(req,res);
 	}
@@ -29,11 +32,30 @@ public class SearchController extends HttpServlet{
 		result = req.getParameter("city");
 		fromDate = req.getParameter("fromDate");
 		toDate = req.getParameter("toDate");
+		//System.out.print(result + " " + fromDate + " " + " " + toDate);
+		hotels = impl.getAllHotels();
 		
-		System.out.print(result + " " + fromDate + " " + " " + toDate);
-		hotel=impl.getHotelById(Integer.parseInt(result));
-		System.out.print(hotel.getName());
-		req.setAttribute("name", hotel.getName());
+		//Split the ArrayList<Hotel> hotels
+		ArrayList <String> hotelNames = new ArrayList<>();
+		ArrayList <String> location = new ArrayList<>();
+		ArrayList <Integer> noOfRooms = new ArrayList<>();
+		ArrayList <Float> rating = new ArrayList<>();
+		
+		for (int i=0;i<hotels.size();i++){
+			hotelNames.add(hotels.get(i).getName());
+			location.add(hotels.get(i).getLocation());
+			noOfRooms.add(hotels.get(i).getNoOfRooms());
+			rating.add(hotels.get(i).getRating());
+		}
+		
+		req.setAttribute("hotelNames", hotelNames);
+		req.setAttribute("location", location);
+		req.setAttribute("noOfRooms", noOfRooms);
+		req.setAttribute("rating", rating);
+		req.setAttribute("count", hotels.size());
+		req.setAttribute("hotels", hotels);
+		
+		System.out.print("The counter is" + hotels.size());
 		gotoPage("/jsp/result.jsp",req,res);
 	}
 
