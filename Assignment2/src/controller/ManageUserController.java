@@ -16,7 +16,7 @@ import service.UserService;
  * @author lausinleung
  *
  */
-public class UserManagerController extends HttpServlet {
+public class ManageUserController extends HttpServlet {
 	UserService userService = new UserService();
 	
 	private static final long serialVersionUID = 1L;
