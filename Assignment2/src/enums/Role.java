@@ -19,6 +19,6 @@ public enum Role {
 		for(Role r : Role.values()){
 			if(r.value == i) return r;
 		}
-		return null;
+		return Customer;
 	}
 }

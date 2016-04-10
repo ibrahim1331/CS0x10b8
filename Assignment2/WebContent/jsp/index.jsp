@@ -24,15 +24,18 @@ $(document).ready(function(){
 	})
 	.on("submit", function(e){
 		e.preventDefault();
+		
+		var json = JSON.stringify({
+			email: form.form("get value","email"),
+			password: form.form("get value","password")
+		})
+		
 		var form = $(this);
 		if(form.form("is valid")){
 			$.ajax({
 				url: "./auth/login",
 				method: "post",
-				data: {
-					email: form.form("get value","email"),
-					password: form.form("get value","password")
-				}
+				data: json
 			}).then(function(data){
 				console.log(data);
 				window.location.href=data;
@@ -60,19 +63,22 @@ $(document).ready(function(){
 		e.preventDefault();
 		
 		var form = $(this);
+		
+		var json = JSON.stringify({
+			email: form.form("get value","email"),
+			password: form.form("get value","password"),
+			gender: form.form("get value","gender"),
+			title: form.form("get value","title"),
+			firstName: form.form("get value","firstname"),
+			lastName: form.form("get value","lastname"),
+		})
+		
 		if(form.form("is valid")){
 			console.log("register submit");
 			$.ajax({
 				url: "./auth/register",
 				method: "post",
-				data: {
-					email: form.form("get value","email"),
-					password: form.form("get value","password"),
-					gender: form.form("get value","gender"),
-					title: form.form("get value","title"),
-					firstname: form.form("get value","firstname"),
-					lastname: form.form("get value","lastname"),
-				}
+				data: json
 			}).then(function(data){
 				window.location.href=data;
 			},function(jqXHR){

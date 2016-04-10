@@ -9,12 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import dao.UserDAO;
 import dao.UserDAOImpl;
 import enums.Role;
 import model.User;
 import service.AuthenticationService;
 import service.ValidationService;
+import utils.AppHelper;
+import utils.RoleDeserializer;
+import utils.RoleSerializer;
 
 /**
  * responsible for routing /login /logout /register under /auth
@@ -61,8 +67,10 @@ public class AuthenticationController extends HttpServlet {
 	private void login(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		Logger.getLogger(this.getClass().getName()).log(Level.INFO, "login");
 		
-		String email = req.getParameter("email");
-		String password = req.getParameter("password");
+		User userReq = AppHelper.getGson().fromJson(req.getReader(), User.class);
+		
+		String email = userReq.getEmail();
+		String password = userReq.getPassword();
 		
 		if(email!=null && password!=null){
 			if(authServ.authenticateUser(email, password)){
@@ -92,32 +100,25 @@ public class AuthenticationController extends HttpServlet {
 	//ajax
 	private void register(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		Logger.getLogger(this.getClass().getName()).log(Level.INFO, "register");
-		String email = req.getParameter("email");
-		String password = req.getParameter("password");
-		String title = req.getParameter("title");
-		String firstName = req.getParameter("firstname");
-		String lastName = req.getParameter("lastname");
-		String gender = req.getParameter("gender");
 		
-		if(email!=null && password!=null && title!=null 
-				&& firstName!=null && lastName!=null && gender!=null){
-			if(validServ.validateEmail(email)){
-				User user = new User();
-				user.setEmail(email);
-				user.setFirstName(firstName);
-				user.setLastName(lastName);
-				user.setGender(gender);
-				user.setPassword(password);
-				user.setTitle(title);
-				user.setIsRegistered(true);
-				user.setRole(Role.Customer.getValue());
-				
-				if(userDAO.getUser(email)!=null){
+		//get request body and convert it to User object with gson...
+		User userReq = AppHelper.getGson().fromJson(req.getReader(), User.class);
+		userReq.setRole(Role.Customer.getValue());
+		userReq.setIsRegistered(true);
+		
+		if(userReq.getEmail()!=null 
+				&& userReq.getPassword()!=null 
+				&& userReq.getFirstName()!=null 
+				&& userReq.getLastName()!=null 
+				&& userReq.getTitle()!=null 
+				&& userReq.getGender()!=null){
+			if(validServ.validateEmail(userReq.getEmail())){
+				if(userDAO.getUser(userReq.getEmail())!=null){
 					res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 					res.setContentType("text/html");
 					res.getWriter().print("This email is registered.");
-				} else if(userDAO.createUser(user)){
-					user = userDAO.getUser(email, password);
+				} else if(userDAO.createUser(userReq)){
+					User user = userDAO.getUser(userReq.getEmail(), userReq.getPassword());
 					req.getSession().setAttribute("loginUser", user);
 					res.setContentType("text/html");
 					res.getWriter().print(req.getContextPath()+"/");
