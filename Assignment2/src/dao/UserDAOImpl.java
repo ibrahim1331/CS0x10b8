@@ -7,10 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.User;
+import sqlwhere.core.Select;
+import sqlwhere.core.Where;
 import utils.DBHelper;
 
 public class UserDAOImpl implements UserDAO {
@@ -88,6 +92,30 @@ public class UserDAOImpl implements UserDAO {
         }
 		
 		return chief_managers;
+	}
+	
+	@Override
+	public List<User> getUsers(Where where){
+		ArrayList<User> records = new ArrayList<>();
+		
+		try{
+			Connection con = DBHelper.getConnection();
+	        Select select = new Select("*").from("user").where(where);
+	        PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
+	        	pstmt.setObject(es.getKey(), es.getValue());
+	        }
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        this.populateUserArray(records, rs);
+	        
+		} catch (SQLException ex){
+			Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception ex){
+			Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		
+		return records;
 	}
 	
 	/**
