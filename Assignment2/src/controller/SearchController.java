@@ -34,25 +34,6 @@ public class SearchController extends HttpServlet{
 		toDate = req.getParameter("toDate");
 		//System.out.print(result + " " + fromDate + " " + " " + toDate);
 		hotels = impl.getAllHotels();
-		
-		//Split the ArrayList<Hotel> hotels
-		ArrayList <String> hotelNames = new ArrayList<>();
-		ArrayList <String> location = new ArrayList<>();
-		ArrayList <Integer> noOfRooms = new ArrayList<>();
-		ArrayList <Float> rating = new ArrayList<>();
-		
-		for (int i=0;i<hotels.size();i++){
-			hotelNames.add(hotels.get(i).getName());
-			location.add(hotels.get(i).getLocation());
-			noOfRooms.add(hotels.get(i).getNoOfRooms());
-			rating.add(hotels.get(i).getRating());
-		}
-		
-		req.setAttribute("hotelNames", hotelNames);
-		req.setAttribute("location", location);
-		req.setAttribute("noOfRooms", noOfRooms);
-		req.setAttribute("rating", rating);
-		req.setAttribute("count", hotels.size());
 		req.setAttribute("hotels", hotels);
 		
 		System.out.print("The counter is" + hotels.size());
