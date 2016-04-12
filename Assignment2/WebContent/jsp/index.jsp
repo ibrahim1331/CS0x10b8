@@ -112,7 +112,7 @@ $(document).ready(function(){
 					<div class="centered row">
 						<div class="column">
 							<div class="ui fluid action input">
-								<input type="text" name="city" placeholder="Search..." />
+								<input type="text" name="city" placeholder="Search..." required/>
 								<button type="submit" class="ui button" >Search</button>	
 							</div>
 						</div>

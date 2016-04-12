@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +16,8 @@ import model.Hotel;
 public class SearchController extends HttpServlet{
 	
 	HotelDAOImpl impl = new HotelDAOImpl();
-	Hotel hotel = new Hotel();
+	ArrayList <Hotel> hotels = new ArrayList<>();
+	
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
 		this.processRequest(req,res);
 	}
@@ -29,11 +32,11 @@ public class SearchController extends HttpServlet{
 		result = req.getParameter("city");
 		fromDate = req.getParameter("fromDate");
 		toDate = req.getParameter("toDate");
+		//System.out.print(result + " " + fromDate + " " + " " + toDate);
+		hotels = impl.getAllHotels();
+		req.setAttribute("hotels", hotels);
 		
-		System.out.print(result + " " + fromDate + " " + " " + toDate);
-		hotel=impl.getHotelById(Integer.parseInt(result));
-		System.out.print(hotel.getName());
-		req.setAttribute("name", hotel.getName());
+		System.out.print("The counter is" + hotels.size());
 		gotoPage("/jsp/result.jsp",req,res);
 	}
 
