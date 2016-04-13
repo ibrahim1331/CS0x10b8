@@ -9,7 +9,7 @@ public class Room {
 	private int capacity;
 	private int size;
 	private int discount;
-	private int belongs_to;
+	private int belongsTo;
 	private int recommended;
 	
 	public int getRoomId() {
@@ -60,11 +60,11 @@ public class Room {
 	public void setDiscount(int discount) {
 		this.discount = discount;
 	}
-	public int getBelongs_to() {
-		return belongs_to;
+	public int getBelongsTo() {
+		return belongsTo;
 	}
-	public void setBelongs_to(int belongs_to) {
-		this.belongs_to = belongs_to;
+	public void setBelongsTo(int belongsTo) {
+		this.belongsTo = belongsTo;
 	}
 	public int getRecommended() {
 		return recommended;
@@ -72,5 +72,4 @@ public class Room {
 	public void setRecommended(int recommended) {
 		this.recommended = recommended;
 	}
-	
 }

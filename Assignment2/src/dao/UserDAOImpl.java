@@ -134,7 +134,7 @@ public class UserDAOImpl implements UserDAO {
 			user.setPassword(rs.getString("password"));
 			user.setGender(rs.getString("gender"));
 			user.setRole(rs.getInt("role"));
-			user.setIsRegistered(rs.getBoolean("is_registered"));
+			user.setRegister(rs.getBoolean("is_registered"));
 			users.add(user);
 		}
 	}
@@ -152,7 +152,7 @@ public class UserDAOImpl implements UserDAO {
         	user.setPassword(rs.getString("password"));
         	user.setGender(rs.getString("gender"));
         	user.setRole(rs.getInt("role"));
-        	user.setIsRegistered(rs.getBoolean("is_registered"));
+        	user.setRegister(rs.getBoolean("is_registered"));
         }
 		
 		return user;
@@ -258,7 +258,7 @@ public class UserDAOImpl implements UserDAO {
                 pstmt.setString(5, user.getEmail());
                 pstmt.setString(6, user.getPassword());
                 pstmt.setInt(7, user.getRole().getValue());
-                pstmt.setBoolean(8, user.getIsRegistered());
+                pstmt.setBoolean(8, user.isRegister());
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();
@@ -293,7 +293,7 @@ public class UserDAOImpl implements UserDAO {
                 pstmt.setString(5, user.getEmail());
                 pstmt.setString(6, user.getPassword());
                 pstmt.setInt(7, user.getRole().getValue());
-                pstmt.setBoolean(8, user.getIsRegistered());
+                pstmt.setBoolean(8, user.isRegister());
                 pstmt.setInt(9, user.getUserId());
                 
                 // execute the SQL statement
