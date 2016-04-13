@@ -34,6 +34,11 @@ public class Insert extends Operation {
 		}
 		return result;
 	}
+	
+	@Override
+	public int getParamCounts(){
+		return insertValues.size();
+	}
 
 	@Override
 	public String getStatement() {

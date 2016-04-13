@@ -36,6 +36,11 @@ public class Select extends Operation{
 		groupBy.addAll(Arrays.asList(column));
 		return this;
 	}
+	
+	@Override
+	public int getParamCounts(){
+		return where.getParamCounts();
+	}
 
 	@Override
 	public Map<Integer, Object> getIndexMap() {

@@ -38,10 +38,16 @@ public class Update extends Operation {
 		for(Set set: setValues){
 			result.put(index++, set.getValue());
 		}
-		for(Object o: where.getParamValues()){
-			result.put(index++, o);
-		}
+		if(where!=null)
+			for(Object o: where.getParamValues()){
+				result.put(index++, o);
+			}
 		return result;
+	}
+	
+	@Override
+	public int getParamCounts(){
+		return setValues.size() + (where==null ? 0 : where.getParamCounts());
 	}
 
 	@Override
