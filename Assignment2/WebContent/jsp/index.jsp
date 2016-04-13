@@ -25,12 +25,12 @@ $(document).ready(function(){
 	.on("submit", function(e){
 		e.preventDefault();
 		
+		var form = $(this);
+		
 		var json = JSON.stringify({
 			email: form.form("get value","email"),
 			password: form.form("get value","password")
 		})
-		
-		var form = $(this);
 		if(form.form("is valid")){
 			$.ajax({
 				url: "./auth/login",

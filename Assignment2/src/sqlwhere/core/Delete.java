@@ -22,7 +22,7 @@ public class Delete extends Operation{
 	
 	@Override
 	public String getStatement(){
-		return String.format("DELETE FROM %s %s", table, where==null ? "" : where.getStatement());
+		return String.format("DELETE FROM \"%s\" %s", table, where==null ? "" : where.getStatement());
 	}
 
 }

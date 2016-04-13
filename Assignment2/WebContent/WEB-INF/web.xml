@@ -22,6 +22,10 @@
   	<servlet-name>RoomResultController</servlet-name>
   	<servlet-class>controller.RoomResultController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>ManageUserController</servlet-name>
+  	<servlet-class>controller.ManageUserController</servlet-class>
+  </servlet>
   
   <!-- Servlet Mapping -->
   
@@ -44,6 +48,11 @@
   	<servlet-name>RoomResultController</servlet-name>
   	<url-pattern>/roomResult/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>ManageUserController</servlet-name>
+  	<url-pattern>/manage-user/*</url-pattern>
+  </servlet-mapping>
     
   <!-- Filter -->
   <filter>
@@ -56,6 +65,7 @@
   	<filter-name>LoginFilter</filter-name>
   	<url-pattern>/user/*</url-pattern>
   	<url-pattern>/booking/*</url-pattern>
+  	<url-pattern>/manage-user/*</url-pattern>
   </filter-mapping>
   
   <welcome-file-list>

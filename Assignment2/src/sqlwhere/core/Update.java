@@ -47,7 +47,7 @@ public class Update extends Operation {
 	@Override
 	public String getStatement() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("UPDATE ").append(table);
+		sb.append("UPDATE ").append("\"").append(table).append("\"");
 		sb.append(" SET ").append(setValues.get(0).getString());
 		for(int i=1; i<setValues.size(); i++){
 			sb.append(", ").append(setValues.get(i).getString());

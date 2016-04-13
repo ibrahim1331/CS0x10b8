@@ -50,6 +50,7 @@ public class ManageUserController extends HttpServlet {
 	}
 	
 	private void showUserList(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
+		req.setAttribute("users", userService.getAllManagers());
+		req.getRequestDispatcher("/jsp/manage-user.jsp").forward(req, res);
 	}
 }
