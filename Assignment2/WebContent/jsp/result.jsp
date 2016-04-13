@@ -23,16 +23,14 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${requestScope.hotels}" var="hotel">
 				<tr>
 					<td><c:out value="${hotel.name}"></c:out></td>
 					<td><c:out value="${hotel.location}"></c:out></td>
 					<td><c:out value="${hotel.noOfRooms}"></c:out></td>
 					<td><c:out value="${hotel.address}"></c:out></td>
 					<td><c:out value="${hotel.rating}"></c:out></td>
-					<td><button class="ui button">Book</button> </td>
+					<td><a href="roomResult?id=${hotel.hotelId}" class="ui button">View More</a> </td>
 				</tr>
-			</c:forEach>
 		</tbody>
 	</table>
 </div>

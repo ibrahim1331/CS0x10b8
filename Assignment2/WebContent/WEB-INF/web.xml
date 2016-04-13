@@ -18,6 +18,10 @@
   	<servlet-name>SearchController</servlet-name>
   	<servlet-class>controller.SearchController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>RoomResultController</servlet-name>
+  	<servlet-class>controller.RoomResultController</servlet-class>
+  </servlet>
   
   <!-- Servlet Mapping -->
   
@@ -35,7 +39,12 @@
   	<servlet-name>SearchController</servlet-name>
   	<url-pattern>/search/*</url-pattern>
   </servlet-mapping>
-  
+
+  <servlet-mapping>
+  	<servlet-name>RoomResultController</servlet-name>
+  	<url-pattern>/roomResult/*</url-pattern>
+  </servlet-mapping>
+    
   <!-- Filter -->
   <filter>
   	<filter-name>LoginFilter</filter-name>
