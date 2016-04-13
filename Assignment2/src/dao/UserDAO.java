@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import model.User;
+import sqlwhere.core.Where;
 
 public interface UserDAO {
 	List<User> getAllCustomers();
@@ -10,6 +11,8 @@ public interface UserDAO {
 	List<User> getAllManagers();
 	
 	List<User> getAllChiefManagers();
+	
+	List<User> getUsers(Where where);
 	
 	User getUserById(Integer id);
 	
