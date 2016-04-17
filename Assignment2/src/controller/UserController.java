@@ -45,6 +45,12 @@ public class UserController extends HttpServlet{
 			this.updateAccount(req, res);
 		} else if(operation.equals("/update/personal")){
 			this.updatePersonal(req, res);
+		} else if(operation.equals("/go-bad-error")){
+			res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		} else if(operation.equals("/go-general-error")){
+			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		} else {
+			res.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 
