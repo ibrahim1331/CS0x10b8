@@ -35,6 +35,10 @@ public class UserService {
 		return userDAO.getUsers(new Where(new Equal(Columns.Table.User.ROLE, Role.Chief_Manager.getValue())));
 	}
 	
+	public User getUserById(int id){
+		return userDAO.getUserById(id);
+	}
+	
 	public User getUser(String email, String password){
 		return userDAO.getUser(email, password);
 	}
