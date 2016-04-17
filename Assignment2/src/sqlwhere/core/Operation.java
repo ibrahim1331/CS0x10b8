@@ -6,6 +6,4 @@ public abstract class Operation {
 	public abstract Map<Integer, Object> getIndexMap();
 	
 	public abstract String getStatement();
-	
-	public abstract int getParamCounts();
 }

@@ -3,7 +3,7 @@ package model;
 import java.sql.Timestamp;
 
 public class Hotel {
-	private int hotelId;
+	private int hotel_id;
 	private String name;
 	private String location;
 	private String address;
@@ -13,7 +13,7 @@ public class Hotel {
 	private Timestamp dateJoined;
 	
 	public int getHotelId() {
-		return hotelId;
+		return hotel_id;
 	}
 	public String getName() {
 		return name;
@@ -31,8 +31,8 @@ public class Hotel {
 		return rating;
 	}
 	
-	public void setHotelId(int hotelId) {
-		this.hotelId = hotelId;
+	public void setHotelId(int hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 	public void setName(String name) {
 		this.name = name;

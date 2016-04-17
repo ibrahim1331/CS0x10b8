@@ -190,7 +190,7 @@ public class RoomDAOImpl implements RoomDAO{
 			room.setCapacity(rs.getInt("capacity"));
 			room.setSize(rs.getInt("size"));
 			room.setRoomNo(rs.getString("room_no"));
-			room.setBelongsTo(rs.getInt("belongs_to"));
+			room.setBelongs_to(rs.getInt("belongs_to"));
 			room.setDiscount(rs.getInt("discount"));
 			room.setRecommended(rs.getInt("recommended"));
 			rooms.add(room);
@@ -209,7 +209,7 @@ public class RoomDAOImpl implements RoomDAO{
 			room.setCapacity(rs.getInt("capacity"));
 			room.setSize(rs.getInt("size"));
 			room.setRoomNo(rs.getString("room_no"));
-			room.setBelongsTo(rs.getInt("belongs_to"));
+			room.setBelongs_to(rs.getInt("belongs_to"));
 			room.setDiscount(rs.getInt("discount"));
 			room.setRecommended(rs.getInt("recommended"));
         }
@@ -231,7 +231,7 @@ public class RoomDAOImpl implements RoomDAO{
                 pstmt.setInt(4, room.getCapacity());
                 pstmt.setInt(5, room.getSize());
                 pstmt.setString(6, room.getRoomNo());
-                pstmt.setInt(7, room.getBelongsTo());
+                pstmt.setInt(7, room.getBelongs_to());
                 pstmt.setInt(8, room.getDiscount());
                 pstmt.setInt(9, room.getRecommended());
                 
@@ -267,7 +267,7 @@ public class RoomDAOImpl implements RoomDAO{
                 pstmt.setInt(4, room.getCapacity());
                 pstmt.setInt(5, room.getSize());
                 pstmt.setString(6, room.getRoomNo());
-                pstmt.setInt(7, room.getBelongsTo());
+                pstmt.setInt(7, room.getBelongs_to());
                 pstmt.setInt(8, room.getDiscount());
                 pstmt.setInt(9, room.getRecommended());
                 pstmt.setInt(10, room.getRoomId());

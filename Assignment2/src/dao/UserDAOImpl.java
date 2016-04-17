@@ -17,7 +17,83 @@ import sqlwhere.core.Select;
 import sqlwhere.core.Where;
 import utils.DBHelper;
 
-public class UserDAOImpl implements UserDAO {	
+public class UserDAOImpl implements UserDAO {
+
+	@Override
+	public List<User> getAllCustomers() {
+		ArrayList<User> customers = new ArrayList<User>();
+		
+		try {
+            Connection con = DBHelper.getConnection();
+	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM [user] WHERE role='1' ORDER BY [user_id] ASC");
+           
+            // populate the customer ArrayList
+            populateUserArray(customers, rs);
+            
+            DBHelper.close(con);
+            DBHelper.close(stmt);
+            DBHelper.close(rs);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+		
+		return customers;
+	}
+
+	@Override
+	public List<User> getAllManagers() {
+		ArrayList<User> managers = new ArrayList<User>();
+		
+		try {
+			Connection con = DBHelper.getConnection();
+	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM [user] WHERE role='2' ORDER BY [user_id] ASC");
+           
+            // populate the managers ArrayList
+            populateUserArray(managers, rs);
+            
+            DBHelper.close(con);
+            DBHelper.close(stmt);
+            DBHelper.close(rs);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+		
+		return managers;
+	}
+	
+	@Override
+	public List<User> getAllChiefManagers() {
+		ArrayList<User> chief_managers = new ArrayList<User>();
+		
+		try {
+			Connection con = DBHelper.getConnection();
+	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM [user] WHERE role='3' ORDER BY [user_id] ASC");
+           
+            // populate the chief managers ArrayList
+            populateUserArray(chief_managers, rs);
+            
+            DBHelper.close(con);
+            DBHelper.close(stmt);
+            DBHelper.close(rs);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+		
+		return chief_managers;
+	}
+	
 	@Override
 	public List<User> getUsers(Where where){
 		ArrayList<User> records = new ArrayList<>();
@@ -25,9 +101,6 @@ public class UserDAOImpl implements UserDAO {
 		try{
 			Connection con = DBHelper.getConnection();
 	        Select select = new Select("*").from("user").where(where);
-	        
-	        Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
-	        
 	        PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
 	        	pstmt.setObject(es.getKey(), es.getValue());
@@ -61,7 +134,7 @@ public class UserDAOImpl implements UserDAO {
 			user.setPassword(rs.getString("password"));
 			user.setGender(rs.getString("gender"));
 			user.setRole(rs.getInt("role"));
-			user.setRegister(rs.getBoolean("is_registered"));
+			user.setIsRegistered(rs.getBoolean("is_registered"));
 			users.add(user);
 		}
 	}
@@ -79,7 +152,7 @@ public class UserDAOImpl implements UserDAO {
         	user.setPassword(rs.getString("password"));
         	user.setGender(rs.getString("gender"));
         	user.setRole(rs.getInt("role"));
-        	user.setRegister(rs.getBoolean("is_registered"));
+        	user.setIsRegistered(rs.getBoolean("is_registered"));
         }
 		
 		return user;
@@ -185,7 +258,7 @@ public class UserDAOImpl implements UserDAO {
                 pstmt.setString(5, user.getEmail());
                 pstmt.setString(6, user.getPassword());
                 pstmt.setInt(7, user.getRole().getValue());
-                pstmt.setBoolean(8, user.isRegister());
+                pstmt.setBoolean(8, user.getIsRegistered());
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();
@@ -220,7 +293,7 @@ public class UserDAOImpl implements UserDAO {
                 pstmt.setString(5, user.getEmail());
                 pstmt.setString(6, user.getPassword());
                 pstmt.setInt(7, user.getRole().getValue());
-                pstmt.setBoolean(8, user.isRegister());
+                pstmt.setBoolean(8, user.getIsRegistered());
                 pstmt.setInt(9, user.getUserId());
                 
                 // execute the SQL statement

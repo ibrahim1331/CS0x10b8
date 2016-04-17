@@ -81,5 +81,4 @@ public class Booking {
 	public void setCancelled(boolean isCancelled) {
 		this.isCancelled = isCancelled;
 	}
-	
 }

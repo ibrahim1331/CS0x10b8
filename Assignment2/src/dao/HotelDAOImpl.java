@@ -20,7 +20,7 @@ import model.Hotel;
 public class HotelDAOImpl implements HotelDAO{
 
 	@Override
-	public ArrayList<Hotel> getAllHotels() {
+	public List<Hotel> getAllHotels() {
 		ArrayList<Hotel> hotels = new ArrayList<Hotel>();
 		
 		try{

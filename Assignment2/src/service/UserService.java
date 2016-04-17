@@ -4,11 +4,7 @@ import java.util.List;
 
 import dao.UserDAO;
 import dao.UserDAOImpl;
-import enums.Role;
 import model.User;
-import sqlwhere.core.Where;
-import sqlwhere.operators.compare.Equal;
-import utils.Columns;
 
 
 public class UserService {
@@ -19,20 +15,16 @@ public class UserService {
 		return userDAO.getUser(email, password)!=null;
 	}
 	
-	public List<User> getAllUsers(){
-		return userDAO.getUsers(null);
-	}
-	
 	public List<User> getAllCustomers(){
-		return userDAO.getUsers(new Where(new Equal(Columns.Table.User.ROLE, Role.Customer.getValue())));
+		return userDAO.getAllCustomers();
 	}
 	
 	public List<User> getAllManagers(){
-		return userDAO.getUsers(new Where(new Equal(Columns.Table.User.ROLE, Role.Manager.getValue())));
+		return userDAO.getAllManagers();
 	}
 	
 	public List<User> getAllChiefManagers(){
-		return userDAO.getUsers(new Where(new Equal(Columns.Table.User.ROLE, Role.Chief_Manager.getValue())));
+		return userDAO.getAllChiefManagers();
 	}
 	
 	public User getUser(String email, String password){

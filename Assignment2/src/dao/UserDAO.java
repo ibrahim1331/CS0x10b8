@@ -6,6 +6,12 @@ import model.User;
 import sqlwhere.core.Where;
 
 public interface UserDAO {
+	List<User> getAllCustomers();
+	
+	List<User> getAllManagers();
+	
+	List<User> getAllChiefManagers();
+	
 	List<User> getUsers(Where where);
 	
 	User getUserById(Integer id);

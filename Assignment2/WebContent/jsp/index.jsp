@@ -25,12 +25,12 @@ $(document).ready(function(){
 	.on("submit", function(e){
 		e.preventDefault();
 		
-		var form = $(this);
-		
 		var json = JSON.stringify({
 			email: form.form("get value","email"),
 			password: form.form("get value","password")
 		})
+		
+		var form = $(this);
 		if(form.form("is valid")){
 			$.ajax({
 				url: "./auth/login",
@@ -112,7 +112,7 @@ $(document).ready(function(){
 					<div class="centered row">
 						<div class="column">
 							<div class="ui fluid action input">
-								<input type="text" name="city" placeholder="Search..." required/>
+								<input type="text" name="city" placeholder="Search..." />
 								<button type="submit" class="ui button" >Search</button>	
 							</div>
 						</div>

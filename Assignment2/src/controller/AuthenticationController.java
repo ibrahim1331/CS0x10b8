@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import dao.UserDAO;
 import dao.UserDAOImpl;
 import enums.Role;
@@ -16,6 +19,8 @@ import model.User;
 import service.AuthenticationService;
 import service.ValidationService;
 import utils.AppHelper;
+import utils.RoleDeserializer;
+import utils.RoleSerializer;
 
 /**
  * responsible for routing /login /logout /register under /auth
@@ -99,7 +104,7 @@ public class AuthenticationController extends HttpServlet {
 		//get request body and convert it to User object with gson...
 		User userReq = AppHelper.getGson().fromJson(req.getReader(), User.class);
 		userReq.setRole(Role.Customer.getValue());
-		userReq.setRegister(true);
+		userReq.setIsRegistered(true);
 		
 		if(userReq.getEmail()!=null 
 				&& userReq.getPassword()!=null 
