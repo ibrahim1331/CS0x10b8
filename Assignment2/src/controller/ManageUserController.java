@@ -36,7 +36,9 @@ public class ManageUserController extends HttpServlet {
 	private void processRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		/*
 		 * "/" : main page. show list of users
-		 * 
+		 * "/add" : add new manage page
+		 * "/remove": remove confirmation page
+		 * "/remove?confirm=1": do remove action
 		 */
 		String operation = req.getPathInfo();
 		

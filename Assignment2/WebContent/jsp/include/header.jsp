@@ -20,12 +20,12 @@
 			Booking
 		</a>
 	</c:if>
-	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Manager}">
-		<a href="#" class="item">
-			Manage Users
+	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Chief_Manager}">
+		<a href="${pageContext.request.contextPath}/manage-user" class="item">
+			Manage Hotel Managers
 		</a>
 	</c:if>
-	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Chief_Manager}">
+	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Manager}">
 		<a href="#" class="item">
 			Manage Hotels
 		</a>
