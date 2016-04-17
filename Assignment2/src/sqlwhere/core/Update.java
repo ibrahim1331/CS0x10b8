@@ -38,16 +38,22 @@ public class Update extends Operation {
 		for(Set set: setValues){
 			result.put(index++, set.getValue());
 		}
-		for(Object o: where.getParamValues()){
-			result.put(index++, o);
-		}
+		if(where!=null)
+			for(Object o: where.getParamValues()){
+				result.put(index++, o);
+			}
 		return result;
+	}
+	
+	@Override
+	public int getParamCounts(){
+		return setValues.size() + (where==null ? 0 : where.getParamCounts());
 	}
 
 	@Override
 	public String getStatement() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("UPDATE ").append(table);
+		sb.append("UPDATE ").append("\"").append(table).append("\"");
 		sb.append(" SET ").append(setValues.get(0).getString());
 		for(int i=1; i<setValues.size(); i++){
 			sb.append(", ").append(setValues.get(i).getString());

@@ -10,7 +10,7 @@ public class User {
 	private String gender;
 	private String email;
 	private String password;
-	private boolean is_registered;
+	private boolean isRegister;
 	private Role role;
 	
 	public int getUserId() {
@@ -49,11 +49,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public boolean getIsRegistered() {
-		return is_registered;
+	public boolean isRegister() {
+		return isRegister;
 	}
-	public void setIsRegistered(boolean is_registered) {
-		this.is_registered = is_registered;
+	public void setRegister(boolean isRegister) {
+		this.isRegister = isRegister;
 	}
 	public String getGender() {
 		return gender;

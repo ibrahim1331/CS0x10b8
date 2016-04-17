@@ -9,6 +9,8 @@ public class Select extends Operation{
 	private String table;
 	private List<String> columns = new ArrayList<>();
 	private Where where;
+	private List<OrderBy> orderBy = new ArrayList<>();
+	private List<String> groupBy = new ArrayList<>();
 	
 	public Select(String col1, String... columns){
 		this.columns.add(col1);
@@ -24,6 +26,21 @@ public class Select extends Operation{
 		this.where = where;
 		return this;
 	}
+	
+	public Select orderBy(String column, boolean asc){
+		orderBy.add(new OrderBy(column, asc));
+		return this;
+	}
+	
+	public Select groupBy(String... column){
+		groupBy.addAll(Arrays.asList(column));
+		return this;
+	}
+	
+	@Override
+	public int getParamCounts(){
+		return where.getParamCounts();
+	}
 
 	@Override
 	public Map<Integer, Object> getIndexMap() {
@@ -37,8 +54,32 @@ public class Select extends Operation{
 		for(int i=1; i<columns.size(); i++){
 			sb.append(", ").append(columns.get(i));
 		}
-		sb.append(" FROM ").append(table);
-		if(where!=null)	sb.append(" ").append(where.getStatement());
+		sb.append(" FROM ").append("\"").append(table).append("\"");
+		if(where!=null){	
+			sb.append(" ").append(where.getStatement());
+		}
+		if(groupBy.size()!=0){
+			sb.append(" GROUP BY ").append(groupBy.get(0));
+			for(int i=1; i<groupBy.size(); i++){
+				sb.append(groupBy.get(i));
+			}
+		}
+		if(orderBy.size()!=0){
+			sb.append(" ORDER BY ").append(orderBy.get(0).column).append(orderBy.get(0).asc?"":" DESC");
+			for(int i=1; i<orderBy.size(); i++){
+				sb.append(orderBy.get(i).column).append(orderBy.get(i).asc?"":" DESC");
+			}
+		}
 		return sb.toString();
+	}
+	
+	class OrderBy{
+		String column;
+		boolean asc;
+		
+		public OrderBy(String column, boolean asc){
+			this.column = column;
+			this.asc = asc;
+		}
 	}
 }

@@ -41,6 +41,14 @@ public class Where{
 		return idxMap;
 	}
 	
+	public int getParamCounts(){
+		int sum = 0;
+		for(Object op: opList){
+			if(op instanceof Operator) sum += ((Operator)op).getParamCounts();
+		}
+		return sum;
+	}
+	
 	public List<Object> getParamValues(){
 		List<Object> result = new ArrayList<>();
 		for(Object op: opList){

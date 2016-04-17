@@ -34,6 +34,11 @@ public class Insert extends Operation {
 		}
 		return result;
 	}
+	
+	@Override
+	public int getParamCounts(){
+		return insertValues.size();
+	}
 
 	@Override
 	public String getStatement() {
@@ -45,7 +50,7 @@ public class Insert extends Operation {
 			columns.append(",").append(insertValues.get(i).getColumn());
 			values.append(",").append("?");
 		}
-		return String.format("INSERT INTO %s (%s) VALUES (%s)", table, columns, values);
+		return String.format("INSERT INTO \"%s\" (%s) VALUES (%s)", table, columns, values);
 	}
 
 }
