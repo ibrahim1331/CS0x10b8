@@ -68,6 +68,19 @@
   	<url-pattern>/manage-user/*</url-pattern>
   </filter-mapping>
   
+  <!-- Default Error Page -->
+  <error-page>
+  	<error-code>404</error-code>
+  	<location>/jsp/error/404.jsp</location>
+  </error-page>
+  <error-page>
+  	<error-code>500</error-code>
+  	<location>/jsp/error/500.jsp</location>
+  </error-page>
+  <error-page>
+  	<location>/jsp/error/general.jsp</location>
+  </error-page>
+  
   <welcome-file-list>
     <welcome-file>jsp/index.jsp</welcome-file>
   </welcome-file-list>
