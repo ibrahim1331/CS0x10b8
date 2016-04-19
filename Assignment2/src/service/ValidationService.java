@@ -20,4 +20,10 @@ public class ValidationService {
 		
 		return matcher.matches();
 	}
+	
+	public String cleanHtml(){
+		String htmlString = "";
+		
+		return htmlString;
+	}
 }

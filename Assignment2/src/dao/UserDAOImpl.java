@@ -4,11 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,9 +35,9 @@ public class UserDAOImpl implements UserDAO {
 	        this.populateUserArray(records, rs);
 	        
 		} catch (SQLException ex){
-			Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (Exception ex){
-			Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 		
 		return records;
@@ -104,10 +102,10 @@ public class UserDAOImpl implements UserDAO {
             DBHelper.close(rs);
         } catch (SQLException ex) {
         	user = null;
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
         	user = null;
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return user;
@@ -133,10 +131,10 @@ public class UserDAOImpl implements UserDAO {
             DBHelper.close(rs);
         } catch (SQLException ex) {
         	user = null;
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
         	user = null;
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return user;
@@ -161,10 +159,10 @@ public class UserDAOImpl implements UserDAO {
             DBHelper.close(rs);
         } catch (SQLException ex) {
         	user = null;
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
         	user = null;
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return user;
@@ -197,9 +195,9 @@ public class UserDAOImpl implements UserDAO {
                 DBHelper.close(con);
             }
         } catch (SQLException ex) {
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return saved;
@@ -234,9 +232,9 @@ public class UserDAOImpl implements UserDAO {
                 DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return updated;
@@ -263,9 +261,9 @@ public class UserDAOImpl implements UserDAO {
                 DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-        	Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return deleted;

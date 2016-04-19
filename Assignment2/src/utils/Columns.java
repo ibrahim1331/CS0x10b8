@@ -104,6 +104,7 @@ public class Columns {
 			public static final String JOIN_DATE = "join_date";
 			public static final String ROOM_ID = "room_id";
 			public static final String TYPE = "type";
+			public static final String ROOM_NO = "room_no";
 			public static final String ROOM_PRICE = "room_price";
 			public static final String ROOM_CAPACITY = "room_capacity";
 			public static final String ROOM_SIZE = "room_size";
