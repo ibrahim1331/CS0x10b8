@@ -33,7 +33,7 @@ $(document).ready(function(){
 		})
 		if(form.form("is valid")){
 			$.ajax({
-				url: "./auth/login",
+				url: "/Assignment2/auth/login",
 				method: "post",
 				data: json
 			}).then(function(data){

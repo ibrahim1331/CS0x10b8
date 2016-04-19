@@ -133,6 +133,4 @@ public class ManageUserController extends HttpServlet {
 		req.getSession().setAttribute("inputBefore", manager);
 		res.sendRedirect(req.getContextPath()+"/manage-user/add");
 	}
-	
-	
 }
