@@ -20,15 +20,22 @@
 			Booking
 		</a>
 	</c:if>
-	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Chief_Manager}">
-		<a href="${pageContext.request.contextPath}/manage-user" class="item">
-			Manage Hotel Managers
-		</a>
-	</c:if>
-	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role == Role.Manager}">
-		<a href="#" class="item">
-			Manage Hotels
-		</a>
+	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role != Role.Customer }">
+	<div class="ui simple dropdown item">
+		Manage
+		<i class="dropdown icon"></i>
+		<div class="menu">
+			<c:if test="${sessionScope.loginUser.role == Role.Manager}">
+				<a href="${pageContext.request.contextPath}/recommend-room" class="item">Recommend Featured Hotels</a>
+			</c:if>
+			<c:if test="${sessionScope.loginUser.role == Role.Manager}">
+				<a href="#" class="item">Hotels</a>
+			</c:if>
+			<c:if test="${sessionScope.loginUser.role == Role.Chief_Manager}">
+				<a href="${pageContext.request.contextPath}/manage-user" class="item">Hotel Managers</a>
+			</c:if>
+		</div>
+	</div>
 	</c:if>
 	<div class="right menu">
 		<c:if test="${not empty sessionScope.loginUser}">
