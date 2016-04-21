@@ -38,7 +38,31 @@ $(document).ready(function(){
 				<div class="sub header">Change the recommend priority. Recommending rooms are always on top of the search based on priority.</div>
 			</div>
 		</h1>
-		
+		<c:if test="${not empty sessionScope.errorMsg}">
+			<div class="ui error message">
+				<i class="close icon"></i>
+				<div class="content">
+					<div class="header">Error!!</div>
+					<p>${errorMsg}</p>
+				</div>
+				
+			</div>
+			<c:remove var="errorMsg" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.success }">
+			<div class="ui success message">
+				<i class="close icon"></i>
+				<div class="content">
+					<div class="header">Success!!</div>
+					<p>Hotel recommendation is changed.</p>
+				</div>
+			</div>
+			<c:remove var="success" scope="session"/>
+		</c:if>
+		<a class="ui gray icon button" href="${pageContext.request.contextPath}/recommend-room">
+			<i class="angle left icon"></i>
+			Hotel list
+		</a>
 		<h3>Recommending Rooms</h3>
 		<c:if test="${requestScope.recommendingRooms.size() eq 0 }">
 			<div>No entries</div>
@@ -47,16 +71,19 @@ $(document).ready(function(){
 		<div class="ui vertical fluid menu">
 			<c:forEach var="room" items="${requestScope.recommendingRooms}">
 				<div class="item">
-				<h1 class="ui header">${room.roomNo }</h1>
-				<form class="ui form" method="post" action="${pageContext.request.contextPath}/recommend-room/rooms/recommend?id=${room.roomId}">
-					<div class="inline fields">
-						<div class="field">
-							<label>Recommend</label>
-							<input name="recommend" type="number" min="0" value="${not empty room.recommended?room.recommended:''}"/>
+				<div class="ui green label">${room.roomType }</div>
+				<div class="content">
+					<h1 class="ui header">${room.roomNo }</h1>
+					<form class="ui form" method="post" action="${pageContext.request.contextPath}/recommend-room/rooms/recommend?id=${room.roomId}">
+						<div class="inline fields">
+							<div class="field">
+								<label>Recommend</label>
+								<input name="recommend" type="number" min="0" value="${not empty room.recommended?room.recommended:''}"/>
+							</div>
+							<div class="field"><button class="ui blue submit button">Change</button></div>
 						</div>
-						<div class="field"><button class="ui blue submit button">Change</button></div>
-					</div>
-				</form>
+					</form>
+				</div>
 				</div>
 			</c:forEach>
 		</div>

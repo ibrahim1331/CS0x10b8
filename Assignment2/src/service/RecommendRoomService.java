@@ -13,8 +13,10 @@ import model.Room;
 import model.Search;
 import sqlwhere.core.Where;
 import sqlwhere.operators.compare.Equal;
+import sqlwhere.operators.compare.GreaterThan;
 import sqlwhere.operators.compare.NotNull;
 import sqlwhere.operators.compare.Null;
+import sqlwhere.operators.logical.And;
 import sqlwhere.operators.logical.Or;
 import utils.Columns;
 
@@ -32,7 +34,8 @@ public class RecommendRoomService {
 	}
 	
 	public List<Search> getRecommendingRooms(int hotelId){
-		Where where = new Where(new NotNull(Columns.View.SearchView.RECOMMENDED))
+		Where where = new Where(new And(new NotNull(Columns.View.SearchView.RECOMMENDED)
+										, new GreaterThan(Columns.View.SearchView.RECOMMENDED, 0)))
 				.and(new Equal(Columns.View.SearchView.HOTEL_ID, hotelId))
 				.and(new Null(Columns.View.SearchView.BELONGS_TO));
 		return searchDAO.search(where);

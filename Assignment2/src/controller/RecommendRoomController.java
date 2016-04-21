@@ -74,12 +74,24 @@ public class RecommendRoomController extends HttpServlet{
 		} else {
 			room.setRecommended(recommend);
 			if(service.recommendRoom(room)){
-				//redirect to room page
-				res.sendRedirect(req.getContextPath()+"/recommend-room/rooms?hotel="+room.getHotelId());
+				this.goRoomPage(req, res, room);
 			} else {
-				res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "fail to recommend room");
+				this.goRoomPage(req, res, room, "Fail to recommend room.");
 			}
 		}
+	}
+	
+	private void goRoomPage(HttpServletRequest req, HttpServletResponse res, Room room, String errorMsg) throws ServletException, IOException {
+		if(errorMsg!=null){
+			req.getSession().setAttribute("errorMsg", errorMsg);
+		} else{
+			req.getSession().setAttribute("success", true);
+		}
+		res.sendRedirect(req.getContextPath()+"/recommend-room/rooms?hotel="+room.getHotelId());
+	}
+	
+	private void goRoomPage(HttpServletRequest req, HttpServletResponse res, Room room) throws ServletException, IOException {
+		this.goRoomPage(req, res, room, null);
 	}
 		
 }
