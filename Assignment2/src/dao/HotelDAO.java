@@ -3,8 +3,11 @@ package dao;
 import java.util.List;
 
 import model.Hotel;
+import sqlwhere.core.Where;
 
 public interface HotelDAO {
+	
+	List<Hotel> getHotels(Where where);
 	
 	List<Hotel> getAllHotels();
 	

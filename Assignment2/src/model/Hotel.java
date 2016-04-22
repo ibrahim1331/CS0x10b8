@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Hotel {
 	private int hotelId;
 	private String name;
-	private String location;
+	private int location;
 	private String address;
 	private String description;
 	private int noOfRooms;
@@ -18,7 +18,7 @@ public class Hotel {
 	public String getName() {
 		return name;
 	}
-	public String getLocation() {
+	public int getLocation() {
 		return location;
 	}
 	public String getAddress() {
@@ -37,7 +37,7 @@ public class Hotel {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setLocation(String location) {
+	public void setLocation(int location) {
 		this.location = location;
 	}
 	public void setAddress(String address) {
