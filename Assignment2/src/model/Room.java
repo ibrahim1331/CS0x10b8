@@ -1,21 +1,21 @@
 package model;
 
 public class Room {
-	private int roomId;
+	private Integer roomId;
 	private String roomNo;
 	private String type;
-	private int price;
-	private int hotelId;
-	private int capacity;
-	private int size;
-	private int discount;
-	private int belongsTo;
-	private int recommended;
+	private Integer price;
+	private Integer hotelId;
+	private Integer capacity;
+	private Integer size;
+	private Integer discount;
+	private Integer belongsTo;
+	private Integer recommended;
 	
-	public int getRoomId() {
+	public Integer getRoomId() {
 		return roomId;
 	}
-	public void setRoomId(int roomId) {
+	public void setRoomId(Integer roomId) {
 		this.roomId = roomId;
 	}
 	public String getRoomNo() {
@@ -30,46 +30,46 @@ public class Room {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public int getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
-	public int getHotelId() {
+	public Integer getHotelId() {
 		return hotelId;
 	}
-	public void setHotelId(int hotelId) {
+	public void setHotelId(Integer hotelId) {
 		this.hotelId = hotelId;
 	}
-	public int getCapacity() {
+	public Integer getCapacity() {
 		return capacity;
 	}
-	public void setCapacity(int capacity) {
+	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
-	public int getSize() {
+	public Integer getSize() {
 		return size;
 	}
-	public void setSize(int size) {
+	public void setSize(Integer size) {
 		this.size = size;
 	}
-	public int getDiscount() {
+	public Integer getDiscount() {
 		return discount;
 	}
-	public void setDiscount(int discount) {
+	public void setDiscount(Integer discount) {
 		this.discount = discount;
 	}
-	public int getBelongsTo() {
+	public Integer getBelongsTo() {
 		return belongsTo;
 	}
-	public void setBelongsTo(int belongsTo) {
+	public void setBelongsTo(Integer belongsTo) {
 		this.belongsTo = belongsTo;
 	}
-	public int getRecommended() {
+	public Integer getRecommended() {
 		return recommended;
 	}
-	public void setRecommended(int recommended) {
+	public void setRecommended(Integer recommended) {
 		this.recommended = recommended;
 	}
 }

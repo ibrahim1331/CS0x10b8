@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.Hotel;
 import model.Room;
+import sqlwhere.core.Select;
+import sqlwhere.core.Where;
 import utils.DBHelper;
 
 public class RoomDAOImpl implements RoomDAO{
@@ -39,6 +42,32 @@ public class RoomDAOImpl implements RoomDAO{
         }
 		
 		return rooms;
+	}
+	
+	@Override
+	public List<Room> getRooms(Where where){
+		ArrayList<Room> records = new ArrayList<Room>();
+		
+		try{
+			Connection con = DBHelper.getConnection();
+			Select select = new Select("*").from("room").where(where);
+			
+			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
+			
+			PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
+	        	pstmt.setObject(es.getKey(), es.getValue());
+	        }
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        this.populateRoomArray(records, rs);
+		} catch (SQLException ex){
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception ex){
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+		}
+		
+		return records;
 	}
 	
 	@Override
@@ -191,8 +220,17 @@ public class RoomDAOImpl implements RoomDAO{
 			room.setSize(rs.getInt("size"));
 			room.setRoomNo(rs.getString("room_no"));
 			room.setBelongsTo(rs.getInt("belongs_to"));
+			if(rs.wasNull()){
+				room.setBelongsTo(null);
+			}
 			room.setDiscount(rs.getInt("discount"));
+			if(rs.wasNull()){
+				room.setDiscount(null);
+			}
 			room.setRecommended(rs.getInt("recommended"));
+			if(rs.wasNull()){
+				room.setRecommended(null);
+			}
 			rooms.add(room);
 		}
 	}
@@ -210,8 +248,17 @@ public class RoomDAOImpl implements RoomDAO{
 			room.setSize(rs.getInt("size"));
 			room.setRoomNo(rs.getString("room_no"));
 			room.setBelongsTo(rs.getInt("belongs_to"));
+			if(rs.wasNull()){
+				room.setBelongsTo(null);
+			}
 			room.setDiscount(rs.getInt("discount"));
+			if(rs.wasNull()){
+				room.setDiscount(null);
+			}
 			room.setRecommended(rs.getInt("recommended"));
+			if(rs.wasNull()){
+				room.setRecommended(null);
+			}
         }
 		
 		return room;
@@ -231,7 +278,11 @@ public class RoomDAOImpl implements RoomDAO{
                 pstmt.setInt(4, room.getCapacity());
                 pstmt.setInt(5, room.getSize());
                 pstmt.setString(6, room.getRoomNo());
-                pstmt.setInt(7, room.getBelongsTo());
+                if(room.getBelongsTo()!=null){
+                	pstmt.setInt(7, room.getBelongsTo());
+                } else {
+                	pstmt.setNull(7, java.sql.Types.INTEGER);
+                }
                 pstmt.setInt(8, room.getDiscount());
                 pstmt.setInt(9, room.getRecommended());
                 
@@ -267,9 +318,21 @@ public class RoomDAOImpl implements RoomDAO{
                 pstmt.setInt(4, room.getCapacity());
                 pstmt.setInt(5, room.getSize());
                 pstmt.setString(6, room.getRoomNo());
-                pstmt.setInt(7, room.getBelongsTo());
-                pstmt.setInt(8, room.getDiscount());
-                pstmt.setInt(9, room.getRecommended());
+                if(room.getBelongsTo()!=null){
+                	pstmt.setInt(7, room.getBelongsTo());
+                } else {
+                	pstmt.setNull(7, java.sql.Types.INTEGER);
+                }
+                if(room.getDiscount()!=null){
+                	pstmt.setInt(8, room.getDiscount());
+                } else {
+                	pstmt.setNull(8, java.sql.Types.INTEGER);
+                }
+                if(room.getRecommended()!=null){
+                	pstmt.setInt(9, room.getRecommended());
+                } else {
+                	pstmt.setNull(9, java.sql.Types.INTEGER);
+                }
                 pstmt.setInt(10, room.getRoomId());
                 
                 // execute the SQL statement
