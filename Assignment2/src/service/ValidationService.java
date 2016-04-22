@@ -23,7 +23,7 @@ public class ValidationService {
 	
 	public String removeScripts(String inputString){
 		String string = inputString;
-		System.out.println(string);
+//		System.out.println(string);
 		string = string.replaceAll("(?im)<script\\b[^<]*(?:(?!<\\/.*>)[^<]*)*<\\/\\w+>", "");
 		string = string.replaceAll("(?im)on\\w+[^<]=\\W*?[\"\"\'\']\\b[^>]*[\"\"\'\']", "");
 		string = string.replaceAll("(?im)href\\W*=\\W*[\'\'\"\"]\\W*javascript\\b[^>]*[\'\'\"\"]", "");
