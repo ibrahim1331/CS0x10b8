@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -12,11 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.HotelDAOImpl;
 import model.Hotel;
+import service.SearchService;
 
 public class SearchController extends HttpServlet{
 	
 	HotelDAOImpl impl = new HotelDAOImpl();
-	Hotel hotel = new Hotel();
+	SearchService searchService = new SearchService();
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
 		this.processRequest(req,res);
@@ -33,8 +33,10 @@ public class SearchController extends HttpServlet{
 		fromDate = req.getParameter("fromDate");
 		toDate = req.getParameter("toDate");
 		//System.out.print(result + " " + fromDate + " " + " " + toDate);
-		hotel = impl.getHotelByName(result);
-		req.setAttribute("hotel", hotel);
+		List<Hotel> hotels = searchService.searchHotels(result, null, null);
+//		hotel = impl.getHotelByName(result);
+//		req.setAttribute("hotel", hotel);
+		req.setAttribute("hotels", hotels);
 		gotoPage("/jsp/result.jsp",req,res);
 	}
 

@@ -10,11 +10,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import model.Hotel;
 import sqlwhere.core.Select;
 import sqlwhere.core.Where;
@@ -30,6 +26,8 @@ public class HotelDAOImpl implements HotelDAO{
 		try{
 			Connection conn = DBHelper.getConnection();
 			Select select = new Select("*").from("hotel").where(where);
+			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
+			System.out.println(select.getIndexMap());
 			PreparedStatement pstmt = conn.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
 				pstmt.setObject(es.getKey(), es.getValue());

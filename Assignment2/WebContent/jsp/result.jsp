@@ -6,9 +6,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <jsp:include page="include/include.jsp"></jsp:include>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.message .close').on('click', function() {
+	    $(this).closest('.message').transition('fade');
+	});
+	
+	$(".ui.dropdown").dropdown();
+	
+	$(".tabular.menu .item").tab();
+	
+	//hack
+	$(".ui.reset.button").each(function(idx, ele){$(ele).on("click",function(){$(this).parent().form("reset")})})
+})
+</script>
 <title>Result</title>
 </head>
 <body>
+<jsp:include page="include/header.jsp"></jsp:include>
 <div class="ui attached segment">
 	<h1 class="ui centered header">Result</h1>
 	<table class ="ui celled table">
@@ -23,6 +38,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			<c:forEach var="hotel" items="${requestScope.hotels}">
 				<tr>
 					<td><c:out value="${hotel.name}"></c:out></td>
 					<td><c:out value="${hotel.location}"></c:out></td>
@@ -31,6 +47,7 @@
 					<td><c:out value="${hotel.rating}"></c:out></td>
 					<td><a href="roomResult?id=${hotel.hotelId}" class="ui button">View More</a> </td>
 				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
 </div>
