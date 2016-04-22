@@ -115,6 +115,38 @@ public class Columns {
 			public static final String LOCATION_NAME = "location_name";
 			public static final String COUNTRY = "country";
 		}
+		
+		public class BookingView{
+			public static final String BOOKING_ID = "booking_id";
+			public static final String BOOKING_NUMBER = "booking_number";
+			public static final String CUSTOMER_ID = "customer_id";
+			public static final String NO_OF_PEOPLE = "no_of_people";
+			public static final String CHECK_IN_DATE = "check_in_date";
+			public static final String CHECK_OUT_DATE = "check_out_date";
+			public static final String PURPOSE = "purpose";
+			public static final String BOOKING_DATE = "booking_date";
+			public static final String PIN = "pin";
+			public static final String IS_CANCELLED = "is_cancelled";
+			public static final String HOTEL_ID = "hotel_id";
+			public static final String HOTEL_NAME = "hotel_name";
+			public static final String ADDRESS = "address";
+			public static final String NO_OF_ROOMS = "no_of_rooms";
+			public static final String RATING = "rating";
+			public static final String DESCRIPTION = "description";
+			public static final String JOIN_DATE = "join_date";
+			public static final String ROOM_ID = "room_id";
+			public static final String TYPE = "type";
+			public static final String ROOM_NO = "room_no";
+			public static final String ROOM_PRICE = "room_price";
+			public static final String ROOM_CAPACITY = "room_capacity";
+			public static final String ROOM_SIZE = "room_size";
+			public static final String BELONGS_TO = "belongs_to";
+			public static final String DISCOUNT = "discount";
+			public static final String RECOMMENDED = "recommended";
+			public static final String LOCATION_ID = "location_id";
+			public static final String LOCATION_NAME = "location_name";
+			public static final String COUNTRY = "country";
+		}
 	}
 	
 }
