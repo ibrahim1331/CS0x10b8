@@ -84,7 +84,7 @@ public class Select extends Operation{
 		return sb.toString();
 	}
 	
-	public class OrderBy{
+	public static class OrderBy{
 		String column;
 		boolean asc;
 		
