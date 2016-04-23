@@ -9,6 +9,8 @@ import dao.BookingDAOImpl;
 import dao.SearchDAO;
 import dao.SearchDAOImpl;
 
+import service.ValidationService;
+
 public class AuthenticationService {
 	
 	public boolean authenticateUser(String email, String password){
@@ -29,6 +31,9 @@ public class AuthenticationService {
 //		SearchDAO searchDAO = new SearchDAOImpl();
 		
 //		System.out.println(searchDAO.search(new Where(new Like("hotel_name", "%Casino%"))));
+//		ValidationService validationServ = new ValidationService();
+		
+//		System.out.println(validationServ.removeScripts("asdasd as d asd asd<script>function(){alert('hello');}</script> asd asd asdasd<a onclick=\"a\"></a><a href=\"javascript:alert(\"hello\")\"></a>"));
 		
 		return valid;
 	}

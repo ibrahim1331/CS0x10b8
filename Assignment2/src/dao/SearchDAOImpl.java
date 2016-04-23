@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.Columns;
 
 import javax.naming.NamingException;
 
@@ -52,25 +53,25 @@ public class SearchDAOImpl implements SearchDAO {
 	private void populateSearchArray(ArrayList<Search> result, ResultSet rs) throws SQLException {
 		while(rs != null && rs.next()){
 			Search searchResult = new Search();
-			searchResult.setHotelId(rs.getInt("hotel_id"));
-			searchResult.setHotelName(rs.getString("hotel_name"));
-			searchResult.setHotelAddress(rs.getString("address"));
-			searchResult.setNoOfRooms(rs.getInt("no_of_rooms"));
-			searchResult.setHotelRating(rs.getInt("rating"));
-			searchResult.setHotelDescription(rs.getString("description"));
-			searchResult.setHotelDateJoined(rs.getTimestamp("join_date"));
-			searchResult.setRoomId(rs.getInt("room_id"));
-			searchResult.setRoomType(rs.getString("type"));
-			searchResult.setRoomPrice(rs.getInt("room_price"));
-			searchResult.setRoomCapacity(rs.getInt("room_capacity"));
-			searchResult.setRoomSize(rs.getInt("room_size"));
-			searchResult.setRoomNo(rs.getString("room_no"));
-			searchResult.setBelongsTo(rs.getInt("belongs_to"));
-			searchResult.setDiscount(rs.getInt("discount"));
-			searchResult.setRecommended(rs.getInt("recommended"));
-			searchResult.setLocationId(rs.getInt("location_id"));
-			searchResult.setLocationName(rs.getString("location_name"));
-			searchResult.setCountry(rs.getString("country"));
+			searchResult.setHotelId(rs.getInt(Columns.View.SearchView.HOTEL_ID));
+			searchResult.setHotelName(rs.getString(Columns.View.SearchView.HOTEL_NAME));
+			searchResult.setHotelAddress(rs.getString(Columns.View.SearchView.ADDRESS));
+			searchResult.setNoOfRooms(rs.getInt(Columns.View.SearchView.NO_OF_ROOMS));
+			searchResult.setHotelRating(rs.getInt(Columns.View.SearchView.RATING));
+			searchResult.setHotelDescription(rs.getString(Columns.View.SearchView.DESCRIPTION));
+			searchResult.setHotelDateJoined(rs.getTimestamp(Columns.View.SearchView.JOIN_DATE));
+			searchResult.setRoomId(rs.getInt(Columns.View.SearchView.ROOM_ID));
+			searchResult.setRoomType(rs.getString(Columns.View.SearchView.TYPE));
+			searchResult.setRoomPrice(rs.getInt(Columns.View.SearchView.ROOM_PRICE));
+			searchResult.setRoomCapacity(rs.getInt(Columns.View.SearchView.ROOM_CAPACITY));
+			searchResult.setRoomSize(rs.getInt(Columns.View.SearchView.ROOM_SIZE));
+			searchResult.setRoomNo(rs.getString(Columns.View.SearchView.ROOM_NO));
+			searchResult.setBelongsTo(rs.getInt(Columns.View.SearchView.BELONGS_TO));
+			searchResult.setDiscount(rs.getInt(Columns.View.SearchView.DISCOUNT));
+			searchResult.setRecommended(rs.getInt(Columns.View.SearchView.RECOMMENDED));
+			searchResult.setLocationId(rs.getInt(Columns.View.SearchView.LOCATION_ID));
+			searchResult.setLocationName(rs.getString(Columns.View.SearchView.LOCATION_NAME));
+			searchResult.setCountry(rs.getString(Columns.View.SearchView.COUNTRY));
 			result.add(searchResult);
 		}
 	}

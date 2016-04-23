@@ -2,6 +2,7 @@ package sqlwhere.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +33,18 @@ public class Select extends Operation{
 		return this;
 	}
 	
+	public Select orderBy(List<OrderBy> orderBys){
+		orderBy.addAll(orderBys);
+		return this;
+	}
+	
 	public Select groupBy(String... column){
 		groupBy.addAll(Arrays.asList(column));
+		return this;
+	}
+	
+	public Select groupBy(List<String> columns){
+		groupBy.addAll(columns);
 		return this;
 	}
 	
@@ -44,7 +55,7 @@ public class Select extends Operation{
 
 	@Override
 	public Map<Integer, Object> getIndexMap() {
-		return where==null ? null : where.getIndexMap();
+		return where==null ? new HashMap<Integer, Object>() : where.getIndexMap();
 	}
 
 	@Override
@@ -73,13 +84,17 @@ public class Select extends Operation{
 		return sb.toString();
 	}
 	
-	class OrderBy{
+	public static class OrderBy{
 		String column;
 		boolean asc;
 		
 		public OrderBy(String column, boolean asc){
 			this.column = column;
 			this.asc = asc;
+		}
+		
+		public OrderBy(String column){
+			this(column, true);
 		}
 	}
 }
