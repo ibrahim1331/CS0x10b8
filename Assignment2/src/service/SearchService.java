@@ -20,6 +20,7 @@ import sqlwhere.core.Where;
 import sqlwhere.operators.compare.GreaterThanEqual;
 import sqlwhere.operators.compare.LessThanEqual;
 import sqlwhere.operators.compare.Like;
+import sqlwhere.operators.compare.NotIn;
 import utils.AppHelper;
 import utils.Columns;
 

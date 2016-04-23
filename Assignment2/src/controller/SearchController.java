@@ -33,19 +33,21 @@ public class SearchController extends HttpServlet{
 	
 	private void processRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String result, fromDate, toDate;
-		result = req.getParameter("city");
-		fromDate = req.getParameter("fromDate");
-		toDate = req.getParameter("toDate");
-		logger.log(Level.INFO, String.format("result=[%s], fromDate=[%s], toDate=[%s]", result, fromDate, toDate));
-		
-		Timestamp from = AppHelper.getTimestamp(fromDate);
-		Timestamp to = AppHelper.getTimestamp(toDate);
-		
-		logger.log(Level.INFO, String.format("from=[%s], to=[%s]", from, to));
+		String result = req.getParameter("city");
+		Timestamp from = AppHelper.getTimestamp(req.getParameter("fromDate"));
+		Timestamp to = AppHelper.getTimestamp(req.getParameter("toDate"));
+		logger.log(Level.INFO, String.format("result=[%s], from=[%s], to=[%s]", result, from, to));
 		
 		List<Hotel> hotels = searchService.searchHotels(result, from, to);
 		req.setAttribute("hotels", hotels);
+		req.setAttribute("result", result);
+		if(from!=null){
+			req.setAttribute("fromDate", from);
+		}
+		if(to!=null){
+			req.setAttribute("toDate", to);
+		}
+		
 		gotoPage("/jsp/result.jsp",req,res);
 	}
 
