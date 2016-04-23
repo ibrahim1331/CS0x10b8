@@ -4,53 +4,28 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import model.Hotel;
 import model.Room;
 import sqlwhere.core.Select;
 import sqlwhere.core.Where;
 import utils.DBHelper;
 
 public class RoomDAOImpl implements RoomDAO{
-
 	@Override
-	public List<Room> getAllRooms() {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = stmt.executeQuery("SELECT * FROM [room] ORDER BY [room_id] ASC");
-           
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(stmt);
-            DBHelper.close(rs);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-	
-	@Override
-	public List<Room> getRooms(Where where){
+	public List<Room> getRooms(Where where, List<Select.OrderBy> orderBys){
 		ArrayList<Room> records = new ArrayList<Room>();
 		
 		try{
 			Connection con = DBHelper.getConnection();
 			Select select = new Select("*").from("room").where(where);
+			if(orderBys!=null){
+				select.orderBy(orderBys);
+			}
 			
 			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
 			
@@ -68,6 +43,11 @@ public class RoomDAOImpl implements RoomDAO{
 		}
 		
 		return records;
+	}
+	
+	@Override
+	public List<Room> getRooms(Where where){
+		return this.getRooms(where, null);
 	}
 	
 	@Override
@@ -96,91 +76,6 @@ public class RoomDAOImpl implements RoomDAO{
         }
 		
 		return room;
-	}
-	
-	@Override
-	public List<Room> getAllRoomsofHotel(Hotel hotel) {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [hotel_id] = ?");
-            pstmt.setInt(1, hotel.getHotelId());
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-
-	@Override
-	public List<Room> getAllRecommendedRooms() {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = stmt.executeQuery("SELECT * FROM [room] WHERE [recommended] IS NOT NULL ORDER BY [recommended] DESC");
-           
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(stmt);
-            DBHelper.close(rs);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-
-	@Override
-	public List<Room> getRecommendedRooms(Hotel hotel) {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [hotel_id] = ? AND [recommended] IS NOT NULL ORDER BY [recommended] DESC");
-            pstmt.setInt(1, hotel.getHotelId());
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-
-	@Override
-	public List<Room> getRooms(String filter, String orderBy) {
-		
-		return null;
 	}
 	
 	public List<Room> getBedrooms(Room room){
