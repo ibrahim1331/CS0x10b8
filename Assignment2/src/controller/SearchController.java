@@ -50,8 +50,6 @@ public class SearchController extends HttpServlet{
 		
 		gotoPage("/jsp/result.jsp",req,res);
 	}
-
-	
 	
 	private void gotoPage(String address, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(address);
