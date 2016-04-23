@@ -1,7 +1,10 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,9 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import dao.HotelDAOImpl;
 import model.Hotel;
 import service.SearchService;
+import utils.AppHelper;
 
 public class SearchController extends HttpServlet{
 	
+	Logger logger = Logger.getLogger(this.getClass().getName());
 	HotelDAOImpl impl = new HotelDAOImpl();
 	SearchService searchService = new SearchService();
 	
@@ -32,10 +37,14 @@ public class SearchController extends HttpServlet{
 		result = req.getParameter("city");
 		fromDate = req.getParameter("fromDate");
 		toDate = req.getParameter("toDate");
-		//System.out.print(result + " " + fromDate + " " + " " + toDate);
-		List<Hotel> hotels = searchService.searchHotels(result, null, null);
-//		hotel = impl.getHotelByName(result);
-//		req.setAttribute("hotel", hotel);
+		logger.log(Level.INFO, String.format("result=[%s], fromDate=[%s], toDate=[%s]", result, fromDate, toDate));
+		
+		Timestamp from = AppHelper.getTimestamp(fromDate);
+		Timestamp to = AppHelper.getTimestamp(toDate);
+		
+		logger.log(Level.INFO, String.format("from=[%s], to=[%s]", from, to));
+		
+		List<Hotel> hotels = searchService.searchHotels(result, from, to);
 		req.setAttribute("hotels", hotels);
 		gotoPage("/jsp/result.jsp",req,res);
 	}

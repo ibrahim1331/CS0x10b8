@@ -32,7 +32,7 @@ public class SearchService {
 	BookingViewDAO bookingViewDAO = new BookingViewDAOImpl();
 	
 	public List<Hotel> searchHotels(String name, Timestamp fromDate, Timestamp toDate){
-		if(fromDate==null || toDate==null){
+		if(fromDate==null && toDate==null){
 			logger.log(Level.INFO, "searchHotels, name only");
 			Where where = new Where(new Like(Columns.Table.Hotel.NAME, "%"+name+"%"));
 			return hotelDAO.getHotels(where);

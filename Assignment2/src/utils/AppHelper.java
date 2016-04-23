@@ -1,5 +1,9 @@
 package utils;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -17,5 +21,17 @@ public class AppHelper {
 				.create();
 		}
 		return gson;
+	}
+	
+	public static Timestamp getTimestamp(String datetime){
+		try{
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		    Date parsedDate = dateFormat.parse(datetime);
+		    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+		    return timestamp;
+		} catch(Exception ex){
+			return null;
+		}
+	    
 	}
 }
