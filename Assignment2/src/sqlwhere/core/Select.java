@@ -2,6 +2,7 @@ package sqlwhere.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class Select extends Operation{
 
 	@Override
 	public Map<Integer, Object> getIndexMap() {
-		return where==null ? null : where.getIndexMap();
+		return where==null ? new HashMap<Integer, Object>() : where.getIndexMap();
 	}
 
 	@Override

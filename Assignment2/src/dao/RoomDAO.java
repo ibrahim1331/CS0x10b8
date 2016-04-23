@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.Hotel;
 import model.Room;
+import sqlwhere.core.Where;
 
 public interface RoomDAO {
 	List<Room> getAllRooms();
@@ -19,6 +20,8 @@ public interface RoomDAO {
 	List<Room> getRooms(String filter, String orderBy);
 	
 	List<Room> getBedrooms(Room room);
+	
+	List<Room> getRooms(Where where);
 	
 	boolean createRoom(Room room);
 	

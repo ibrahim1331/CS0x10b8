@@ -1,5 +1,6 @@
 package sqlwhere.core;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Delete extends Operation{
@@ -17,7 +18,7 @@ public class Delete extends Operation{
 	
 	@Override
 	public Map<Integer, Object> getIndexMap(){
-		return where==null ? null : where.getIndexMap();
+		return where==null ? new HashMap<Integer, Object>() : where.getIndexMap();
 	}
 	
 	@Override

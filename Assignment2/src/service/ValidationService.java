@@ -21,9 +21,12 @@ public class ValidationService {
 		return matcher.matches();
 	}
 	
-	public String cleanHtml(){
-		String htmlString = "";
-		
-		return htmlString;
+	public String removeScripts(String inputString){
+		String string = inputString;
+//		System.out.println(string);
+		string = string.replaceAll("(?im)<script\\b[^<]*(?:(?!<\\/.*>)[^<]*)*<\\/\\w+>", "");
+		string = string.replaceAll("(?im)on\\w+[^<]=\\W*?[\"\"\'\']\\b[^>]*[\"\"\'\']", "");
+		string = string.replaceAll("(?im)href\\W*=\\W*[\'\'\"\"]\\W*javascript\\b[^>]*[\'\'\"\"]", "");
+		return string;
 	}
 }
