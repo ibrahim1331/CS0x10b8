@@ -16,6 +16,11 @@ public class In implements Negable {
 			this.values.add(o);
 		}
 	}
+	
+	public In(String column, List<Object> values){
+		this.column = column;
+		this.values.addAll(values);
+	}
 
 	@Override
 	public String getString() {
