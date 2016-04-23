@@ -34,4 +34,9 @@ public class AppHelper {
 		}
 	    
 	}
+	
+	public static Timestamp getCurrentTimestamp(){
+		Timestamp timestamp = new Timestamp(new Date().getTime());
+		return timestamp;
+	}
 }

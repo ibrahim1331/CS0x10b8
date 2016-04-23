@@ -2,9 +2,9 @@ package service;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import dao.BookingDAO;
 import dao.BookingDAOImpl;
@@ -18,9 +18,9 @@ import model.BookingView;
 import model.Hotel;
 import sqlwhere.core.Where;
 import sqlwhere.operators.compare.GreaterThanEqual;
-import sqlwhere.operators.compare.In;
 import sqlwhere.operators.compare.LessThanEqual;
 import sqlwhere.operators.compare.Like;
+import utils.AppHelper;
 import utils.Columns;
 
 public class SearchService {
@@ -38,16 +38,25 @@ public class SearchService {
 			return hotelDAO.getHotels(where);
 		} else {
 			logger.log(Level.INFO, "searchHotels, name + date range");
-			//get booking within date range first
-			Where whereBooking = new Where(new Like(Columns.View.BookingView.HOTEL_NAME, "%"+name+"%"))
-					.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, fromDate))
-					.and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, toDate));
+			//if there is any room within the date range not booked by anyone, then the hotel is in the list
+			Where whereBooking = new Where(new Like(Columns.View.BookingView.HOTEL_NAME, "%"+name+"%"));
+			
+			if(fromDate!=null){
+				whereBooking.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, fromDate));
+			} else { 
+				whereBooking.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()));
+			}
+			if(toDate!=null){
+				whereBooking.and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, toDate));
+			}
 			
 			List<BookingView> bookingViews = bookingViewDAO.getBookings(whereBooking);
 			
-			Integer[] hotelIds = (Integer[]) bookingViews.stream().map(bv->bv.getHotelId()).distinct().collect(Collectors.toList()).toArray();
+			List<Integer> hotelIds = bookingViews.stream().map(bv->bv.getHotelId()).distinct().collect(Collectors.toList());
 			
-			Where whereHotel = new Where(new In(Columns.Table.Hotel.HOTEL_ID, hotelIds));
+			Where whereHotel = new Where(new Like(Columns.Table.Hotel.NAME, "%"+name+"%"));
+			
+			if(!hotelIds.isEmpty()) whereHotel.and(new NotIn(Columns.Table.Hotel.HOTEL_ID, hotelIds));
 			
 			return hotelDAO.getHotels(whereHotel);
 		}
