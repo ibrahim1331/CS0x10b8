@@ -24,15 +24,26 @@
 			</tr>
 		</thead>
 		<tbody>
-				<c:forEach items="${requestScope.rooms}" var="room">
+				<c:forEach items="${requestScope.recommendingRooms}" var="room">
 					<tr>
-						<td>${room.roomNo}"</td>
-						<td>"${room.type}"<</td>
-						<td>"${room.price}"</td>
-						<td>"${room.capacity}"</td>
-						<td>"${room.discount}"</td>
-						<td>"${room.recommended}"</td>
-						<td><a href="#" class="ui button">Book</a> </td>
+						<td>${room.roomNo}</td>
+						<td>${room.type}</td>
+						<td>${room.price}</td>
+						<td>${room.capacity}</td>
+						<td>${room.discount}</td>
+						<td>${room.recommended}</td>
+						<td><a href="book?roomId=${room.roomId}" class="ui button">Book</a> </td>
+					</tr>
+				</c:forEach>
+				<c:forEach items="${requestScope.nonRecommendingRooms}" var="room">
+					<tr>
+						<td>${room.roomNo}</td>
+						<td>${room.type}</td>
+						<td>${room.price}</td>
+						<td>${room.capacity}</td>
+						<td>${room.discount}</td>
+						<td>${room.recommended}</td>
+						<td><a href="book?roomId=${room.roomId}" class="ui button">Book</a> </td>
 					</tr>
 				</c:forEach>
 		</tbody>
