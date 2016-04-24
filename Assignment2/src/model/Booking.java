@@ -3,46 +3,47 @@ package model;
 import java.sql.Timestamp;
 
 public class Booking {
-	private int bookingId;
-	private int bookingNumber;
-	private int customerId;
-	private int roomId;
-	private int noOfPeople;
+	private Integer bookingId;
+	private Integer bookingNumber;
+	private Integer customerId;
+	private Integer roomId;
+	private Integer noOfPeople;
 	private Timestamp checkInDate;
 	private Timestamp checkOutDate;
 	private Timestamp bookingDate;
 	private String purpose;
 	private String pin;
-	private boolean isCancelled;
+	private Boolean isCancelled;
+	private Integer price;
 	
-	public int getBookingId() {
+	public Integer getBookingId() {
 		return bookingId;
 	}
-	public void setBookingId(int bookingId) {
+	public void setBookingId(Integer bookingId) {
 		this.bookingId = bookingId;
 	}
-	public int getBookingNumber() {
+	public Integer getBookingNumber() {
 		return bookingNumber;
 	}
-	public void setBookingNumber(int bookingNumber) {
+	public void setBookingNumber(Integer bookingNumber) {
 		this.bookingNumber = bookingNumber;
 	}
-	public int getCustomerId() {
+	public Integer getCustomerId() {
 		return customerId;
 	}
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
 	}
-	public int getRoomId() {
+	public Integer getRoomId() {
 		return roomId;
 	}
-	public void setRoomId(int roomId) {
+	public void setRoomId(Integer roomId) {
 		this.roomId = roomId;
 	}
-	public int getNoOfPeople() {
+	public Integer getNoOfPeople() {
 		return noOfPeople;
 	}
-	public void setNoOfPeople(int noOfPeople) {
+	public void setNoOfPeople(Integer noOfPeople) {
 		this.noOfPeople = noOfPeople;
 	}
 	public Timestamp getCheckInDate() {
@@ -75,11 +76,17 @@ public class Booking {
 	public void setPin(String pin) {
 		this.pin = pin;
 	}
-	public boolean isCancelled() {
+	public Boolean isCancelled() {
 		return isCancelled;
 	}
-	public void setCancelled(boolean isCancelled) {
+	public void setCancelled(Boolean isCancelled) {
 		this.isCancelled = isCancelled;
+	}
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
 	
 }

@@ -32,7 +32,7 @@
 						<td>${room.capacity}</td>
 						<td>${room.discount}</td>
 						<td>${room.recommended}</td>
-						<td><a href="book?roomId=${room.roomId}" class="ui button">Book</a> </td>
+						<td><a href="${pageContext.request.contextPath }/booking/create?id=${room.roomId}" class="ui button">Book</a> </td>
 					</tr>
 				</c:forEach>
 				<c:forEach items="${requestScope.nonRecommendingRooms}" var="room">
@@ -43,7 +43,7 @@
 						<td>${room.capacity}</td>
 						<td>${room.discount}</td>
 						<td>${room.recommended}</td>
-						<td><a href="book?roomId=${room.roomId}" class="ui button">Book</a> </td>
+						<td><a href="${pageContext.request.contextPath }/booking/create?id=${room.roomId}" class="ui button">Book</a> </td>
 					</tr>
 				</c:forEach>
 		</tbody>

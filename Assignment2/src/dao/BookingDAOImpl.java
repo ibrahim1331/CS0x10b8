@@ -45,7 +45,7 @@ public class BookingDAOImpl implements BookingDAO{
 	}
 
 	@Override
-	public Booking getBookingById(int id) {
+	public Booking getBookingById(Integer id) {
 		Booking booking = null;
 		
 		try {
@@ -77,17 +77,21 @@ public class BookingDAOImpl implements BookingDAO{
 		
 		if (rs != null && rs.next()) {
 			booking = new Booking();
-			booking.setBookingId(rs.getInt("booking_id"));
-			booking.setBookingNumber(rs.getInt("booking_number"));
-			booking.setCustomerId(rs.getInt("customer_id"));
-			booking.setRoomId(rs.getInt("room_id"));
-			booking.setNoOfPeople(rs.getInt("no_of_people"));
-			booking.setCheckInDate(rs.getTimestamp("check_in_date"));
-			booking.setCheckOutDate(rs.getTimestamp("check_out_date"));
-			booking.setPurpose(rs.getString("purpose"));
-			booking.setBookingDate(rs.getTimestamp("booking_date"));
-			booking.setPin(rs.getString("pin"));
-			booking.setCancelled(rs.getBoolean("is_cancelled"));
+			booking.setBookingId(rs.getInt(Columns.Table.Booking.BOOKING_ID));
+			booking.setBookingNumber(rs.getInt(Columns.Table.Booking.BOOKING_NUMBER));
+			booking.setCustomerId(rs.getInt(Columns.Table.Booking.CUSTOMER_ID));
+			if(rs.wasNull()){
+				booking.setCustomerId(null);
+			}
+			booking.setRoomId(rs.getInt(Columns.Table.Booking.ROOM_ID));
+			booking.setNoOfPeople(rs.getInt(Columns.Table.Booking.NO_OF_PEOPLE));
+			booking.setCheckInDate(rs.getTimestamp(Columns.Table.Booking.CHECK_IN_DATE));
+			booking.setCheckOutDate(rs.getTimestamp(Columns.Table.Booking.CHECK_OUT_DATE));
+			booking.setPurpose(rs.getString(Columns.Table.Booking.PURPOSE));
+			booking.setBookingDate(rs.getTimestamp(Columns.Table.Booking.BOOKING_DATE));
+			booking.setPin(rs.getString(Columns.Table.Booking.PIN));
+			booking.setCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
+			booking.setPrice(rs.getInt(Columns.Table.Booking.PRICE));
         }
 		
 		return booking;
@@ -96,17 +100,21 @@ public class BookingDAOImpl implements BookingDAO{
 	private void populateBookingArray(ArrayList<Booking> bookings, ResultSet rs) throws SQLException {
 		while(rs != null && rs.next()){
 			Booking booking = new Booking();
-			booking.setBookingId(rs.getInt("booking_id"));
-			booking.setBookingNumber(rs.getInt("booking_number"));
-			booking.setCustomerId(rs.getInt("customer_id"));
-			booking.setRoomId(rs.getInt("room_id"));
-			booking.setNoOfPeople(rs.getInt("no_of_people"));
-			booking.setCheckInDate(rs.getTimestamp("check_in_date"));
-			booking.setCheckOutDate(rs.getTimestamp("check_out_date"));
-			booking.setPurpose(rs.getString("purpose"));
-			booking.setBookingDate(rs.getTimestamp("booking_date"));
-			booking.setPin(rs.getString("pin"));
-			booking.setCancelled(rs.getBoolean("is_cancelled"));
+			booking.setBookingId(rs.getInt(Columns.Table.Booking.BOOKING_ID));
+			booking.setBookingNumber(rs.getInt(Columns.Table.Booking.BOOKING_NUMBER));
+			booking.setCustomerId(rs.getInt(Columns.Table.Booking.CUSTOMER_ID));
+			if(rs.wasNull()){
+				booking.setCustomerId(null);
+			}
+			booking.setRoomId(rs.getInt(Columns.Table.Booking.ROOM_ID));
+			booking.setNoOfPeople(rs.getInt(Columns.Table.Booking.NO_OF_PEOPLE));
+			booking.setCheckInDate(rs.getTimestamp(Columns.Table.Booking.CHECK_IN_DATE));
+			booking.setCheckOutDate(rs.getTimestamp(Columns.Table.Booking.CHECK_OUT_DATE));
+			booking.setPurpose(rs.getString(Columns.Table.Booking.PURPOSE));
+			booking.setBookingDate(rs.getTimestamp(Columns.Table.Booking.BOOKING_DATE));
+			booking.setPin(rs.getString(Columns.Table.Booking.PIN));
+			booking.setCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
+			booking.setPrice(rs.getInt(Columns.Table.Booking.PRICE));
 			bookings.add(booking);
 		}
 	}
@@ -118,9 +126,13 @@ public class BookingDAOImpl implements BookingDAO{
 		try {
             if (booking != null) {
             	Connection con = DBHelper.getConnection();
-            	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [booking] ([booking_number], [customer_id], [room_id], [no_of_people], [check_in_date], [check_out_date], [purpose], [booking_date], [pin], [is_cancelled]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [booking] ([booking_number], [customer_id], [room_id], [no_of_people], [check_in_date], [check_out_date], [purpose], [booking_date], [pin], [is_cancelled], [price]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 pstmt.setInt(1, booking.getBookingNumber());
-                pstmt.setInt(2, booking.getCustomerId());
+                if(booking.getCustomerId()!=null){
+                	pstmt.setInt(2, booking.getCustomerId());
+                } else {
+                	pstmt.setNull(2, java.sql.Types.INTEGER);
+                }
                 pstmt.setInt(3, booking.getRoomId());
                 pstmt.setInt(4, booking.getNoOfPeople());
                 pstmt.setTimestamp(5, booking.getCheckInDate());
@@ -129,6 +141,7 @@ public class BookingDAOImpl implements BookingDAO{
                 pstmt.setTimestamp(8, booking.getBookingDate());
                 pstmt.setString(9, booking.getPin());
                 pstmt.setBoolean(10, booking.isCancelled());
+                pstmt.setInt(11, booking.getPrice());
                 
                 
                 // execute the SQL statement
@@ -156,7 +169,7 @@ public class BookingDAOImpl implements BookingDAO{
 		try {
             if (booking != null) {
             	Connection con = DBHelper.getConnection();
-                PreparedStatement pstmt = con.prepareStatement("UPDATE [booking] SET [booking_number] = ?, [customer_id] = ?, [room_id] = ?, [no_of_people] = ?, [check_in_date] = ?, [check_out_date] = ?, [purpose] = ?, [booking_date] = ?, [pin] = ?, [is_cancelled] = ? WHERE [booking_id] = ?");
+                PreparedStatement pstmt = con.prepareStatement("UPDATE [booking] SET [booking_number] = ?, [customer_id] = ?, [room_id] = ?, [no_of_people] = ?, [check_in_date] = ?, [check_out_date] = ?, [purpose] = ?, [booking_date] = ?, [pin] = ?, [is_cancelled] = ?, [price] = ? WHERE [booking_id] = ?");
                 pstmt.setInt(1, booking.getBookingNumber());
                 pstmt.setInt(2, booking.getCustomerId());
                 pstmt.setInt(3, booking.getRoomId());
@@ -167,7 +180,8 @@ public class BookingDAOImpl implements BookingDAO{
                 pstmt.setTimestamp(8, booking.getBookingDate());
                 pstmt.setString(9, booking.getPin());
                 pstmt.setBoolean(10, booking.isCancelled());
-                pstmt.setInt(11, booking.getBookingId());
+                pstmt.setInt(11, booking.getPrice());
+                pstmt.setInt(12, booking.getBookingId());
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();

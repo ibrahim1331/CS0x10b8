@@ -17,7 +17,7 @@ public class In implements Negable {
 		}
 	}
 	
-	public In(String column, List<Object> values){
+	public In(String column, List<? extends Object> values){
 		this.column = column;
 		this.values.addAll(values);
 	}

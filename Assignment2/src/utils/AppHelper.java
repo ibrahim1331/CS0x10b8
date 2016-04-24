@@ -1,8 +1,10 @@
 package utils;
 
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -38,5 +40,17 @@ public class AppHelper {
 	public static Timestamp getCurrentTimestamp(){
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		return timestamp;
+	}
+	
+	public static String generatePin(){
+		char[] characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+		Random random = new SecureRandom();
+	    char[] result = new char[25];
+	    for (int i = 0; i < result.length; i++) {
+	        // picks a random index out of character set > random character
+	        int randomCharIndex = random.nextInt(characterSet.length);
+	        result[i] = characterSet[randomCharIndex];
+	    }
+	    return new String(result);
 	}
 }

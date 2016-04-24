@@ -30,6 +30,10 @@
   	<servlet-name>RecommendRoomController</servlet-name>
   	<servlet-class>controller.RecommendRoomController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>BookingController</servlet-name>
+  	<servlet-class>controller.BookingController</servlet-class>
+  </servlet>
   
   <!-- Servlet Mapping -->
   
@@ -62,6 +66,11 @@
   	<servlet-name>RecommendRoomController</servlet-name>
   	<url-pattern>/recommend-room/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>BookingController</servlet-name>
+  	<url-pattern>/booking/*</url-pattern>
+  </servlet-mapping>
     
   <!-- Filter -->
   <filter>
@@ -73,7 +82,6 @@
   <filter-mapping>
   	<filter-name>LoginFilter</filter-name>
   	<url-pattern>/user/*</url-pattern>
-  	<url-pattern>/booking/*</url-pattern>
   	<url-pattern>/manage-user/*</url-pattern>
   	<url-pattern>/recommend-room/*</url-pattern>
   </filter-mapping>

@@ -8,7 +8,7 @@ import model.User;
 import sqlwhere.core.Where;
 
 public interface BookingDAO {
-	Booking getBookingById(int id);
+	Booking getBookingById(Integer id);
 	
 	List<Booking> getBookings(Where where);
 	
