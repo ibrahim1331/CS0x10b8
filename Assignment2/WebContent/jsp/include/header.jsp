@@ -50,7 +50,7 @@
 			</a>
 		</c:if>
 		<c:if test="${empty sessionScope.loginUser}">
-			<a class="item" id="btnLogin">
+			<a class="item" id="btnLogin" href="${pageContext.request.contextPath }/auth">
 				Login
 			</a>
 		</c:if>
