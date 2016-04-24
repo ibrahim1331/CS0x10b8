@@ -3,6 +3,7 @@ package utils;
 import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -40,6 +41,16 @@ public class AppHelper {
 	public static Timestamp getCurrentTimestamp(){
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		return timestamp;
+	}
+	
+	public static Timestamp getTimestampAfterDays(int day){
+		Timestamp ts = new Timestamp(new Date().getTime());
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(ts);
+		cal.add(Calendar.DAY_OF_WEEK, day);
+		ts.setTime(cal.getTime().getTime());
+		ts = new Timestamp(cal.getTime().getTime());
+		return ts;
 	}
 	
 	public static String generatePin(){

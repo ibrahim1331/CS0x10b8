@@ -37,6 +37,10 @@ public class RoomDAOImpl implements RoomDAO{
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        this.populateRoomArray(records, rs);
+	        
+	        DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
 		} catch (SQLException ex){
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (Exception ex){
@@ -121,10 +125,6 @@ public class RoomDAOImpl implements RoomDAO{
 				room.setSize(null);
 			}
 			room.setRoomNo(rs.getString("room_no"));
-			room.setBelongsTo(rs.getInt("belongs_to"));
-			if(rs.wasNull()){
-				room.setBelongsTo(null);
-			}
 			room.setDiscount(rs.getInt("discount"));
 			if(rs.wasNull()){
 				room.setDiscount(null);
@@ -155,10 +155,6 @@ public class RoomDAOImpl implements RoomDAO{
 				room.setSize(null);
 			}
 			room.setRoomNo(rs.getString("room_no"));
-			room.setBelongsTo(rs.getInt("belongs_to"));
-			if(rs.wasNull()){
-				room.setBelongsTo(null);
-			}
 			room.setDiscount(rs.getInt("discount"));
 			if(rs.wasNull()){
 				room.setDiscount(null);
@@ -214,6 +210,7 @@ public class RoomDAOImpl implements RoomDAO{
                 }
                 
                 DBHelper.close(con);
+                DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
         	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
