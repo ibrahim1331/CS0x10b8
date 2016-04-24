@@ -80,15 +80,16 @@ public class SearchService {
 	}
 	
 	public List<Room> getRecommendingRooms(int hotelId, Timestamp fromDate, Timestamp toDate){
-		Where where = new Where(new Equal(Columns.View.BookingView.HOTEL_ID, hotelId));
+		Where where = new Where(new Equal(Columns.View.BookingView.HOTEL_ID, hotelId))
+				.and(new Equal(Columns.View.BookingView.IS_CANCELLED, false));
 		if(fromDate==null && toDate==null){
 			//exclude rooms that are booked within the coming week
-			where.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()))
-				 .and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, AppHelper.getTimestampAfterDays(7)));
+			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()))
+				 .and(new GreaterThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, AppHelper.getTimestampAfterDays(7)));
 		} else if(fromDate!=null && toDate!=null){
 			//startA <= endB and endA >= startB
-			where.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, fromDate))
-				 .and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, toDate));
+			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_IN_DATE, toDate))
+				 .and(new GreaterThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, fromDate));
 		}
 		
 		List<BookingView> bookingView = bookingViewDAO.getBookings(where);
@@ -109,15 +110,16 @@ public class SearchService {
 	}
 	
 	public List<Room> getNonRecommendingRooms(int hotelId, Timestamp fromDate, Timestamp toDate){
-		Where where = new Where(new Equal(Columns.Table.Room.HOTEL_ID, hotelId));
+		Where where = new Where(new Equal(Columns.View.BookingView.HOTEL_ID, hotelId))
+				.and(new Equal(Columns.View.BookingView.IS_CANCELLED, false));
 		if(fromDate==null && toDate==null){
 			//exclude rooms that are booked within the coming week
-			where.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()))
-				 .and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, AppHelper.getTimestampAfterDays(7)));
+			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()))
+				 .and(new GreaterThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, AppHelper.getTimestampAfterDays(7)));
 		} else if(fromDate!=null && toDate!=null){
 			//startA <= endB and endA >= startB
-			where.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, fromDate))
-				 .and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, toDate));
+			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_IN_DATE, toDate))
+				 .and(new GreaterThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, fromDate));
 		}
 		
 		List<BookingView> bookingView = bookingViewDAO.getBookings(where);
