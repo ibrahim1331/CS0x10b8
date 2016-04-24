@@ -16,7 +16,7 @@
 		Hotel Pro
 	</a>
 	<c:if test="true">
-		<a href="#" class="item">
+		<a href="${pageContext.request.contextPath}/booking" class="item">
 			Booking
 		</a>
 	</c:if>

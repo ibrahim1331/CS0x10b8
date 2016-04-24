@@ -17,7 +17,7 @@ public class NotIn implements Operator {
 		operator = new Not(new In(column, value, values));
 	}
 	
-	public NotIn(String column, List<Object> values){
+	public NotIn(String column, List<? extends Object> values){
 		operator = new Not(new In(column, values));
 	}
 

@@ -3,65 +3,66 @@ package model;
 import java.sql.Timestamp;
 
 public class BookingView {
-	private int bookingId;
-	private int bookingNumber;
-	private int customerId;
-	private int noOfPeople;
+	private Integer bookingId;
+	private Integer bookingNumber;
+	private Integer customerId;
+	private Integer noOfPeople;
 	private Timestamp checkInDate;
 	private Timestamp checkOutDate;
 	private String purpose;
+	private Integer bookingPrice;
 	private Timestamp bookingDate;
 	private String pin;
-	private boolean isCancelled;
-	private int hotelId;
+	private Boolean cancelled;
+	private Integer hotelId;
 	private String hotelName;
 	private String hotelAddress;
 	private String hotelDescription;
-	private int noOfRooms;
-	private float hotelRating;
+	private Integer noOfRooms;
+	private Float hotelRating;
 	private Timestamp hotelDateJoined;
-	private int roomId;
+	private Integer roomId;
 	private String roomNo;
 	private String roomType;
-	private int roomPrice;
-	private int roomCapacity;
-	private int roomSize;
-	private int belongsTo;
-	private int discount;
-	private int recommended;
-	private int locationId;
+	private Integer roomPrice;
+	private Integer roomCapacity;
+	private Integer roomSize;
+	private Integer belongsTo;
+	private Integer discount;
+	private Integer recommended;
+	private Integer locationId;
 	private String locationName;
 	private String country;
 	
-	public int getBookingId() {
+	public Integer getBookingId() {
 		return bookingId;
 	}
 	
-	public void setBookingId(int bookingId) {
+	public void setBookingId(Integer bookingId) {
 		this.bookingId = bookingId;
 	}
 	
-	public int getBookingNumber() {
+	public Integer getBookingNumber() {
 		return bookingNumber;
 	}
 	
-	public void setBookingNumber(int bookingNumber) {
+	public void setBookingNumber(Integer bookingNumber) {
 		this.bookingNumber = bookingNumber;
 	}
 	
-	public int getCustomerId() {
+	public Integer getCustomerId() {
 		return customerId;
 	}
 	
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
 	}
 	
-	public int getNoOfPeople() {
+	public Integer getNoOfPeople() {
 		return noOfPeople;
 	}
 	
-	public void setNoOfPeople(int noOfPeople) {
+	public void setNoOfPeople(Integer noOfPeople) {
 		this.noOfPeople = noOfPeople;
 	}
 	
@@ -105,11 +106,11 @@ public class BookingView {
 		this.pin = pin;
 	}
 	
-	public int getHotelId() {
+	public Integer getHotelId() {
 		return hotelId;
 	}
 	
-	public void setHotelId(int hotelId) {
+	public void setHotelId(Integer hotelId) {
 		this.hotelId = hotelId;
 	}
 	
@@ -137,19 +138,19 @@ public class BookingView {
 		this.hotelDescription = hotelDescription;
 	}
 	
-	public int getNoOfRooms() {
+	public Integer getNoOfRooms() {
 		return noOfRooms;
 	}
 	
-	public void setNoOfRooms(int noOfRooms) {
+	public void setNoOfRooms(Integer noOfRooms) {
 		this.noOfRooms = noOfRooms;
 	}
 	
-	public float getHotelRating() {
+	public Float getHotelRating() {
 		return hotelRating;
 	}
 	
-	public void setHotelRating(float hotelRating) {
+	public void setHotelRating(Float hotelRating) {
 		this.hotelRating = hotelRating;
 	}
 	
@@ -161,11 +162,11 @@ public class BookingView {
 		this.hotelDateJoined = hotelDateJoined;
 	}
 	
-	public int getRoomId() {
+	public Integer getRoomId() {
 		return roomId;
 	}
 	
-	public void setRoomId(int roomId) {
+	public void setRoomId(Integer roomId) {
 		this.roomId = roomId;
 	}
 	
@@ -185,59 +186,59 @@ public class BookingView {
 		this.roomType = roomType;
 	}
 	
-	public int getRoomPrice() {
+	public Integer getRoomPrice() {
 		return roomPrice;
 	}
 	
-	public void setRoomPrice(int roomPrice) {
+	public void setRoomPrice(Integer roomPrice) {
 		this.roomPrice = roomPrice;
 	}
 	
-	public int getRoomCapacity() {
+	public Integer getRoomCapacity() {
 		return roomCapacity;
 	}
 	
-	public void setRoomCapacity(int roomCapacity) {
+	public void setRoomCapacity(Integer roomCapacity) {
 		this.roomCapacity = roomCapacity;
 	}
 	
-	public int getRoomSize() {
+	public Integer getRoomSize() {
 		return roomSize;
 	}
 	
-	public void setRoomSize(int roomSize) {
+	public void setRoomSize(Integer roomSize) {
 		this.roomSize = roomSize;
 	}
 	
-	public int getBelongsTo() {
+	public Integer getBelongsTo() {
 		return belongsTo;
 	}
 	
-	public void setBelongsTo(int belongsTo) {
+	public void setBelongsTo(Integer belongsTo) {
 		this.belongsTo = belongsTo;
 	}
 	
-	public int getDiscount() {
+	public Integer getDiscount() {
 		return discount;
 	}
 	
-	public void setDiscount(int discount) {
+	public void setDiscount(Integer discount) {
 		this.discount = discount;
 	}
 	
-	public int getRecommended() {
+	public Integer getRecommended() {
 		return recommended;
 	}
 	
-	public void setRecommended(int recommended) {
+	public void setRecommended(Integer recommended) {
 		this.recommended = recommended;
 	}
 	
-	public int getLocationId() {
+	public Integer getLocationId() {
 		return locationId;
 	}
 	
-	public void setLocationId(int locationId) {
+	public void setLocationId(Integer locationId) {
 		this.locationId = locationId;
 	}
 	
@@ -257,11 +258,19 @@ public class BookingView {
 		this.country = country;
 	}
 
-	public boolean isCancelled() {
-		return isCancelled;
+	public Integer getBookingPrice() {
+		return bookingPrice;
 	}
 
-	public void setCancelled(boolean isCancelled) {
-		this.isCancelled = isCancelled;
+	public void setBookingPrice(Integer bookingPrice) {
+		this.bookingPrice = bookingPrice;
+	}
+
+	public Boolean getCancelled() {
+		return cancelled;
+	}
+
+	public void setCancelled(Boolean cancelled) {
+		this.cancelled = cancelled;
 	}
 }

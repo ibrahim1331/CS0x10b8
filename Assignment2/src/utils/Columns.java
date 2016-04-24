@@ -43,6 +43,7 @@ public class Columns {
 			public static final String BOOKING_DATE = "booking_date";
 			public static final String PIN = "pin";
 			public static final String IS_CANCELLED = "is_cancelled";
+			public static final String PRICE = "price";
 		}
 		
 		public class Location{
@@ -124,6 +125,7 @@ public class Columns {
 			public static final String CHECK_IN_DATE = "check_in_date";
 			public static final String CHECK_OUT_DATE = "check_out_date";
 			public static final String PURPOSE = "purpose";
+			public static final String BOOKING_PRICE = "booking_price";
 			public static final String BOOKING_DATE = "booking_date";
 			public static final String PIN = "pin";
 			public static final String IS_CANCELLED = "is_cancelled";
@@ -144,7 +146,7 @@ public class Columns {
 			public static final String DISCOUNT = "discount";
 			public static final String RECOMMENDED = "recommended";
 			public static final String LOCATION_ID = "location_id";
-			public static final String LOCATION_NAME = "location_name";
+			public static final String LOCATION_NAME = "name";
 			public static final String COUNTRY = "country";
 		}
 	}

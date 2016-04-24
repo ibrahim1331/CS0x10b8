@@ -28,6 +28,7 @@ public class RoomDAOImpl implements RoomDAO{
 			}
 			
 			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
+			System.out.println(select.getIndexMap());
 			
 			PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
@@ -111,8 +112,14 @@ public class RoomDAOImpl implements RoomDAO{
 			room.setType(rs.getString("type"));
 			room.setPrice(rs.getInt("price"));
 			room.setHotelId(rs.getInt("hotel_id"));
+			if(rs.wasNull()){
+				room.setHotelId(null);
+			}
 			room.setCapacity(rs.getInt("capacity"));
 			room.setSize(rs.getInt("size"));
+			if(rs.wasNull()){
+				room.setSize(null);
+			}
 			room.setRoomNo(rs.getString("room_no"));
 			room.setBelongsTo(rs.getInt("belongs_to"));
 			if(rs.wasNull()){
@@ -139,8 +146,14 @@ public class RoomDAOImpl implements RoomDAO{
 			room.setType(rs.getString("type"));
 			room.setPrice(rs.getInt("price"));
 			room.setHotelId(rs.getInt("hotel_id"));
+			if(rs.wasNull()){
+				room.setHotelId(null);
+			}
 			room.setCapacity(rs.getInt("capacity"));
 			room.setSize(rs.getInt("size"));
+			if(rs.wasNull()){
+				room.setSize(null);
+			}
 			room.setRoomNo(rs.getString("room_no"));
 			room.setBelongsTo(rs.getInt("belongs_to"));
 			if(rs.wasNull()){
@@ -171,15 +184,27 @@ public class RoomDAOImpl implements RoomDAO{
                 pstmt.setInt(2, room.getPrice());
                 pstmt.setInt(3, room.getHotelId());
                 pstmt.setInt(4, room.getCapacity());
-                pstmt.setInt(5, room.getSize());
+                if(room.getSize()!=null){
+                	pstmt.setInt(5, room.getSize());
+                } else {
+                	pstmt.setNull(5, java.sql.Types.INTEGER);
+                }
                 pstmt.setString(6, room.getRoomNo());
                 if(room.getBelongsTo()!=null){
                 	pstmt.setInt(7, room.getBelongsTo());
                 } else {
                 	pstmt.setNull(7, java.sql.Types.INTEGER);
                 }
-                pstmt.setInt(8, room.getDiscount());
-                pstmt.setInt(9, room.getRecommended());
+                if(room.getDiscount()!=null){
+                	pstmt.setInt(8, room.getDiscount());
+                } else {
+                	pstmt.setNull(8, java.sql.Types.NUMERIC);
+                }
+                if(room.getRecommended()!=null){
+                	pstmt.setInt(9, room.getRecommended());
+                } else {
+                	pstmt.setNull(9, java.sql.Types.INTEGER);
+                }
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();
@@ -211,7 +236,11 @@ public class RoomDAOImpl implements RoomDAO{
                 pstmt.setInt(2, room.getPrice());
                 pstmt.setInt(3, room.getHotelId());
                 pstmt.setInt(4, room.getCapacity());
-                pstmt.setInt(5, room.getSize());
+                if(room.getSize()!=null){
+                	pstmt.setInt(5, room.getSize());
+                } else {
+                	pstmt.setNull(5, java.sql.Types.INTEGER);
+                }
                 pstmt.setString(6, room.getRoomNo());
                 if(room.getBelongsTo()!=null){
                 	pstmt.setInt(7, room.getBelongsTo());
@@ -221,7 +250,7 @@ public class RoomDAOImpl implements RoomDAO{
                 if(room.getDiscount()!=null){
                 	pstmt.setInt(8, room.getDiscount());
                 } else {
-                	pstmt.setNull(8, java.sql.Types.INTEGER);
+                	pstmt.setNull(8, java.sql.Types.NUMERIC);
                 }
                 if(room.getRecommended()!=null){
                 	pstmt.setInt(9, room.getRecommended());

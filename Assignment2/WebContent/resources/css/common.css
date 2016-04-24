@@ -1,0 +1,3 @@
+a.disabled, a[disabled]{
+	pointer-events: none !important;
+}
