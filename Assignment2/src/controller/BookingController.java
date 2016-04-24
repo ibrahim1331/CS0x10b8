@@ -346,7 +346,11 @@ public class BookingController extends HttpServlet {
 		}
 		Search roomView = service.getSearch(roomId);
 		if(req.getParameter("confirm")==null){
+			Timestamp from = AppHelper.getTimestamp(req.getParameter("fromDate"));
+			Timestamp to = AppHelper.getTimestamp(req.getParameter("toDate"));
 			req.setAttribute("roomView", roomView);
+			req.setAttribute("fromDate", from);
+			req.setAttribute("toDate", to);
 			req.getRequestDispatcher("/jsp/booking/booking-confirm.jsp").forward(req, res);
 		} else {
 			int noOfPeople = Integer.parseInt(req.getParameter("noOfPeople"));

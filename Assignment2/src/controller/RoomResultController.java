@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Hotel;
 import model.Room;
 import service.SearchService;
 import utils.AppHelper;
@@ -29,15 +30,20 @@ public class RoomResultController extends HttpServlet{
 		int id = Integer.parseInt(req.getParameter("id"));
 		Timestamp from = AppHelper.getTimestamp(req.getParameter("fromDate"));
 		Timestamp to = AppHelper.getTimestamp(req.getParameter("toDate"));
-		logger.log(Level.INFO, String.format("id=[%s], from=[%s], to=[%s]", id, from, id));
+		if(from==null){
+			from = AppHelper.getCurrentTimestamp();
+		}
+		if(to==null){
+			to = AppHelper.getTimestampAfterDays(7);
+		}
+		logger.log(Level.INFO, String.format("id=[%s], from=[%s], to=[%s]", id, from, to));
+		Hotel hotel = searchService.getHotels(id);
 		List<Room> recommendingRooms = searchService.getRecommendingRooms(id, from, to);
 		List<Room> nonRecommendingRooms = searchService.getNonRecommendingRooms(id, from, to);
-		if(from!=null){
-			req.setAttribute("fromDate", from);
-		}
-		if(from!=null){
-			req.setAttribute("toDate", to);
-		}
+		
+		req.setAttribute("fromDate", from);
+		req.setAttribute("toDate", to);
+		req.setAttribute("hotel", hotel);
 		req.setAttribute("recommendingRooms", recommendingRooms);
 		req.setAttribute("nonRecommendingRooms", nonRecommendingRooms);
 		

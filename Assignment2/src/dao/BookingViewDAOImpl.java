@@ -120,10 +120,6 @@ public class BookingViewDAOImpl implements BookingViewDAO {
 				booking.setRoomSize(null);
 			}
 			booking.setRoomNo(rs.getString(Columns.View.BookingView.ROOM_NO));
-			booking.setBelongsTo(rs.getInt(Columns.View.BookingView.BELONGS_TO));
-			if(rs.wasNull()){
-				booking.setBelongsTo(null);
-			}
 			booking.setDiscount(rs.getInt(Columns.View.BookingView.DISCOUNT));
 			if(rs.wasNull()){
 				booking.setBelongsTo(null);
