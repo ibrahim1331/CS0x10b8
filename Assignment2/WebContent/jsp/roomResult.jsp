@@ -78,15 +78,11 @@ $(document).ready(function(){
 			<div class="inline fields">
 				<div class="ui calendar field" id="fromDate">
 					<label>Check-in Date</label>
-					<!-- <div class="ui calendar" id="fromDate"> -->
-						<input type="text" name="fromDate" value="${requestScope.fromDate}"/>
-					<!-- </div> -->
+					<input type="text" name="fromDate" value="${requestScope.fromDate}"/>
 				</div>
 				<div class="ui calendar field" id="toDate">
 					<label>Check-out Date</label>
-					<!-- <div class="ui calendar" id="toDate"> -->
-						<input type="text" name="toDate" value="${requestScope.toDate}"/>
-					<!-- </div> -->
+					<input type="text" name="toDate" value="${requestScope.toDate}"/>
 				</div>
 					<button class="ui button">Search</button>
 			</div>
@@ -99,7 +95,7 @@ $(document).ready(function(){
 			<div class="ui vertical fluid menu">
 				<c:if test="${requestScope.recommendingRooms.size() > 0}">
 					<c:forEach var="room" items="${requestScope.recommendingRooms }">
-					<a class="item" href="${pageContext.request.contextPath }/booking/create?id=${room.roomId}">
+					<a class="item" href="${pageContext.request.contextPath }/booking/create?id=${room.roomId}&fromDate=${requestScope.fromDate}&toDate=${requestScope.toDate}">
 						<div class="ui green label">${room.capacity} person(s)</div>
 						<div class="ui green label">${room.type}</div>
 						<div class="ui red label"><i class="star icon"></i>Featured</div>
@@ -113,7 +109,7 @@ $(document).ready(function(){
 				</c:if>	
 				<c:if test="${requestScope.nonRecommendingRooms.size() != 0}">
 					<c:forEach var="room" items="${requestScope.nonRecommendingRooms }">
-					<a class="item" href="${pageContext.request.contextPath }/booking/create?id=${room.roomId}">
+					<a class="item" href="${pageContext.request.contextPath }/booking/create?id=${room.roomId}&fromDate=${requestScope.fromDate}&toDate=${requestScope.toDate}">
 						<div class="ui green label">${room.capacity} person(s)</div>
 						<div class="ui green label">${room.type}</div>
 						<div class="content">
