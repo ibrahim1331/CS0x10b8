@@ -36,16 +36,14 @@ public class RecommendRoomService {
 	public List<Search> getRecommendingRooms(int hotelId){
 		Where where = new Where(new And(new NotNull(Columns.View.SearchView.RECOMMENDED)
 										, new GreaterThan(Columns.View.SearchView.RECOMMENDED, 0)))
-				.and(new Equal(Columns.View.SearchView.HOTEL_ID, hotelId))
-				.and(new Null(Columns.View.SearchView.BELONGS_TO));
+				.and(new Equal(Columns.View.SearchView.HOTEL_ID, hotelId));
 		return searchDAO.search(where);
 	}
 	
 	public List<Search> getNonRecommendingRooms(int hotelId){
 		Where where = new Where(new Or(new Null(Columns.View.SearchView.RECOMMENDED)
 										, new Equal(Columns.View.SearchView.RECOMMENDED, 0)))
-				.and(new Equal(Columns.View.SearchView.HOTEL_ID, hotelId))
-				.and(new Null(Columns.View.SearchView.BELONGS_TO));
+				.and(new Equal(Columns.View.SearchView.HOTEL_ID, hotelId));
 		return searchDAO.search(where);
 	}
 	

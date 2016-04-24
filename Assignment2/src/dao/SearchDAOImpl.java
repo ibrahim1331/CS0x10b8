@@ -66,7 +66,6 @@ public class SearchDAOImpl implements SearchDAO {
 			searchResult.setRoomCapacity(rs.getInt(Columns.View.SearchView.ROOM_CAPACITY));
 			searchResult.setRoomSize(rs.getInt(Columns.View.SearchView.ROOM_SIZE));
 			searchResult.setRoomNo(rs.getString(Columns.View.SearchView.ROOM_NO));
-			searchResult.setBelongsTo(rs.getInt(Columns.View.SearchView.BELONGS_TO));
 			searchResult.setDiscount(rs.getInt(Columns.View.SearchView.DISCOUNT));
 			searchResult.setRecommended(rs.getInt(Columns.View.SearchView.RECOMMENDED));
 			searchResult.setLocationId(rs.getInt(Columns.View.SearchView.LOCATION_ID));

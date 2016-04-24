@@ -115,7 +115,7 @@
 	  				</c:if>
 	  			</div>
 	  			
-	  			<button class="ui green button" type="submit">Register</button>
+	  			<button class="ui green button" type="submit">Create</button>
 	  			<button class="ui reset button">Reset</button>
 	  			<div class="ui error message"></div>
 	  		</form>

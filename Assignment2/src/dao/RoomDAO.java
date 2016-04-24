@@ -13,6 +13,10 @@ public interface RoomDAO {
 	
 	Room getRoomById(int id);
 	
+	Room getRoomByNo(String roomNo);
+	
+	Room getRoom(Where where);
+	
 	List<Room> getAllRecommendedRooms();
 	
 	List<Room> getRecommendedRooms(Hotel hotel);

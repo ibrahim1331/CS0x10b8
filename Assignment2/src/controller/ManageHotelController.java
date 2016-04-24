@@ -118,8 +118,8 @@ public class ManageHotelController extends HttpServlet {
 
 		if(req.getParameter("edit")==null){
 			Hotel hotel = manageHotelServ.getHotel(hotelId);
-			
 			if(hotel!=null){
+				req.setAttribute("rooms", manageHotelServ.getRooms(hotel));
 				req.setAttribute("hotel", hotel);
 				req.getRequestDispatcher("/jsp/manage-hotel/edit.jsp").forward(req, res);
 			} else {
@@ -191,6 +191,6 @@ public class ManageHotelController extends HttpServlet {
 	private void goEditPage(HttpServletRequest req, HttpServletResponse res, String errorMsg, Hotel hotel) throws ServletException, IOException {
 		req.setAttribute("errorMsg", errorMsg);
 		req.setAttribute("hotel", hotel);
-		res.sendRedirect(req.getContextPath()+"/manage-hotel/edit");
+		res.sendRedirect(req.getContextPath()+"/manage-hotel/edit?hotel_id="+hotel.getHotelId());
 	}
 }

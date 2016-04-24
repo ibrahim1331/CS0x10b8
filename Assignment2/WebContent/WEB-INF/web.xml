@@ -34,6 +34,10 @@
   	<servlet-name>ManageHotelController</servlet-name>
   	<servlet-class>controller.ManageHotelController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>ManageRoomController</servlet-name>
+  	<servlet-class>controller.ManageRoomController</servlet-class>
+  </servlet>
   
   <!-- Servlet Mapping -->
   
@@ -71,6 +75,11 @@
   	<servlet-name>ManageHotelController</servlet-name>
   	<url-pattern>/manage-hotel/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>ManageRoomController</servlet-name>
+  	<url-pattern>/manage-room/*</url-pattern>
+  </servlet-mapping>
     
   <!-- Filter -->
   <filter>
@@ -86,6 +95,7 @@
   	<url-pattern>/manage-user/*</url-pattern>
   	<url-pattern>/recommend-room/*</url-pattern>
   	<url-pattern>/manage-hotel/*</url-pattern>
+  	<url-pattern>/manage-room/*</url-pattern>
   </filter-mapping>
   
   <!-- Default Error Page -->

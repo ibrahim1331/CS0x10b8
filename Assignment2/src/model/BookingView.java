@@ -26,7 +26,6 @@ public class BookingView {
 	private Integer roomPrice;
 	private Integer roomCapacity;
 	private Integer roomSize;
-	private Integer belongsTo;
 	private Integer discount;
 	private Integer recommended;
 	private Integer locationId;
@@ -215,14 +214,6 @@ public class BookingView {
 
 	public void setRoomSize(Integer roomSize) {
 		this.roomSize = roomSize;
-	}
-
-	public Integer getBelongsTo() {
-		return belongsTo;
-	}
-
-	public void setBelongsTo(Integer belongsTo) {
-		this.belongsTo = belongsTo;
 	}
 
 	public Integer getDiscount() {
