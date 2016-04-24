@@ -13,30 +13,12 @@ $(document).ready(function(){
 	//init tab in login/register modal
 	$("#modalLoginReg .menu .item").tab();
 	
-	$("#fromDate").calendar({
-		endCalendar: $("#toDate"),
-		formatter: {
-			date: function(date, settings){
-				if(!date) return;
-				return date.format("yyyy-mm-dd");
-			} 
-		}
-	});
-	$("#toDate").calendar({
-		startCalendar: $("#fromDate"),
-		formatter: {
-			date: function(date, settings){
-				if(!date) return;
-				return date.format("yyyy-mm-dd");
-			} 
-		} 
-	})
 })
 </script>
 </head>
 <body>
 <jsp:include page="include/header.jsp"></jsp:include>
-<div class="ui attached segment">
+<div class="ui basic segment">
 	<h1 class="ui centered header">Hotel Pro. The most advanced hotel booking website.</h1>
 		<div class="ui container">
 			<form class="ui form" action="search" method="post">
@@ -47,28 +29,6 @@ $(document).ready(function(){
 								<input type="text" name="city" placeholder="Search..." required/>
 								<button type="submit" class="ui button" >Search</button>	
 							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="column">
-							<p>Check-in date</p>
-							<div class="ui calendar" id="fromDate">
-								<div class="ui fluid input left icon">
-									<i class="calendar icon"></i>
-									<input type="text" placeholder="From" name="fromDate"/>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="column">
-							<p>Check-out date</p>
-							<div class="ui calendar" id="toDate">
-								<div class="ui fluid input left icon">
-									<i class="calendar icon"></i>
-									<input type="text" placeholder="To" name="toDate"/>
-								</div>
-							</div>					
 						</div>
 					</div>
 				</div>

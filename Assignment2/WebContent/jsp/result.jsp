@@ -12,25 +12,6 @@ $(document).ready(function(){
 	    $(this).closest('.message').transition('fade');
 	});
 	
-	$("#fromDate").calendar({
-		endCalendar: $("#toDate"),
-		formatter: {
-			date: function(date, settings){
-				if(!date) return;
-				return date.format("yyyy-mm-dd");
-			} 
-		}
-	});
-	$("#toDate").calendar({
-		startCalendar: $("#fromDate"),
-		formatter: {
-			date: function(date, settings){
-				if(!date) return;
-				return date.format("yyyy-mm-dd");
-			} 
-		} 
-	})
-	
 	$(".ui.dropdown").dropdown();
 	
 	$(".tabular.menu .item").tab();
@@ -48,7 +29,7 @@ $(document).ready(function(){
 </head>
 <body>
 <jsp:include page="include/header.jsp"></jsp:include>
-<div class="ui attached segment">
+<div class="ui basic segment">
 	<h1 class="ui centered header">Result</h1>
 		<div class="ui container">
 			<form class="ui form" action="search" method="post">
@@ -59,28 +40,6 @@ $(document).ready(function(){
 								<input type="text" name="city" placeholder="Search..." required value="${requestScope.result}"/>
 								<button type="submit" class="ui button" >Search</button>	
 							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="column">
-							<p>Check-in date</p>
-							<div class="ui calendar" id="fromDate">
-								<div class="ui fluid input left icon">
-									<i class="calendar icon"></i>
-									<input type="text" placeholder="From" name="fromDate" value="${requestScope.fromDate }"/>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="column">
-							<p>Check-out date</p>
-							<div class="ui calendar" id="toDate">
-								<div class="ui fluid input left icon">
-									<i class="calendar icon"></i>
-									<input type="text" placeholder="To" name="toDate" value="${requestScope.toDate }"/>
-								</div>
-							</div>					
 						</div>
 					</div>
 				</div>

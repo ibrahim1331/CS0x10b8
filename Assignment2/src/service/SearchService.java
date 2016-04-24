@@ -15,12 +15,15 @@ import dao.HotelDAO;
 import dao.HotelDAOImpl;
 import dao.RoomDAO;
 import dao.RoomDAOImpl;
+import dao.SearchDAO;
+import dao.SearchDAOImpl;
 import model.BookingView;
 import model.Hotel;
 import model.Room;
 import sqlwhere.core.Select;
 import sqlwhere.core.Where;
 import sqlwhere.operators.compare.Equal;
+import sqlwhere.operators.compare.GreaterThan;
 import sqlwhere.operators.compare.GreaterThanEqual;
 import sqlwhere.operators.compare.LessThanEqual;
 import sqlwhere.operators.compare.Like;
@@ -35,7 +38,12 @@ public class SearchService {
 	HotelDAO hotelDAO = new HotelDAOImpl();
 	BookingDAO bookingDAO = new BookingDAOImpl();
 	RoomDAO roomDAO = new RoomDAOImpl();
+	SearchDAO searchDAO = new SearchDAOImpl();
 	BookingViewDAO bookingViewDAO = new BookingViewDAOImpl();
+	
+	public Hotel getHotels(int id){
+		return hotelDAO.getHotelById(id);
+	}
 	
 	public List<Hotel> searchHotels(String name, Timestamp fromDate, Timestamp toDate){
 		if(fromDate==null && toDate==null){
@@ -45,15 +53,18 @@ public class SearchService {
 		} else {
 			logger.log(Level.INFO, "searchHotels, name + date range");
 			//if there is any room within the date range not booked by anyone, then the hotel is in the list
+			//fromDate is null, assume from today
+			//toDate is null, assume to infinity
 			Where whereBooking = new Where(new Like(Columns.View.BookingView.HOTEL_NAME, "%"+name+"%"));
-			
-			if(fromDate!=null){
-				whereBooking.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, fromDate));
-			} else { 
-				whereBooking.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()));
-			}
-			if(toDate!=null){
-				whereBooking.and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, toDate));
+		
+			if(fromDate==null && toDate==null){
+				//exclude rooms that are booked within the coming week
+				whereBooking.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()))
+					 .and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, AppHelper.getTimestampAfterDays(7)));
+			} else if(fromDate!=null && toDate!=null){
+				//startA <= endB and endA >= startB
+				whereBooking.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, toDate))
+					 .and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, fromDate));
 			}
 			
 			List<BookingView> bookingViews = bookingViewDAO.getBookings(whereBooking);
@@ -69,22 +80,24 @@ public class SearchService {
 	}
 	
 	public List<Room> getRecommendingRooms(int hotelId, Timestamp fromDate, Timestamp toDate){
-		Where where = new Where(new Equal(Columns.View.BookingView.HOTEL_ID, hotelId));
-		if(fromDate!=null){
-			where.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, fromDate));
-		} else { 
-			where.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()));
+		Where where = new Where(new Equal(Columns.View.BookingView.HOTEL_ID, hotelId))
+				.and(new Equal(Columns.View.BookingView.IS_CANCELLED, false));
+		if(fromDate==null && toDate==null){
+			//exclude rooms that are booked within the coming week
+			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()))
+				 .and(new GreaterThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, AppHelper.getTimestampAfterDays(7)));
+		} else if(fromDate!=null && toDate!=null){
+			//startA <= endB and endA >= startB
+			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_IN_DATE, toDate))
+				 .and(new GreaterThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, fromDate));
 		}
-		if(toDate!=null){
-			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, toDate));
-		}		
 		
 		List<BookingView> bookingView = bookingViewDAO.getBookings(where);
 		
 		List<Integer> roomIds = bookingView.stream().map(bv->bv.getRoomId()).distinct().collect(Collectors.toList());
 		
-		Where whereRoom = new Where(new Null(Columns.Table.Room.BELONGS_TO))
-				.and(new Equal(Columns.Table.Room.HOTEL_ID, hotelId));
+		Where whereRoom = new Where(new Equal(Columns.Table.Room.HOTEL_ID, hotelId))
+				.and(new GreaterThan(Columns.Table.Room.RECOMMENDED, 0));
 		if(!roomIds.isEmpty()){
 			whereRoom.and(new NotIn(Columns.Table.Room.ROOM_ID, roomIds));
 		}
@@ -97,24 +110,25 @@ public class SearchService {
 	}
 	
 	public List<Room> getNonRecommendingRooms(int hotelId, Timestamp fromDate, Timestamp toDate){
-		Where where = new Where(new Null(Columns.Table.Room.BELONGS_TO))
-				.and(new Equal(Columns.Table.Room.HOTEL_ID, hotelId));
-		if(fromDate!=null){
-			where.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, fromDate));
-		} else { 
-			where.and(new GreaterThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()));
+		Where where = new Where(new Equal(Columns.View.BookingView.HOTEL_ID, hotelId))
+				.and(new Equal(Columns.View.BookingView.IS_CANCELLED, false));
+		if(fromDate==null && toDate==null){
+			//exclude rooms that are booked within the coming week
+			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_IN_DATE, AppHelper.getCurrentTimestamp()))
+				 .and(new GreaterThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, AppHelper.getTimestampAfterDays(7)));
+		} else if(fromDate!=null && toDate!=null){
+			//startA <= endB and endA >= startB
+			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_IN_DATE, toDate))
+				 .and(new GreaterThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, fromDate));
 		}
-		if(toDate!=null){
-			where.and(new LessThanEqual(Columns.View.BookingView.CHECK_OUT_DATE, toDate));
-		}		
 		
 		List<BookingView> bookingView = bookingViewDAO.getBookings(where);
 		
 		List<Integer> roomIds = bookingView.stream().map(bv->bv.getRoomId()).distinct().collect(Collectors.toList());
 		
-		Where whereRoom = new Where(new Null(Columns.Table.Room.BELONGS_TO))
-				.and(new Null(Columns.Table.Room.RECOMMENDED))
-				.and(new Equal(Columns.Table.Room.RECOMMENDED, 0));
+		Where whereRoom = new Where(new Null(Columns.Table.Room.RECOMMENDED))
+				.or(new Equal(Columns.Table.Room.RECOMMENDED, 0))
+				.and(new Equal(Columns.Table.Room.HOTEL_ID, hotelId));
 		if(!roomIds.isEmpty()){
 			whereRoom.and(new NotIn(Columns.Table.Room.ROOM_ID, roomIds));
 		}

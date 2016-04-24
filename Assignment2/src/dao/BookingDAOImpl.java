@@ -171,7 +171,11 @@ public class BookingDAOImpl implements BookingDAO{
             	Connection con = DBHelper.getConnection();
                 PreparedStatement pstmt = con.prepareStatement("UPDATE [booking] SET [booking_number] = ?, [customer_id] = ?, [room_id] = ?, [no_of_people] = ?, [check_in_date] = ?, [check_out_date] = ?, [purpose] = ?, [booking_date] = ?, [pin] = ?, [is_cancelled] = ?, [price] = ? WHERE [booking_id] = ?");
                 pstmt.setInt(1, booking.getBookingNumber());
-                pstmt.setInt(2, booking.getCustomerId());
+                if(booking.getCustomerId()!=null){
+                	pstmt.setInt(2, booking.getCustomerId());
+                } else {
+                	pstmt.setNull(2, java.sql.Types.INTEGER);
+                }
                 pstmt.setInt(3, booking.getRoomId());
                 pstmt.setInt(4, booking.getNoOfPeople());
                 pstmt.setTimestamp(5, booking.getCheckInDate());
