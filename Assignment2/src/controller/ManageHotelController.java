@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.HotelDAO;
 import dao.HotelDAOImpl;
-import enums.Role;
+import dao.LocationDAO;
+import dao.LocationDAOImpl;
+import model.Hotel;
+import service.ManageHotelService;
+import service.ValidationService;
 
 /**
  * responsible for routing under context /manage-hotel
@@ -20,6 +26,9 @@ import enums.Role;
  */
 public class ManageHotelController extends HttpServlet {
 	HotelDAO hotelDAO = new HotelDAOImpl();
+	LocationDAO locationDAO = new LocationDAOImpl();
+	ManageHotelService manageHotelServ = new ManageHotelService();
+	ValidationService validationServ = new ValidationService();
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -38,20 +47,22 @@ public class ManageHotelController extends HttpServlet {
 	private void processRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		/*
 		 * "/" : main page. show list of hotels
-		 * "/add" : add new manage page
+		 * "/add" : add new hotel page
 		 * "/remove": remove confirmation page
 		 * "/remove?confirm=1": do remove action
 		 */
 		String operation = req.getPathInfo();
-		
+
 		Logger.getLogger(this.getClass().getName()).log(Level.INFO, "processRequest, operation="+operation);
 		
 		if(operation == null){
 			this.showHotelList(req, res);
+		} else if(operation.equals("/edit")) {
+			this.editHotel(req, res);
 		} else if(operation.equals("/add")){
-			this.addHotelManager(req, res);
+			this.addHotel(req, res);
 		} else if(operation.equals("/remove")){
-			this.removeHotelManager(req, res);
+			this.removeHotel(req, res);
 		} else {
 			res.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -62,74 +73,124 @@ public class ManageHotelController extends HttpServlet {
 		req.getRequestDispatcher("/jsp/manage-hotel/index.jsp").forward(req, res);
 	}
 	
-	private void addHotelManager(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	private void addHotel(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		req.setAttribute("locations", locationDAO.getAllLocations());
 		if(req.getParameter("add")==null){
 			req.getRequestDispatcher("/jsp/manage-hotel/add.jsp").forward(req, res);
 		} else {
-			String email = req.getParameter("email"),
-					firstName = req.getParameter("firstName"),
-					lastName = req.getParameter("lastName"),
-					gender = req.getParameter("gender"),
-					password = req.getParameter("password"),
-					title = req.getParameter("title");
+			String name = req.getParameter("name"),
+			address = req.getParameter("address"),
+			description = req.getParameter("description");
 			
-			if(email!=null && firstName!=null && lastName!=null && gender!=null && password!=null && title!=null){
-				User manager = new User();
-				manager.setEmail(req.getParameter("email"));
-				manager.setFirstName(req.getParameter("firstName"));
-				manager.setLastName(req.getParameter("lastName"));
-				manager.setGender(req.getParameter("gender"));
-				manager.setPassword(req.getParameter("password"));
-				manager.setTitle(req.getParameter("title"));
-				manager.setRegister(true);
-				manager.setRole(Role.Manager.getValue());
+			int location = Integer.parseInt(req.getParameter("location")),
+				noOfRooms = Integer.parseInt(req.getParameter("noOfRooms"));
+
+			if(name!=null && address!=null && description!=null){
+				Hotel hotel = new Hotel();
+				hotel.setName(name);
+				hotel.setAddress(address);
+				hotel.setLocation(location);
+				hotel.setNoOfRooms(noOfRooms);
+				hotel.setDescription(validationServ.removeScripts(description));
+				hotel.setDateJoined(new Timestamp(new Date().getTime()));
+				hotel.setRating((float) 0);
 				
-				if(userService.getUser(email)!=null){
+				if(manageHotelServ.getHotel(name)!=null){
 					//add error message
-					this.goAddPage(req, res, "This email is already registered.", manager);
+					this.goAddPage(req, res, "This hotel is already registered.", hotel);
 				} else {
-					if(!userService.createUser(manager)){
+					if(!manageHotelServ.createHotel(hotel)){
 						//add error message
-						this.goAddPage(req, res, "Cannot create hotel manager at this time. Please try again later.", manager);
+						this.goAddPage(req, res, "Cannot create hotel at this time. Please try again later.", hotel);
 					} else {
 						this.goHome(req, res);
 					}
 				}
 			} else {
-				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "There is missing information in adding hotel manager.");
+				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "There is missing information in add hotel request.");
 			}
 		}
 	}
 	
-	private void removeHotelManager(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		int userId = Integer.parseInt((String) req.getParameter("id")); 
+	private void editHotel(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+		int hotelId = Integer.parseInt((String) req.getParameter("hotel_id")); 
+		req.setAttribute("locations", locationDAO.getAllLocations());
+
+		if(req.getParameter("edit")==null){
+			Hotel hotel = manageHotelServ.getHotel(hotelId);
+			
+			if(hotel!=null){
+				req.setAttribute("hotel", hotel);
+				req.getRequestDispatcher("/jsp/manage-hotel/edit.jsp").forward(req, res);
+			} else {
+				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "This hotel doesn't exist.");
+			}
+		}else{
+			Hotel hotel = manageHotelServ.getHotel(hotelId);
+			if(hotel!=null){
+				String name = req.getParameter("name"),
+				address = req.getParameter("address"),
+				description = req.getParameter("description");
+				
+				int location = Integer.parseInt(req.getParameter("location")),
+					noOfRooms = Integer.parseInt(req.getParameter("noOfRooms"));
+
+				if(name!=null && address!=null && description!=null){
+					hotel.setName(name);
+					hotel.setAddress(address);
+					hotel.setLocation(location);
+					hotel.setNoOfRooms(noOfRooms);
+					hotel.setDescription(validationServ.removeScripts(description));
+					
+					if(!manageHotelServ.updateHotel(hotel)){
+						//add error message
+						this.goEditPage(req, res, "Cannot update hotel at this time. Please try again later.", hotel);
+					} else {
+						this.goHome(req, res);
+					}
+				} else {
+					res.sendError(HttpServletResponse.SC_BAD_REQUEST, "This hotel doesn't exist.");
+				}
+			}
+		}
+	}
+	
+	private void removeHotel(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		int hotelId = Integer.parseInt((String) req.getParameter("hotel_id")); 
 		
 		if(req.getParameter("confirm")==null){
-			User manager = userService.getUserById(userId);
-			if(manager!=null && manager.getRole().equals(Role.Manager)){
-				req.setAttribute("manager", manager);
-				req.getRequestDispatcher("/jsp/manage-user/confirm.jsp").forward(req, res);
+			Hotel hotel = manageHotelServ.getHotel(hotelId);
+			
+			if(hotel!=null){
+				req.setAttribute("hotel", hotel);
+				req.getRequestDispatcher("/jsp/manage-hotel/confirm.jsp").forward(req, res);
 			} else {
-				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "This is not a hotel manager.");
+				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "This hotel doesn't exist.");
 			}
 		} else {
-			User manager = userService.getUserById(userId);
-			if(manager!=null && manager.getRole().equals(Role.Manager)){
-				userService.deleteUser(manager);
+			Hotel hotel = manageHotelServ.getHotel(hotelId);
+			if(hotel!=null){
+				manageHotelServ.deleteHotel(hotel);
 				this.goHome(req, res);
 			} else {
-				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "This is not a hotel manager.");
+				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "This hotel doesn't exist.");
 			}
 		}
 	}
 	
 	private void goHome(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		res.sendRedirect(req.getContextPath()+"/manage-user");
+		res.sendRedirect(req.getContextPath()+"/manage-hotel");
 	}
 	
-	private void goAddPage(HttpServletRequest req, HttpServletResponse res, String errorMsg, User manager) throws ServletException, IOException {
+	private void goAddPage(HttpServletRequest req, HttpServletResponse res, String errorMsg, Hotel hotel) throws ServletException, IOException {
 		req.getSession().setAttribute("errorMsg", errorMsg);
-		req.getSession().setAttribute("inputBefore", manager);
-		res.sendRedirect(req.getContextPath()+"/manage-user/add");
+		req.getSession().setAttribute("inputBefore", hotel);
+		res.sendRedirect(req.getContextPath()+"/manage-hotel/add");
+	}
+	
+	private void goEditPage(HttpServletRequest req, HttpServletResponse res, String errorMsg, Hotel hotel) throws ServletException, IOException {
+		req.setAttribute("errorMsg", errorMsg);
+		req.setAttribute("hotel", hotel);
+		res.sendRedirect(req.getContextPath()+"/manage-hotel/edit");
 	}
 }

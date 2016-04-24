@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,10 +34,10 @@ public class HotelDAOImpl implements HotelDAO{
             	Hotel hotel = new Hotel();
             	hotel.setHotelId(rs.getInt("hotel_id"));
             	hotel.setName(rs.getString("name"));
-            	hotel.setLocation(rs.getString("location"));
+            	hotel.setLocation(rs.getInt("location"));
             	hotel.setAddress(rs.getString("address"));
             	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
-            	hotel.setRating(rs.getInt("rating"));
+            	hotel.setRating(rs.getFloat("rating"));
             	hotel.setDescription(rs.getString("description"));
             	hotel.setDateJoined(rs.getTimestamp("join_date"));
     			hotels.add(hotel);
@@ -82,10 +81,10 @@ public class HotelDAOImpl implements HotelDAO{
             	hotel = new Hotel();
             	hotel.setHotelId(rs.getInt("hotel_id"));
             	hotel.setName(rs.getString("name"));
-            	hotel.setLocation(rs.getString("location"));
+            	hotel.setLocation(rs.getInt("location"));
             	hotel.setAddress(rs.getString("address"));
             	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
-            	hotel.setRating(rs.getInt("rating"));
+            	hotel.setRating(rs.getFloat("rating"));
             	hotel.setDescription(rs.getString("description"));
             	hotel.setDateJoined(rs.getTimestamp("join_date"));
             }
@@ -127,10 +126,10 @@ public class HotelDAOImpl implements HotelDAO{
             	hotel = new Hotel();
             	hotel.setHotelId(rs.getInt("hotel_id"));
             	hotel.setName(rs.getString("name"));
-            	hotel.setLocation(rs.getString("location"));
+            	hotel.setLocation(rs.getInt("location"));
             	hotel.setAddress(rs.getString("address"));
             	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
-            	hotel.setRating(rs.getInt("rating"));
+            	hotel.setRating(rs.getFloat("rating"));
             	hotel.setDescription(rs.getString("description"));
             	hotel.setDateJoined(rs.getTimestamp("join_date"));
             }
@@ -166,7 +165,7 @@ public class HotelDAOImpl implements HotelDAO{
                 Connection con = ds.getConnection();
             	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [hotel] ([name], [location], [address], [no_of_rooms], [rating], [description], [join_date]) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 pstmt.setString(1, hotel.getName());
-                pstmt.setString(2, hotel.getLocation());
+                pstmt.setInt(2, hotel.getLocation());
                 pstmt.setString(3, hotel.getAddress());
                 pstmt.setInt(4, hotel.getNoOfRooms());
                 pstmt.setFloat(5, hotel.getRating());
@@ -208,7 +207,7 @@ public class HotelDAOImpl implements HotelDAO{
                 Connection con = ds.getConnection();
             	PreparedStatement pstmt = con.prepareStatement("UPDATE [hotel] SET [name]= ?, [location]= ?, [address]= ?, [no_of_rooms]= ?, [rating]= ?, [description]= ?, [join_date]= ? WHERE [hotel_id] = ?");
                 pstmt.setString(1, hotel.getName());
-                pstmt.setString(2, hotel.getLocation());
+                pstmt.setInt(2, hotel.getLocation());
                 pstmt.setString(3, hotel.getAddress());
                 pstmt.setInt(4, hotel.getNoOfRooms());
                 pstmt.setFloat(5, hotel.getRating());

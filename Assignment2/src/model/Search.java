@@ -3,31 +3,31 @@ package model;
 import java.sql.Timestamp;
 
 public class Search {
-	private int hotelId;
+	private Integer hotelId;
 	private String hotelName;
 	private String hotelAddress;
 	private String hotelDescription;
-	private int noOfRooms;
-	private float hotelRating;
+	private Integer noOfRooms;
+	private Float hotelRating;
 	private Timestamp hotelDateJoined;
-	private int roomId;
+	private Integer roomId;
 	private String roomNo;
 	private String roomType;
-	private int roomPrice;
-	private int roomCapacity;
-	private int roomSize;
-	private int belongsTo;
-	private int discount;
-	private int recommended;
-	private int locationId;
+	private Integer roomPrice;
+	private Integer roomCapacity;
+	private Integer roomSize;
+	private Integer belongsTo;
+	private Integer discount;
+	private Integer recommended;
+	private Integer locationId;
 	private String locationName;
 	private String country;
 	
-	public int getHotelId() {
+	public Integer getHotelId() {
 		return hotelId;
 	}
 	
-	public void setHotelId(int hotelId) {
+	public void setHotelId(Integer hotelId) {
 		this.hotelId = hotelId;
 	}
 
@@ -39,19 +39,51 @@ public class Search {
 		this.hotelName = hotelName;
 	}
 
-	public int getNoOfRooms() {
+	public String getHotelAddress() {
+		return hotelAddress;
+	}
+
+	public void setHotelAddress(String hotelAddress) {
+		this.hotelAddress = hotelAddress;
+	}
+
+	public String getHotelDescription() {
+		return hotelDescription;
+	}
+
+	public void setHotelDescription(String hotelDescription) {
+		this.hotelDescription = hotelDescription;
+	}
+
+	public Integer getNoOfRooms() {
 		return noOfRooms;
 	}
 
-	public void setNoOfRooms(int noOfRooms) {
+	public void setNoOfRooms(Integer noOfRooms) {
 		this.noOfRooms = noOfRooms;
 	}
 
-	public int getRoomId() {
+	public Float getHotelRating() {
+		return hotelRating;
+	}
+
+	public void setHotelRating(Float hotelRating) {
+		this.hotelRating = hotelRating;
+	}
+
+	public Timestamp getHotelDateJoined() {
+		return hotelDateJoined;
+	}
+
+	public void setHotelDateJoined(Timestamp hotelDateJoined) {
+		this.hotelDateJoined = hotelDateJoined;
+	}
+
+	public Integer getRoomId() {
 		return roomId;
 	}
 
-	public void setRoomId(int roomId) {
+	public void setRoomId(Integer roomId) {
 		this.roomId = roomId;
 	}
 
@@ -63,59 +95,67 @@ public class Search {
 		this.roomNo = roomNo;
 	}
 
-	public int getRoomPrice() {
+	public String getRoomType() {
+		return roomType;
+	}
+
+	public void setRoomType(String roomType) {
+		this.roomType = roomType;
+	}
+
+	public Integer getRoomPrice() {
 		return roomPrice;
 	}
 
-	public void setRoomPrice(int roomPrice) {
+	public void setRoomPrice(Integer roomPrice) {
 		this.roomPrice = roomPrice;
 	}
 
-	public int getRoomCapacity() {
+	public Integer getRoomCapacity() {
 		return roomCapacity;
 	}
 
-	public void setRoomCapacity(int roomCapacity) {
+	public void setRoomCapacity(Integer roomCapacity) {
 		this.roomCapacity = roomCapacity;
 	}
 
-	public int getRoomSize() {
+	public Integer getRoomSize() {
 		return roomSize;
 	}
 
-	public void setRoomSize(int roomSize) {
+	public void setRoomSize(Integer roomSize) {
 		this.roomSize = roomSize;
 	}
 
-	public int getBelongsTo() {
+	public Integer getBelongsTo() {
 		return belongsTo;
 	}
 
-	public void setBelongsTo(int belongsTo) {
+	public void setBelongsTo(Integer belongsTo) {
 		this.belongsTo = belongsTo;
 	}
 
-	public int getDiscount() {
+	public Integer getDiscount() {
 		return discount;
 	}
 
-	public void setDiscount(int discount) {
+	public void setDiscount(Integer discount) {
 		this.discount = discount;
 	}
 
-	public int getRecommended() {
+	public Integer getRecommended() {
 		return recommended;
 	}
 
-	public void setRecommended(int recommended) {
+	public void setRecommended(Integer recommended) {
 		this.recommended = recommended;
 	}
 
-	public int getLocationId() {
+	public Integer getLocationId() {
 		return locationId;
 	}
 
-	public void setLocationId(int locationId) {
+	public void setLocationId(Integer locationId) {
 		this.locationId = locationId;
 	}
 
@@ -133,45 +173,5 @@ public class Search {
 
 	public void setCountry(String country) {
 		this.country = country;
-	}
-
-	public String getHotelDescription() {
-		return hotelDescription;
-	}
-
-	public void setHotelDescription(String hotelDescription) {
-		this.hotelDescription = hotelDescription;
-	}
-
-	public String getHotelAddress() {
-		return hotelAddress;
-	}
-
-	public void setHotelAddress(String hotelAddress) {
-		this.hotelAddress = hotelAddress;
-	}
-
-	public float getHotelRating() {
-		return hotelRating;
-	}
-
-	public void setHotelRating(float hotelRating) {
-		this.hotelRating = hotelRating;
-	}
-
-	public Timestamp getHotelDateJoined() {
-		return hotelDateJoined;
-	}
-
-	public void setHotelDateJoined(Timestamp hotelDateJoined) {
-		this.hotelDateJoined = hotelDateJoined;
-	}
-
-	public String getRoomType() {
-		return roomType;
-	}
-
-	public void setRoomType(String roomType) {
-		this.roomType = roomType;
 	}
 }

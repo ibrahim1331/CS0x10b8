@@ -1,6 +1,7 @@
 package service;
 
 import dao.UserDAOImpl;
+import model.Hotel;
 import model.User;
 import sqlwhere.core.Where;
 import sqlwhere.operators.compare.Like;
@@ -8,6 +9,8 @@ import dao.BookingDAO;
 import dao.BookingDAOImpl;
 import dao.SearchDAO;
 import dao.SearchDAOImpl;
+import dao.HotelDAO;
+import dao.HotelDAOImpl;
 
 import service.ValidationService;
 
@@ -34,6 +37,11 @@ public class AuthenticationService {
 //		ValidationService validationServ = new ValidationService();
 		
 //		System.out.println(validationServ.removeScripts("asdasd as d asd asd<script>function(){alert('hello');}</script> asd asd asdasd<a onclick=\"a\"></a><a href=\"javascript:alert(\"hello\")\"></a>"));
+//		HotelDAO hotelDAO = new HotelDAOImpl();
+//		Hotel hotel = hotelDAO.getHotelById(22);
+//		
+//		hotel.setDescription("updated description of hotel");
+//		hotelDAO.updateHotel(hotel);
 		
 		return valid;
 	}
