@@ -63,7 +63,7 @@ $(document).ready(function(){
 			    <c:if test="${empty sessionScope.loginUser }">
 			    	You need to log in to see your bookings.
 			    </c:if>
-			    <c:if test="${not empty sessionScope.loginUser && (empty requestScope.bookings || requestScope.bookings.isEmpty())}">
+			    <c:if test="${not empty sessionScope.loginUser && empty requestScope.bookings}">
 			    	No booking records
 			    </c:if>
 			    <c:if test="${not empty sessionScope.loginUser && not empty requestScope.bookings && !requestScope.bookings.isEmpty()}">
