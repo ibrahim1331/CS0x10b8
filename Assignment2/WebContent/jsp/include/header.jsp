@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" 
            uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="enums.Role" %>
 <%-- HEADER --%>
 <div class="ui attached icon red message">
 	<i class="warning icon"></i>
@@ -20,18 +19,18 @@
 			Booking
 		</a>
 	</c:if>
-	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role != Role.Customer }">
+	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.role != 'Customer' }">
 	<div class="ui simple dropdown item">
 		Manage
 		<i class="dropdown icon"></i>
 		<div class="menu">
-			<c:if test="${sessionScope.loginUser.role == Role.Manager}">
+			<c:if test="${sessionScope.loginUser.role == 'Manager'}">
 				<a href="${pageContext.request.contextPath}/recommend-room" class="item">Recommend Featured Hotels</a>
 			</c:if>
-			<c:if test="${sessionScope.loginUser.role == Role.Manager}">
+			<c:if test="${sessionScope.loginUser.role == 'Manager'}">
 				<a href="#" class="item">Hotels</a>
 			</c:if>
-			<c:if test="${sessionScope.loginUser.role == Role.Chief_Manager}">
+			<c:if test="${sessionScope.loginUser.role == 'Chief_Manager'}">
 				<a href="${pageContext.request.contextPath}/manage-user" class="item">Hotel Managers</a>
 			</c:if>
 		</div>
