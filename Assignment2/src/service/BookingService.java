@@ -7,17 +7,21 @@ import dao.BookingDAO;
 import dao.BookingDAOImpl;
 import dao.BookingViewDAO;
 import dao.BookingViewDAOImpl;
+import dao.RoomDAO;
+import dao.RoomDAOImpl;
 import dao.SearchDAO;
 import dao.SearchDAOImpl;
 import model.Booking;
 import model.BookingMeta;
 import model.BookingView;
+import model.Room;
 import model.Search;
 import model.TempBooking;
 import sqlwhere.core.Where;
 import sqlwhere.operators.compare.Equal;
 import sqlwhere.operators.compare.GreaterThan;
 import sqlwhere.operators.compare.LessThan;
+import sqlwhere.operators.compare.NotEqual;
 import utils.AppHelper;
 import utils.Columns;
 
@@ -25,11 +29,17 @@ public class BookingService {
 	SearchDAO searchDAO = new SearchDAOImpl();
 	BookingDAO bookingDAO = new BookingDAOImpl();
 	BookingViewDAO bookingViewDAO = new BookingViewDAOImpl();
+	RoomDAO roomDAO = new RoomDAOImpl();
 	
 	public Search getSearch(int roomId){
 		Where where = new Where(new Equal(Columns.View.SearchView.ROOM_ID, roomId));
 		List<Search> results = searchDAO.search(where); 
 		return results.isEmpty()?null:results.get(0);
+	}
+	
+	public List<Room> getRooms(int hotelId){
+		Where where = new Where(new Equal(Columns.Table.Room.HOTEL_ID, hotelId));
+		return roomDAO.getRooms(where);
 	}
 	
 	public List<BookingView> getBookingViews(int customerId){
@@ -95,6 +105,12 @@ public class BookingService {
 	}
 	
 	public boolean updateBooking(Booking booking){
+		Room room = roomDAO.getRoomById(booking.getRoomId());
+		int price = booking.getCustomerId()==null?room.getPrice():room.getPrice()*room.getDiscount()/100;
+		booking.setPrice(price);
+		if(booking.getCustomerId()!=null){
+			
+		}
 		if(this.validate(booking) && bookingDAO.updateBooking(booking)){
 			return true;
 		}
@@ -107,6 +123,19 @@ public class BookingService {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean checkAvailability(Booking booking){
+		Where where = new Where(new Equal(Columns.Table.Booking.ROOM_ID, booking.getRoomId()))
+				.and(new Equal(Columns.Table.Booking.IS_CANCELLED, false))
+				.and(new LessThan(Columns.Table.Booking.CHECK_IN_DATE, booking.getCheckOutDate()))
+				.and(new GreaterThan(Columns.Table.Booking.CHECK_OUT_DATE, booking.getCheckInDate()));
+		
+		if(booking.getBookingId()!=null){
+			where.and(new NotEqual(Columns.Table.Booking.BOOKING_ID, booking.getBookingId()));
+		}
+		
+		return bookingDAO.getBookings(where).isEmpty();
 	}
 	
 	private int getBookingNumber(){
@@ -124,4 +153,6 @@ public class BookingService {
 		
 		return bookingDAO.getBookings(where).isEmpty();
 	}
+	
+	
 }

@@ -30,6 +30,8 @@ public class BookingDAOImpl implements BookingDAO{
 		try{
 			con = DBHelper.getConnection();
 			Select select = new Select("*").from("booking").where(where).orderBy(Columns.Table.Booking.BOOKING_ID, true);
+			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
+	        System.out.println(select.getIndexMap());
 			pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
 				pstmt.setObject(es.getKey(), es.getValue());

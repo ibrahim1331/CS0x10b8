@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.Booking;
 import model.BookingMeta;
 import model.BookingView;
+import model.Room;
 import model.Search;
 import model.TempBooking;
 import model.User;
@@ -106,14 +107,18 @@ public class BookingController extends HttpServlet {
 		
 		if(req.getParameter("confirm")==null){
 			req.setAttribute("bookingView", bookingView);
+			List<Room> rooms = service.getRooms(bookingView.getHotelId());
+			req.setAttribute("rooms", rooms);
 			req.getRequestDispatcher("/jsp/booking/booking-update.jsp").forward(req, res);
 		} else {
+			int roomId = Integer.parseInt(req.getParameter("roomId"));
 			int noOfPeople = Integer.parseInt(req.getParameter("noOfPeople"));
 			Timestamp from = AppHelper.getTimestamp(req.getParameter("fromDate"));
 			Timestamp to = AppHelper.getTimestamp(req.getParameter("toDate"));
 			String purpose = req.getParameter("purpose");
 			
 			Booking booking = service.getBookingById(bookingId);
+			booking.setRoomId(roomId);
 			booking.setNoOfPeople(noOfPeople);
 			booking.setCheckInDate(from);
 			booking.setCheckOutDate(to);
@@ -192,17 +197,20 @@ public class BookingController extends HttpServlet {
 			res.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing index!");
 			return;
 		}
-		List<Booking> tempBookings = (List<Booking>) req.getSession().getAttribute("tempBookings");
+		List<TempBooking> tempBookings = (List<TempBooking>) req.getSession().getAttribute("tempBookings");
 		if(tempBookings==null || i>=tempBookings.size()){
 			res.sendError(HttpServletResponse.SC_BAD_REQUEST, "no booking is made or query index too large");
 			return;
 		}
 		if(req.getParameter("confirm")==null){
+			Search roomView = service.getSearch(tempBookings.get(i).getRoomId());
+			req.setAttribute("rooms", service.getRooms(roomView.getHotelId()));
 			req.setAttribute("booking", tempBookings.get(i));
 			req.setAttribute("i", i);
-			req.setAttribute("roomView", service.getSearch(tempBookings.get(i).getRoomId()));
+			req.setAttribute("roomView", roomView);
 			req.getRequestDispatcher("/jsp/booking/booking-temp-confirm.jsp").forward(req, res);
 		} else {
+			int roomId = Integer.parseInt(req.getParameter("roomId"));
 			int noOfPeople = Integer.parseInt(req.getParameter("noOfPeople"));
 			Timestamp from = AppHelper.getTimestamp(req.getParameter("fromDate"));
 			Timestamp to = AppHelper.getTimestamp(req.getParameter("toDate"));
@@ -210,11 +218,16 @@ public class BookingController extends HttpServlet {
 			if(from==null || to==null || purpose==null){
 				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required information.");
 			} else {
-				Booking booking = tempBookings.get(i);
+				TempBooking booking = tempBookings.get(i);
 				booking.setNoOfPeople(noOfPeople);
 				booking.setCheckInDate(from);
 				booking.setCheckOutDate(to);
 				booking.setPurpose(purpose);
+				booking.setRoomId(roomId);
+				Search search = service.getSearch(roomId);
+				booking.setPrice(search.getRoomPrice());
+				booking.setRoomNo(search.getRoomNo());
+				booking.setHotelName(search.getHotelName());
 				
 				req.getSession().setAttribute("successUpdate", true);
 				res.sendRedirect(req.getContextPath()+"/booking/temp");

@@ -13,30 +13,46 @@ $(document).ready(function(){
 	
 	$(".ui.dropdown").dropdown();
 	
+	$(".ui.dropdown.room").dropdown({
+		onChange: function(value){
+			checkRoom({roomId: parseInt(value)});
+			changeRoom(parseInt(value));
+		}
+	});
+	
 	$(".tabular.menu .item").tab();
 	
-	$("#fromDate").calendar({
+	$("#fromDate")
+	.calendar({
 		endCalendar: $("#toDate"),
 		formatter: {
 			date: function(date, settings){
 				if(!date) return;
 				return date.format("yyyy-mm-dd");
 			} 
+		},
+		onChange: function(date){
+			checkRoom({fromDate: date.format("yyyy-mm-dd hh:MM:ss TT")})
 		}
 	});
-	$("#toDate").calendar({
+	$("#toDate")
+	.calendar({
 		startCalendar: $("#fromDate"),
 		formatter: {
 			date: function(date, settings){
 				if(!date) return;
 				return date.format("yyyy-mm-dd");
 			} 
-		} 
-	})
+		},
+		onChange: function(date){
+			checkRoom({toDate: date.format("yyyy-mm-dd hh:MM:ss TT")})
+		}
+	});
 	
 	$("form[name='booking']")
 	.form({
 		fields:{
+			roomId: 'empty',
 			noOfPeople: ['empty','integer[1..${requestScope.roomView.roomCapacity}]'],
 			fromDate: 'empty',
 			toDate: 'empty',
@@ -44,6 +60,54 @@ $(document).ready(function(){
 		},
 		inline: true
 	})
+	
+	$("#checkRoom").on("click",checkRoom)
+	
+	function changeRoom(roomId){
+		var data = {roomId: roomId};
+		$.ajax({
+			url: "${pageContext.request.contextPath}/rest/booking/getRoom",
+			method: "post",
+			data: JSON.stringify(data),
+			dataType: "json"
+		}).then(function(data){
+			$("#maxNoOfPeople").text(data.roomCapacity);
+			$("input[name='noOfPeople']").attr("max",data.roomCapacity);
+			$("#price").text(data.roomPrice * data.discount / 100)
+		})
+	}
+	
+	function checkRoom(obj){
+		var form = $("form[name='booking']");
+		var data = {
+			bookingId: ${requestScope.bookingView.bookingId},
+			roomId: obj&&obj.roomId?obj.roomId:form.form("get value", "roomId"),
+			checkInDate: obj&&obj.fromDate?obj.fromDate:form.form("get value", "fromDate"),
+			checkOutDate: obj&&obj.toDate?obj.toDate:form.form("get value", "toDate")
+		};
+		$.ajax({
+			url: "${pageContext.request.contextPath}/rest/booking/checkAvailable",
+			method: "post",
+			data: JSON.stringify(data),
+			dataType: "json"
+		}).then(function(data){
+			$("#checkRoomMessage").css("display","inline");
+			if(data.available){
+				$("#checkRoomMessage > i").addClass("green checkmark");
+				$("#checkRoomMessage > i").removeClass("red remove");
+				$("#checkRoomMessage > span").text(data.msg);
+				$(".change.submit.button").removeClass("disabled");
+			} else {
+				$("#checkRoomMessage > i").removeClass("green checkmark");
+				$("#checkRoomMessage > i").addClass("red remove");
+				$("#checkRoomMessage > span").text(data.msg);
+				$(".change.submit.button").addClass("disabled");
+			}
+			
+		})
+	}
+	
+	checkRoom();
 	
 	//hack
 	$(".ui.reset.button").each(function(idx, ele){$(ele).on("click",function(){$(this).parent().form("reset")})})
@@ -62,20 +126,32 @@ $(document).ready(function(){
 			</div>
 		</h1>
 		<form novalidate name="booking" class="ui form" method="post" action="${pageContext.request.contextPath }/booking/update?confirm=1&id=${requestScope.bookingView.bookingId}">
-			<div class="four wide field">
-				<label>Number of People (Max: ${requestScope.bookingView.roomCapacity})</label>
-				<input type="number" min="1" max="${requestScope.bookingView.roomCapacity}" name="noOfPeople" value="${requestScope.bookingView.noOfPeople }"/>
-			</div>
 			<div class="two fields">
 				<div class="four wide field">
-					<div class="ui calendar" id="fromDate">
-						<label>Check in Date</label>
+					<label>Room</label>
+					<select class="ui dropdown room" name="roomId">
+						<c:forEach var="room" items="${rooms}">
+						<option value="${room.roomId}" ${room.roomId eq bookingView.roomId?'selected':''}>${room.roomNo} (${room.type})</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="four wide field">
+					<label>Number of People (Max: <span id="maxNoOfPeople">${requestScope.bookingView.roomCapacity}</span>)</label>
+					<input type="number" min="1" max="${requestScope.bookingView.roomCapacity}" name="noOfPeople" value="${requestScope.bookingView.noOfPeople}"/>
+				</div>
+			</div>
+			<div class="two fields">
+				<div class="four wide ui calendar field" id="fromDate">
+					<label>Check in Date</label>
+					<div class="ui left icon input">
+						<i class="calendar icon"></i>
 						<input type="text" name="fromDate" value="${requestScope.bookingView.checkInDate }"/>
 					</div>
 				</div>
-				<div class="four wide field">
-					<div class="ui calendar" id="toDate">
-						<label>Check out Date</label>
+				<div class="four wide ui calendar field" id="toDate">
+					<label>Check out Date</label>
+					<div class="ui left icon input">
+						<i class="calendar icon"></i>
 						<input type="text" name="toDate" value="${requestScope.bookingView.checkOutDate }" />
 					</div>
 				</div>
@@ -84,10 +160,15 @@ $(document).ready(function(){
 				<label>Purpose</label>
 				<input type="text" name="purpose" value="${requestScope.bookingView.purpose }" maxlength="20"/>
 			</div>
+			<p>Price: $<span id="price">${bookingView.bookingPrice}</span></p>
 			
 			<a href="${pageContext.request.contextPath }/booking/record?number=${requestScope.bookingView.bookingNumber}" class="ui button">Back</a>
-			<button class="ui green submit button">Change</button>
-			<button class="ui red submit button" formaction="${pageContext.request.contextPath }/booking/cancel?id=${requestScope.bookingView.bookingId}">Cancel</button>
+			<button class="ui green change submit button">Change</button>
+			<a class="ui red button" href="${pageContext.request.contextPath }/booking/cancel?id=${requestScope.bookingView.bookingId}">Cancel Booking</a>
+			<span id="checkRoomMessage" style="display:none">
+				<i class="red remove icon"></i>
+				<span></span>
+			</span>
 		</form>
 		
 		

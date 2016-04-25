@@ -21,6 +21,7 @@ public class AppHelper {
 			gson = new GsonBuilder()
 				.registerTypeAdapter(Role.class, new RoleDeserializer())
 				.registerTypeAdapter(Role.class, new RoleSerializer())
+				.registerTypeAdapter(Timestamp.class, new TimestampDeserializer())
 				.create();
 		}
 		return gson;

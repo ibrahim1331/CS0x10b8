@@ -68,11 +68,17 @@ $(document).ready(function(){
 							<div class="inline fields">
 								<div class="ui fluid calendar field" id="fromDate">
 									<label>Check-in Date</label>
-									<input type="text" name="fromDate" value="${requestScope.fromDate}"/>
+									<div class="ui input left icon">
+										<i class="calendar icon"></i>
+										<input type="text" name="fromDate" placeholder="Check-in Date"/>
+									</div>
 								</div>
 								<div class="ui fluid calendar field" id="toDate">
 									<label>Check-out Date</label>
-									<input type="text" name="toDate" value="${requestScope.toDate}"/>
+									<div class="ui input left icon">
+										<i class="calendar icon"></i>
+										<input type="text" name="toDate" placeholder="Check-out Date"/>
+									</div>
 								</div>
 							</div>
 						</div>

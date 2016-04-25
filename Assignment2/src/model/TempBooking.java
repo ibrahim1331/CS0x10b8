@@ -1,6 +1,9 @@
 package model;
 
-public class TempBooking extends Booking {
+import java.io.Serializable;
+
+public class TempBooking extends Booking{
+	private static final long serialVersionUID = 1L;
 	private String roomNo;
 	private String hotelName;
 
