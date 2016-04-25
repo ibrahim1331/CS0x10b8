@@ -14,6 +14,7 @@ public class Booking {
 	private String purpose;
 	private String pin;
 	private Boolean isCancelled;
+	private Integer price;
 	
 	public Integer getBookingId() {
 		return bookingId;
@@ -101,5 +102,13 @@ public class Booking {
 
 	public void setIsCancelled(Boolean isCancelled) {
 		this.isCancelled = isCancelled;
+	}
+
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
 }

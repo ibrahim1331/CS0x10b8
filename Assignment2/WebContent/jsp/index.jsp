@@ -13,124 +13,22 @@ $(document).ready(function(){
 	//init tab in login/register modal
 	$("#modalLoginReg .menu .item").tab();
 	
-	//init form validation
-	$("form[name='login']")
-	.form({
-		fields:{
-			email: 'email',
-			password: 'empty'	
-		},
-		inline: true
-	})
-	.on("submit", function(e){
-		e.preventDefault();
-		
-		var form = $(this);
-		
-		var json = JSON.stringify({
-			email: form.form("get value","email"),
-			password: form.form("get value","password")
-		})
-		if(form.form("is valid")){
-			$.ajax({
-				url: "/Assignment2/auth/login",
-				method: "post",
-				data: json
-			}).then(function(data){
-				console.log(data);
-				window.location.href=data;
-			}, function(jqXHR){
-				console.log(jqXHR);
-				form.form("add errors", [jqXHR.responseText]);
-			})
-			console.log("login submit");
-		}
-	});
-
-	$("form[name='register']")
-	.form({
-		fields:{
-			email: 'email',
-			password: 'empty',
-			title: 'empty',
-			firstname: 'empty',
-			lastname: 'empty',
-			terms: 'checked'
-		},
-		inline: true,
-	})
-	.on("submit", function(e){
-		e.preventDefault();
-		
-		var form = $(this);
-		
-		var json = JSON.stringify({
-			email: form.form("get value","email"),
-			password: form.form("get value","password"),
-			gender: form.form("get value","gender"),
-			title: form.form("get value","title"),
-			firstName: form.form("get value","firstname"),
-			lastName: form.form("get value","lastname"),
-		})
-		
-		if(form.form("is valid")){
-			console.log("register submit");
-			$.ajax({
-				url: "./auth/register",
-				method: "post",
-				data: json
-			}).then(function(data){
-				window.location.href=data;
-			},function(jqXHR){
-				form.form("add errors",[jqXHR.responseText]);
-			})
-		}
-	});
-	
-	//click login button to open modal
-	$("#btnLogin").on("click", function(){
-		$("#modalLoginReg")
-		.modal({
-			observeChanges: true,
-			onHidden: function(){
-				$("form[name='login']").form("reset");
-				$("form[name='register']").form("reset");
-			}
-		})
-		.modal("show");
-	});
 })
 </script>
 </head>
 <body>
 <jsp:include page="include/header.jsp"></jsp:include>
-<div class="ui attached segment">
+<div class="ui basic segment">
 	<h1 class="ui centered header">Hotel Pro. The most advanced hotel booking website.</h1>
 		<div class="ui container">
-			<form action="search" method="post">
-				<div class="ui three column centered grid">
+			<form class="ui form" action="search" method="post">
+				<div class="ui two column centered grid">
 					<div class="centered row">
 						<div class="column">
 							<div class="ui fluid action input">
 								<input type="text" name="city" placeholder="Search..." required/>
 								<button type="submit" class="ui button" >Search</button>	
 							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="column">
-							<p>Check-in date</p>
-							<div class="ui fluid input">
-								<input type="text" name="fromDate" placeholder="From" />
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="column">
-							<p>Check-out date</p>
-							<div class="ui fluid input">
-								<input type="text" name="toDate" placeholder="To" />
-							</div>					
 						</div>
 					</div>
 				</div>

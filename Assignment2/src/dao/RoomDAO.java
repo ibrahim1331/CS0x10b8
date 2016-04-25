@@ -2,30 +2,20 @@ package dao;
 
 import java.util.List;
 
-import model.Hotel;
 import model.Room;
+import sqlwhere.core.Select;
 import sqlwhere.core.Where;
 
 public interface RoomDAO {
-	List<Room> getAllRooms();
-	
-	List<Room> getAllRoomsofHotel(Hotel hotel);
-	
 	Room getRoomById(int id);
 	
 	Room getRoomByNo(String roomNo);
 	
 	Room getRoom(Where where);
 	
-	List<Room> getAllRecommendedRooms();
-	
-	List<Room> getRecommendedRooms(Hotel hotel);
-	
-	List<Room> getRooms(String filter, String orderBy);
-	
-	List<Room> getBedrooms(Room room);
-	
 	List<Room> getRooms(Where where);
+	
+	List<Room> getRooms(Where where, List<Select.OrderBy> orderBys);
 	
 	boolean createRoom(Room room);
 	

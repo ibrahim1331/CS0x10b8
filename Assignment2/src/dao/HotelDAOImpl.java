@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +16,9 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import model.Hotel;
+import sqlwhere.core.Where;
+import utils.Columns;
+import utils.DBHelper;
 
 public class HotelDAOImpl implements HotelDAO{
 
@@ -30,28 +34,11 @@ public class HotelDAOImpl implements HotelDAO{
 	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = stmt.executeQuery("SELECT * FROM [hotel] ORDER BY [hotel_id] ASC");
             
-            while(rs != null && rs.next()){
-            	Hotel hotel = new Hotel();
-            	hotel.setHotelId(rs.getInt("hotel_id"));
-            	hotel.setName(rs.getString("name"));
-            	hotel.setLocation(rs.getInt("location"));
-            	hotel.setAddress(rs.getString("address"));
-            	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
-            	hotel.setRating(rs.getFloat("rating"));
-            	hotel.setDescription(rs.getString("description"));
-            	hotel.setDateJoined(rs.getTimestamp("join_date"));
-    			hotels.add(hotel);
-    		}
+            this.populateHotelArray(hotels, rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+          	DBHelper.close(con);
+            DBHelper.close(stmt);
+            DBHelper.close(rs);
             
 		} catch (SQLException e) {
 			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -67,37 +54,18 @@ public class HotelDAOImpl implements HotelDAO{
 		Hotel hotel = null;
 		
 		try{
-			Context initCtx = new InitialContext();
-            Context envCtx = (Context)initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-            Connection con = ds.getConnection();
+			Connection con = DBHelper.getConnection();
 	        PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [hotel] WHERE [hotel_id] = ?");
             pstmt.setInt(1, id);
             
             // execute the SQL statement
             ResultSet rs= pstmt.executeQuery();
 
-            if (rs != null && rs.next()) {
-            	hotel = new Hotel();
-            	hotel.setHotelId(rs.getInt("hotel_id"));
-            	hotel.setName(rs.getString("name"));
-            	hotel.setLocation(rs.getInt("location"));
-            	hotel.setAddress(rs.getString("address"));
-            	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
-            	hotel.setRating(rs.getFloat("rating"));
-            	hotel.setDescription(rs.getString("description"));
-            	hotel.setDateJoined(rs.getTimestamp("join_date"));
-            }
+            hotel = this.populateHotel(rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-            	pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
             
 		}catch(SQLException e){
 			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -112,37 +80,18 @@ public class HotelDAOImpl implements HotelDAO{
 		Hotel hotel = null;
 		
 		try{
-			Context initCtx = new InitialContext();
-            Context envCtx = (Context)initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-            Connection con = ds.getConnection();
+			Connection con = DBHelper.getConnection();
 	        PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [hotel] WHERE [name] = ?");
-            pstmt.setString(1, name);
+            pstmt.setString(1, "%"+name+"%");
             
             // execute the SQL statement
             ResultSet rs= pstmt.executeQuery();
 
-            if (rs != null && rs.next()) {
-            	hotel = new Hotel();
-            	hotel.setHotelId(rs.getInt("hotel_id"));
-            	hotel.setName(rs.getString("name"));
-            	hotel.setLocation(rs.getInt("location"));
-            	hotel.setAddress(rs.getString("address"));
-            	hotel.setNoOfRooms(rs.getInt("no_of_rooms"));
-            	hotel.setRating(rs.getFloat("rating"));
-            	hotel.setDescription(rs.getString("description"));
-            	hotel.setDateJoined(rs.getTimestamp("join_date"));
-            }
+            hotel = this.populateHotel(rs);
             
-            if (rs != null) {
-                rs.close();
-            }
-            if (pstmt != null) {
-            	pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+           	DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
             
 		}catch(SQLException e){
 			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -159,10 +108,7 @@ public class HotelDAOImpl implements HotelDAO{
 		
 		try{
 			if(hotel != null){
-				Context initCtx = new InitialContext();
-                Context envCtx = (Context)initCtx.lookup("java:comp/env");
-                DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-                Connection con = ds.getConnection();
+				Connection con = DBHelper.getConnection();
             	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [hotel] ([name], [location], [address], [no_of_rooms], [rating], [description], [join_date]) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 pstmt.setString(1, hotel.getName());
                 pstmt.setInt(2, hotel.getLocation());
@@ -179,12 +125,8 @@ public class HotelDAOImpl implements HotelDAO{
                 	saved = true;
                 }
                 
-                if (pstmt != null) {
-                	pstmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
+                DBHelper.close(con);
+                DBHelper.close(pstmt);
 			}
 		}catch(SQLException e){
 			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -201,10 +143,7 @@ public class HotelDAOImpl implements HotelDAO{
 		
 		try{
 			if(hotel != null){
-				Context initCtx = new InitialContext();
-                Context envCtx = (Context)initCtx.lookup("java:comp/env");
-                DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-                Connection con = ds.getConnection();
+				Connection con = DBHelper.getConnection();
             	PreparedStatement pstmt = con.prepareStatement("UPDATE [hotel] SET [name]= ?, [location]= ?, [address]= ?, [no_of_rooms]= ?, [rating]= ?, [description]= ?, [join_date]= ? WHERE [hotel_id] = ?");
                 pstmt.setString(1, hotel.getName());
                 pstmt.setInt(2, hotel.getLocation());
@@ -222,12 +161,8 @@ public class HotelDAOImpl implements HotelDAO{
                 	updated = true;
                 }
                 
-                if (pstmt != null) {
-                	pstmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
+                DBHelper.close(con);
+                DBHelper.close(pstmt);
 			}
 		}catch(SQLException e){
 			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -244,10 +179,7 @@ public class HotelDAOImpl implements HotelDAO{
 		
 		try{
 			if(hotel != null){
-				Context initCtx = new InitialContext();
-                Context envCtx = (Context)initCtx.lookup("java:comp/env");
-                DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
-                Connection con = ds.getConnection();
+				Connection con = DBHelper.getConnection();
             	PreparedStatement pstmt = con.prepareStatement("DELETE FROM [hotel] WHERE [hotel_id] = ?");
                 pstmt.setInt(1, hotel.getHotelId());
                 
@@ -258,12 +190,8 @@ public class HotelDAOImpl implements HotelDAO{
                 	deleted = true;
                 }
                 
-                if (pstmt != null) {
-                	pstmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
+                DBHelper.close(con);
+                DBHelper.close(pstmt);
 			}
 		}catch(SQLException e){
 			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
@@ -273,5 +201,43 @@ public class HotelDAOImpl implements HotelDAO{
 		
 		return deleted;
 	}
+	
+	private void populateHotelArray(ArrayList<Hotel> hotels, ResultSet rs) throws SQLException{
+		while(rs!=null && rs.next()){
+			Hotel hotel = new Hotel();
+			hotel.setAddress(rs.getString(Columns.Table.Hotel.ADDRESS));
+			hotel.setDateJoined(rs.getTimestamp(Columns.Table.Hotel.JOIN_DATE));
+			hotel.setDescription(rs.getString(Columns.Table.Hotel.DESCRIPTION));
+			hotel.setHotelId(rs.getInt(Columns.Table.Hotel.HOTEL_ID));
+			hotel.setLocation(rs.getInt(Columns.Table.Hotel.LOCATION));
+			hotel.setName(rs.getString(Columns.Table.Hotel.NAME));
+			hotel.setNoOfRooms(rs.getInt(Columns.Table.Hotel.NO_OF_ROOMS));
+			hotel.setRating(rs.getFloat(Columns.Table.Hotel.RATING));
+			hotels.add(hotel);
+		}
+	}
+	
+	private Hotel populateHotel(ResultSet rs) throws SQLException{
+		Hotel hotel = null;
+		
+		if(rs!=null && rs.next()){
+			hotel = new Hotel();
+			hotel.setAddress(rs.getString(Columns.Table.Hotel.ADDRESS));
+			hotel.setDateJoined(rs.getTimestamp(Columns.Table.Hotel.JOIN_DATE));
+			hotel.setDescription(rs.getString(Columns.Table.Hotel.DESCRIPTION));
+			hotel.setHotelId(rs.getInt(Columns.Table.Hotel.HOTEL_ID));
+			hotel.setLocation(rs.getInt(Columns.Table.Hotel.LOCATION));
+			hotel.setName(rs.getString(Columns.Table.Hotel.NAME));
+			hotel.setNoOfRooms(rs.getInt(Columns.Table.Hotel.NO_OF_ROOMS));
+			hotel.setRating(rs.getFloat(Columns.Table.Hotel.RATING));
+		}
+		
+		return hotel;
+	}
 
+	@Override
+	public List<Hotel> getHotels(Where where) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -98,6 +98,9 @@ public class BookingViewDAOImpl implements BookingViewDAO {
 			booking.setHotelAddress(rs.getString(Columns.View.BookingView.ADDRESS));
 			booking.setNoOfRooms(rs.getInt(Columns.View.BookingView.NO_OF_ROOMS));
 			booking.setHotelRating(rs.getFloat(Columns.View.BookingView.RATING));
+			if(rs.wasNull()){
+				booking.setHotelRating(null);
+			}
 			booking.setHotelDescription(rs.getString(Columns.View.BookingView.DESCRIPTION));
 			booking.setHotelDateJoined(rs.getTimestamp(Columns.View.BookingView.JOIN_DATE));
 			

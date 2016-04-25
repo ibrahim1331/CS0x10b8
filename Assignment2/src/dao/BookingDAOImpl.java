@@ -4,58 +4,48 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.NamingException;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import model.Booking;
-import model.Hotel;
-import model.User;
+import service.ValidationService;
+import sqlwhere.core.Select;
+import sqlwhere.core.Where;
 import utils.Columns;
 import utils.DBHelper;
-
-import service.ValidationService;
 
 public class BookingDAOImpl implements BookingDAO{
 	ValidationService validServ = new ValidationService();
 	
 	@Override
-	public List<Booking> getAllBookings() {
-		ArrayList<Booking> bookings = new ArrayList<Booking>();
+	public List<Booking> getBookings(Where where){
+		ArrayList<Booking> bookings = new ArrayList<>();
 		
-		try {
-            Connection con = DBHelper.getConnection();
-	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = stmt.executeQuery("SELECT * FROM [booking] ORDER BY [booking_id] ASC");
-           
-            // populate the bookings ArrayList
-            populateBookingArray(bookings, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(stmt);
-            DBHelper.close(rs);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+		try{
+			Connection con = DBHelper.getConnection();
+			Select select = new Select("*").from("booking").where(where).orderBy(Columns.Table.Booking.BOOKING_ID, true);
+			PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
+				pstmt.setObject(es.getKey(), es.getValue());
+			}
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			this.populateBookingArray(bookings, rs);
+		} catch (SQLException ex) {
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 		
 		return bookings;
 	}
 
 	@Override
-	public Booking getBookingById(int id) {
+	public Booking getBookingById(Integer id) {
 		Booking booking = null;
 		
 		try {
@@ -100,267 +90,11 @@ public class BookingDAOImpl implements BookingDAO{
 			booking.setPurpose(rs.getString(Columns.Table.Booking.PURPOSE));
 			booking.setBookingDate(rs.getTimestamp(Columns.Table.Booking.BOOKING_DATE));
 			booking.setPin(rs.getString(Columns.Table.Booking.PIN));
-			if(rs.wasNull()){
-				booking.setPin(null);
-			}
 			booking.setIsCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
+			booking.setPrice(rs.getInt(Columns.Table.Booking.PRICE));
         }
 		
 		return booking;
-	}
-
-	@Override
-	public List<Booking> getBookingByBookingNumber(int booking_number) {
-		ArrayList<Booking> bookings = new ArrayList<Booking>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [booking] WHERE [booking_number] = ?");
-            pstmt.setInt(1, booking_number);
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateBookingArray(bookings, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return bookings;
-	}
-
-	@Override
-	public List<Booking> getBookingsOfCustomer(User customer) {
-		ArrayList<Booking> bookings = new ArrayList<Booking>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [booking] WHERE [customer_id] = ?");
-            pstmt.setInt(1, customer.getUserId());
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateBookingArray(bookings, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return bookings;
-	}
-
-	@Override
-	public List<Booking> getBookingsOfHotel(Hotel hotel) {
-		ArrayList<Booking> bookings = new ArrayList<Booking>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            
-            //	Get all the rooms of the hotel            
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [hotel_id] = ?");
-            pstmt.setInt(1, hotel.getHotelId());
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // Create a room list string
-            String room_list = "";
-            int count = 0;
-            while(rs != null && rs.next()){
-    			if(count != 0){
-    				room_list += ", ";
-    			}
-    			
-    			room_list += rs.getInt("room_id");
-    			
-    			count++;
-    		}
-            
-            rs = null;
-
-            //	Get all the bookings of the hotel
-            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = stmt.executeQuery("SELECT * FROM [booking] WHERE [room_id] IN ("+room_list+") ORDER BY [booking_id] ASC");
-            
-            // populate the bookings ArrayList
-            populateBookingArray(bookings, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(stmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return bookings;
-	}
-
-	@Override
-	public List<Booking> getBookingsOfLocation(String location) {
-		ArrayList<Booking> bookings = new ArrayList<Booking>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            
-            //	Get all hotels in location            
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [hotel] WHERE [location] = ?");
-            pstmt.setString(1, location);
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // Create a room list string
-            String hotel_list = "";
-            int count = 0;
-            while(rs != null && rs.next()){
-    			if(count != 0){
-    				hotel_list += ", ";
-    			}
-    			
-    			hotel_list += rs.getInt("hotel_id");
-    			
-    			count++;
-    		}
-            
-            rs = null;
-            
-            //	Get all the rooms of the hotel            
-            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = stmt.executeQuery("SELECT * FROM [room] WHERE [hotel_id] IN ("+hotel_list+") ORDER BY [room_id] ASC");
-            
-            // execute the SQL statement
-            rs= pstmt.executeQuery();
-            
-            // Create a room list string
-            String room_list = "";
-            count = 0;
-            while(rs != null && rs.next()){
-    			if(count != 0){
-    				room_list += ", ";
-    			}
-    			
-    			room_list += rs.getInt("room_id");
-    			
-    			count++;
-    		}
-            
-            rs = null;
-            stmt = null;
-            
-            //	Get all the bookings of the hotel
-            stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = stmt.executeQuery("SELECT * FROM [booking] WHERE [room_id] IN ("+room_list+") ORDER BY [booking_id] ASC");
-            
-            // populate the bookings ArrayList
-            populateBookingArray(bookings, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(stmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return bookings;
-	}
-
-	@Override
-	public List<Booking> getBookings(String filter, String orderBy) {
-		try{
-			ArrayList<Booking> bookings = new ArrayList<Booking>();
-			
-			JsonParser parser = new JsonParser();
-			JsonObject filterObj = null;
-			JsonObject orderByObj = null;
-			String queryString = "SELECT * FROM [booking]";
-			Connection con = DBHelper.getConnection();
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			
-			if(!filter.equals(""))
-				filterObj = parser.parse(filter).getAsJsonObject();
-			if(!orderBy.equals(""))
-				orderByObj = parser.parse(orderBy).getAsJsonObject();
-			
-			if(filterObj != null){
-				queryString += " WHERE ";
-				Set<Entry<String, JsonElement>> filterEntrySet = filterObj.entrySet();
-				int i = 0;
-				for(Entry<String, JsonElement> filterEntry : filterEntrySet){
-					if(i == filterEntrySet.size() - 1)
-						queryString += filterEntry.getKey() + " = ?";
-					else
-						queryString += filterEntry.getKey() + " = ? AND ";
-					i++;
-				}
-
-				if(orderByObj != null){
-					queryString += " ORDER BY ";
-					Set<Entry<String, JsonElement>> orderByEntrySet = orderByObj.entrySet();
-					i = 0;
-					for(Entry<String, JsonElement> orderByEntry : orderByEntrySet){
-						if(i == orderByEntrySet.size() - 1)
-							queryString += orderByEntry.getKey() + " " + orderByEntry.getValue().getAsString();
-						else
-							queryString += orderByEntry.getKey() + " " + orderByEntry.getValue().getAsString() + ", ";
-					}
-				}
-				
-				queryString += ";";
-				
-				pstmt = con.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				
-				i = 1;
-	            for(Entry<String, JsonElement> filterEntry : filterEntrySet){
-	            	if(validServ.isInteger(filterEntry.getValue().getAsString())){
-	            		pstmt.setInt(i, filterEntry.getValue().getAsInt());
-	            	}
-	            	else{
-	            		pstmt.setString(i, filterEntry.getValue().getAsString());
-	            	}
-	            	i++;
-	            }
-			}else{
-				pstmt = con.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			}
-			
-			// execute the SQL statement
-            rs= pstmt.executeQuery();
-			
-        	populateBookingArray(bookings, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-            
-            return bookings;
-		} catch (SQLException ex) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		} catch (NamingException ex) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		}
-		
-		return null;
 	}
 	
 	private void populateBookingArray(ArrayList<Booking> bookings, ResultSet rs) throws SQLException {
@@ -379,10 +113,8 @@ public class BookingDAOImpl implements BookingDAO{
 			booking.setPurpose(rs.getString(Columns.Table.Booking.PURPOSE));
 			booking.setBookingDate(rs.getTimestamp(Columns.Table.Booking.BOOKING_DATE));
 			booking.setPin(rs.getString(Columns.Table.Booking.PIN));
-			if(rs.wasNull()){
-				booking.setPin(null);
-			}
 			booking.setIsCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
+			booking.setPrice(rs.getInt(Columns.Table.Booking.PRICE));
 			bookings.add(booking);
 		}
 	}
@@ -394,9 +126,13 @@ public class BookingDAOImpl implements BookingDAO{
 		try {
             if (booking != null) {
             	Connection con = DBHelper.getConnection();
-            	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [booking] ([booking_number], [customer_id], [room_id], [no_of_people], [check_in_date], [check_out_date], [purpose], [booking_date], [pin], [is_cancelled]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [booking] ([booking_number], [customer_id], [room_id], [no_of_people], [check_in_date], [check_out_date], [purpose], [booking_date], [pin], [is_cancelled], [price]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 pstmt.setInt(1, booking.getBookingNumber());
-                pstmt.setInt(2, booking.getCustomerId());
+                if(booking.getCustomerId()!=null){
+                	pstmt.setInt(2, booking.getCustomerId());
+                } else {
+                	pstmt.setNull(2, java.sql.Types.INTEGER);
+                }
                 pstmt.setInt(3, booking.getRoomId());
                 pstmt.setInt(4, booking.getNoOfPeople());
                 pstmt.setTimestamp(5, booking.getCheckInDate());
@@ -405,6 +141,7 @@ public class BookingDAOImpl implements BookingDAO{
                 pstmt.setTimestamp(8, booking.getBookingDate());
                 pstmt.setString(9, booking.getPin());
                 pstmt.setBoolean(10, booking.getIsCancelled());
+                pstmt.setInt(11, booking.getPrice());
                 
                 
                 // execute the SQL statement
@@ -432,9 +169,13 @@ public class BookingDAOImpl implements BookingDAO{
 		try {
             if (booking != null) {
             	Connection con = DBHelper.getConnection();
-                PreparedStatement pstmt = con.prepareStatement("UPDATE [booking] SET [booking_number] = ?, [customer_id] = ?, [room_id] = ?, [no_of_people] = ?, [check_in_date] = ?, [check_out_date] = ?, [purpose] = ?, [booking_date] = ?, [pin] = ?, [is_cancelled] = ? WHERE [booking_id] = ?");
+                PreparedStatement pstmt = con.prepareStatement("UPDATE [booking] SET [booking_number] = ?, [customer_id] = ?, [room_id] = ?, [no_of_people] = ?, [check_in_date] = ?, [check_out_date] = ?, [purpose] = ?, [booking_date] = ?, [pin] = ?, [is_cancelled] = ?, [price] = ? WHERE [booking_id] = ?");
                 pstmt.setInt(1, booking.getBookingNumber());
-                pstmt.setInt(2, booking.getCustomerId());
+                if(booking.getCustomerId()!=null){
+                	pstmt.setInt(2, booking.getCustomerId());
+                } else {
+                	pstmt.setNull(2, java.sql.Types.INTEGER);
+                }
                 pstmt.setInt(3, booking.getRoomId());
                 pstmt.setInt(4, booking.getNoOfPeople());
                 pstmt.setTimestamp(5, booking.getCheckInDate());
@@ -443,7 +184,8 @@ public class BookingDAOImpl implements BookingDAO{
                 pstmt.setTimestamp(8, booking.getBookingDate());
                 pstmt.setString(9, booking.getPin());
                 pstmt.setBoolean(10, booking.getIsCancelled());
-                pstmt.setInt(11, booking.getBookingId());
+                pstmt.setInt(11, booking.getPrice());
+                pstmt.setInt(12, booking.getBookingId());
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();

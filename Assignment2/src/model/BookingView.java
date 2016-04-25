@@ -31,6 +31,7 @@ public class BookingView {
 	private Integer locationId;
 	private String locationName;
 	private String country;
+	private Integer bookingPrice;
 	
 	public Integer getBookingId() {
 		return bookingId;
@@ -254,5 +255,13 @@ public class BookingView {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+	
+	public Integer getBookingPrice() {
+		return bookingPrice;
+	}
+
+	public void setBookingPrice(Integer bookingPrice) {
+		this.bookingPrice = bookingPrice;
 	}
 }

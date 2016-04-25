@@ -4,55 +4,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import model.Hotel;
 import model.Room;
 import sqlwhere.core.Select;
 import sqlwhere.core.Where;
 import utils.DBHelper;
 
 public class RoomDAOImpl implements RoomDAO{
-
 	@Override
-	public List<Room> getAllRooms() {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = stmt.executeQuery("SELECT * FROM [room] ORDER BY [room_id] ASC");
-           
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(stmt);
-            DBHelper.close(rs);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-	
-	@Override
-	public List<Room> getRooms(Where where){
+	public List<Room> getRooms(Where where, List<Select.OrderBy> orderBys){
 		ArrayList<Room> records = new ArrayList<Room>();
 		
 		try{
 			Connection con = DBHelper.getConnection();
 			Select select = new Select("*").from("room").where(where);
+			if(orderBys!=null){
+				select.orderBy(orderBys);
+			}
 			
 			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
+			System.out.println(select.getIndexMap());
 			
 			PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
@@ -72,6 +48,11 @@ public class RoomDAOImpl implements RoomDAO{
 		}
 		
 		return records;
+	}
+	
+	@Override
+	public List<Room> getRooms(Where where){
+		return this.getRooms(where, null);
 	}
 	
 	@Override
@@ -102,174 +83,6 @@ public class RoomDAOImpl implements RoomDAO{
 		return room;
 	}
 	
-	public Room getRoomByNo(String roomNo){
-		Room room = null;
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [room_no] = ?");
-            pstmt.setString(1, roomNo);
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            room = this.populateRoom(rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	room = null;
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	room = null;
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return room;
-	}
-	
-	public Room getRoom(Where where){
-		Room room = null;
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            Select select = new Select("*").from("room").where(where);
-            PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
-	        	pstmt.setObject(es.getKey(), es.getValue());
-	        }
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            room = this.populateRoom(rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	room = null;
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	room = null;
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return room;
-	}
-	
-	@Override
-	public List<Room> getAllRoomsofHotel(Hotel hotel) {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [hotel_id] = ?");
-            pstmt.setInt(1, hotel.getHotelId());
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-
-	@Override
-	public List<Room> getAllRecommendedRooms() {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = stmt.executeQuery("SELECT * FROM [room] WHERE [recommended] IS NOT NULL ORDER BY [recommended] DESC");
-           
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(stmt);
-            DBHelper.close(rs);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-
-	@Override
-	public List<Room> getRecommendedRooms(Hotel hotel) {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [hotel_id] = ? AND [recommended] IS NOT NULL ORDER BY [recommended] DESC");
-            pstmt.setInt(1, hotel.getHotelId());
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-
-	@Override
-	public List<Room> getRooms(String filter, String orderBy) {
-		
-		return null;
-	}
-	
-	public List<Room> getBedrooms(Room room){
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [belongs_to] = ? [room_id] ASC");
-            pstmt.setInt(1, room.getRoomId());
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-	
 	private void populateRoomArray(ArrayList<Room> rooms, ResultSet rs) throws SQLException {
 		while(rs != null && rs.next()){
 			Room room = new Room();
@@ -277,8 +90,14 @@ public class RoomDAOImpl implements RoomDAO{
 			room.setType(rs.getString("type"));
 			room.setPrice(rs.getInt("price"));
 			room.setHotelId(rs.getInt("hotel_id"));
+			if(rs.wasNull()){
+				room.setHotelId(null);
+			}
 			room.setCapacity(rs.getInt("capacity"));
 			room.setSize(rs.getInt("size"));
+			if(rs.wasNull()){
+				room.setSize(null);
+			}
 			room.setRoomNo(rs.getString("room_no"));
 			room.setDiscount(rs.getInt("discount"));
 			if(rs.wasNull()){
@@ -301,8 +120,14 @@ public class RoomDAOImpl implements RoomDAO{
 			room.setType(rs.getString("type"));
 			room.setPrice(rs.getInt("price"));
 			room.setHotelId(rs.getInt("hotel_id"));
+			if(rs.wasNull()){
+				room.setHotelId(null);
+			}
 			room.setCapacity(rs.getInt("capacity"));
 			room.setSize(rs.getInt("size"));
+			if(rs.wasNull()){
+				room.setSize(null);
+			}
 			room.setRoomNo(rs.getString("room_no"));
 			room.setDiscount(rs.getInt("discount"));
 			if(rs.wasNull()){
@@ -329,10 +154,22 @@ public class RoomDAOImpl implements RoomDAO{
                 pstmt.setInt(2, room.getPrice());
                 pstmt.setInt(3, room.getHotelId());
                 pstmt.setInt(4, room.getCapacity());
-                pstmt.setInt(5, room.getSize());
+                if(room.getSize()!=null){
+                	pstmt.setInt(5, room.getSize());
+                } else {
+                	pstmt.setNull(5, java.sql.Types.INTEGER);
+                }
                 pstmt.setString(6, room.getRoomNo());
-                pstmt.setInt(7, room.getDiscount());
-                pstmt.setInt(8, room.getRecommended());
+                if(room.getDiscount()!=null){
+                	pstmt.setInt(7, room.getDiscount());
+                } else {
+                	pstmt.setNull(7, java.sql.Types.NUMERIC);
+                }
+                if(room.getRecommended()!=null){
+                	pstmt.setInt(8, room.getRecommended());
+                } else {
+                	pstmt.setNull(8, java.sql.Types.INTEGER);
+                }
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();
@@ -342,6 +179,7 @@ public class RoomDAOImpl implements RoomDAO{
                 }
                 
                 DBHelper.close(con);
+                DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
         	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -364,12 +202,16 @@ public class RoomDAOImpl implements RoomDAO{
                 pstmt.setInt(2, room.getPrice());
                 pstmt.setInt(3, room.getHotelId());
                 pstmt.setInt(4, room.getCapacity());
-                pstmt.setInt(5, room.getSize());
+                if(room.getSize()!=null){
+                	pstmt.setInt(5, room.getSize());
+                } else {
+                	pstmt.setNull(5, java.sql.Types.INTEGER);
+                }
                 pstmt.setString(6, room.getRoomNo());
                 if(room.getDiscount()!=null){
                 	pstmt.setInt(7, room.getDiscount());
                 } else {
-                	pstmt.setNull(7, java.sql.Types.INTEGER);
+                	pstmt.setNull(7, java.sql.Types.NUMERIC);
                 }
                 if(room.getRecommended()!=null){
                 	pstmt.setInt(8, room.getRecommended());
@@ -426,4 +268,63 @@ public class RoomDAOImpl implements RoomDAO{
 		return deleted;
 	}
 
+	@Override
+	public Room getRoomByNo(String roomNo) {
+		Room room = null;
+		
+		try {
+            Connection con = DBHelper.getConnection();
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [room_no] = ?");
+            pstmt.setString(1, roomNo);
+            
+            // execute the SQL statement
+            ResultSet rs= pstmt.executeQuery();
+            
+            room = this.populateRoom(rs);
+            
+            DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
+        } catch (SQLException ex) {
+        	room = null;
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+        	room = null;
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+		
+		return room;
+	}
+
+	@Override
+	public Room getRoom(Where where) {
+		Room room = new Room();
+		
+		try{
+			Connection con = DBHelper.getConnection();
+			Select select = new Select("*").from("room").where(where);
+
+			
+			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
+			System.out.println(select.getIndexMap());
+			
+			PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
+	        	pstmt.setObject(es.getKey(), es.getValue());
+	        }
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        room = this.populateRoom(rs);
+	        
+	        DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
+		} catch (SQLException ex){
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception ex){
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+		}
+		
+		return room;
+	}
 }
