@@ -70,14 +70,14 @@ $(document).ready(function(){
 									<label>Check-in Date</label>
 									<div class="ui input left icon">
 										<i class="calendar icon"></i>
-										<input type="text" name="fromDate" placeholder="Check-in Date"/>
+										<input type="text" name="fromDate" placeholder="Check-in Date" value="${fromDate }"/>
 									</div>
 								</div>
 								<div class="ui fluid calendar field" id="toDate">
 									<label>Check-out Date</label>
 									<div class="ui input left icon">
 										<i class="calendar icon"></i>
-										<input type="text" name="toDate" placeholder="Check-out Date"/>
+										<input type="text" name="toDate" placeholder="Check-out Date" value="${toDate }"/>
 									</div>
 								</div>
 							</div>

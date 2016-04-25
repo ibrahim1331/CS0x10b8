@@ -42,7 +42,7 @@ $(document).ready(function(){
 				<c:if test="${not empty requestScope.failed}">
 				<div class="row">
 					<div class="centered column">
-						<p>${requestScope.failed.size()} reservation(s) cannot be done because the room is already reserved by other users.</p>
+						<p>${fn:length(requestScope.failed)} reservation(s) cannot be done because the room is already reserved by other users.</p>
 						<p>Please view the booking(s) in the <a href="${pageContext.request.contextPath}/booking/temp">temp booking list</a>.</p>
 						<div class="ui vertical fluid menu">
 						<c:forEach var="temp" items="${requestScope.failed}">

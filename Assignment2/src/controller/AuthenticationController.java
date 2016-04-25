@@ -74,6 +74,7 @@ public class AuthenticationController extends HttpServlet {
 				User user = userDAO.getUser(email, password);
 				req.getSession().setAttribute("loginUser", user);
 				res.sendRedirect(req.getContextPath()+"/");
+				Logger.getLogger(this.getClass().getName()).log(Level.INFO, "loginUser.role: "+user.getRole().toString());
 			} else {
 //				res.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				req.getSession().setAttribute("errorMsg", "login fail!!! user not found!");

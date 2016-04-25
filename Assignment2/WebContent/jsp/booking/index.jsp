@@ -66,7 +66,7 @@ $(document).ready(function(){
 			    <c:if test="${not empty sessionScope.loginUser && empty requestScope.bookings}">
 			    	No booking records
 			    </c:if>
-			    <c:if test="${not empty sessionScope.loginUser && not empty requestScope.bookings && !requestScope.bookings.isEmpty()}">
+			    <c:if test="${not empty sessionScope.loginUser && not empty requestScope.bookings}">
 			    	<div class="ui fluid vertical menu">
 			    		<c:forEach var="record" items="${requestScope.bookings}">
 			    			<a class="item" href="${pageContext.request.contextPath }/booking/record?number=${record.bookingNumber}">
