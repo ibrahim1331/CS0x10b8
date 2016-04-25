@@ -59,7 +59,7 @@ public class Columns {
 		}
 		
 		public class HotelFacility{
-			public static final String HOTEL = "home";
+			public static final String HOTEL = "hotel";
 			public static final String FACILITY = "facility";
 		}
 		

@@ -18,6 +18,8 @@
 			$(".ui.dropdown").dropdown();
 			
 			$(".tabular.menu .item").tab();
+			
+			$('.ui.checkbox').checkbox();
 				
 			//hack
 			$(".ui.reset.button").each(function(idx, ele){$(ele).on("click",function(){$(this).parent().form("reset")})})
@@ -90,6 +92,44 @@
 		  				<label>No of Rooms</label>
 	  					<input type="text" placeholder="No Of Rooms" name="noOfRooms" value="${requestScope.hotel.noOfRooms}"/>
 		  			</div>
+		  			
+		  			<div class="field">
+		  				<label>Facilities</label>
+						<div class="ui grid">
+						<c:forEach var="facility" items="${requestScope.facilities}">
+								<div class="four wide column">
+									<div class="field">
+										<c:if test="${fn:length(requestScope.hotelFacilities) gt 0}">
+											<c:set var="matched"  value="false"/>
+											<c:forEach var="hotelFacility" items="${requestScope.hotelFacilities}">
+												<c:if test="${hotelFacility.facility == facility.facilityId }">
+													<c:set var="matched" value="true"/>
+											    </c:if>
+									   		</c:forEach>
+									   		<c:if test="${matched eq true}">
+										    	<div class="ui checkbox checked">
+													<input name="facilities" type="checkbox" value="${facility.facilityId}" tabindex="0" class="hidden" checked>
+													<label>${facility.name}</label>
+											    </div>
+										    </c:if>
+										    <c:if test="${matched eq false}">
+												<div class="ui checkbox">
+													<input name="facilities" type="checkbox" value="${facility.facilityId}" tabindex="0" class="hidden">
+													<label>${facility.name}</label>
+											    </div>
+										    </c:if>
+									    </c:if>
+									    <c:if test="${fn:length(requestScope.hotelFacilities) eq 0}">
+											<div class="ui checkbox">
+												<input name="facilities" type="checkbox" value="${facility.facilityId}" tabindex="0" class="hidden">
+												<label>${facility.name}</label>
+										    </div>
+									    </c:if>
+								   </div>
+								</div>
+						</c:forEach>
+						</div>
+					</div>
 		  			
 		  			<div class="twelve wide field">
 		  				<label>Description</label>

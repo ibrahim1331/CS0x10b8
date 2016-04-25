@@ -102,13 +102,38 @@ public class FacilityDAOImpl implements FacilityDAO{
 	}
 
 	@Override
-	public List<Facility> getAllFacilities() {
+	public List<Facility> getAllHotelFacilities() {
 		ArrayList<Facility> facilities = new ArrayList<Facility>();
 		
 		try {
             Connection con = DBHelper.getConnection();
 	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = stmt.executeQuery("SELECT * FROM [facility] ORDER BY [facility_id] ASC");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM [facility] WHERE [category] = 'Hotel' ORDER BY [facility_id] ASC");
+           
+            // populate the bookings ArrayList
+            populateFacilityArray(facilities, rs);
+            
+            DBHelper.close(con);
+            DBHelper.close(stmt);
+            DBHelper.close(rs);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+		
+		return facilities;
+	}
+	
+	@Override
+	public List<Facility> getAllRoomFacilities() {
+		ArrayList<Facility> facilities = new ArrayList<Facility>();
+		
+		try {
+            Connection con = DBHelper.getConnection();
+	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM [facility] WHERE [category] = 'Room' ORDER BY [facility_id] ASC");
            
             // populate the bookings ArrayList
             populateFacilityArray(facilities, rs);

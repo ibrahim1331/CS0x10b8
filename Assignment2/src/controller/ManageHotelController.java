@@ -2,7 +2,9 @@ package controller;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,11 +13,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.FacilityDAO;
+import dao.FacilityDAOImpl;
 import dao.HotelDAO;
 import dao.HotelDAOImpl;
+import dao.HotelFacilityDAO;
+import dao.HotelFacilityDAOImpl;
 import dao.LocationDAO;
 import dao.LocationDAOImpl;
 import model.Hotel;
+import model.HotelFacility;
 import service.ManageHotelService;
 import service.ValidationService;
 
@@ -27,6 +34,8 @@ import service.ValidationService;
 public class ManageHotelController extends HttpServlet {
 	HotelDAO hotelDAO = new HotelDAOImpl();
 	LocationDAO locationDAO = new LocationDAOImpl();
+	FacilityDAO facilitiesDAO = new FacilityDAOImpl();
+	HotelFacilityDAO hotelFacilityDAO = new HotelFacilityDAOImpl();
 	ManageHotelService manageHotelServ = new ManageHotelService();
 	ValidationService validationServ = new ValidationService();
 	
@@ -114,10 +123,12 @@ public class ManageHotelController extends HttpServlet {
 	
 	private void editHotel(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
 		int hotelId = Integer.parseInt((String) req.getParameter("hotel_id")); 
+		Hotel hotel = manageHotelServ.getHotel(hotelId);
 		req.setAttribute("locations", locationDAO.getAllLocations());
+		req.setAttribute("facilities", facilitiesDAO.getAllHotelFacilities());
+		req.setAttribute("hotelFacilities", hotelFacilityDAO.getHotelFacilities(hotel));
 
 		if(req.getParameter("edit")==null){
-			Hotel hotel = manageHotelServ.getHotel(hotelId);
 			if(hotel!=null){
 				req.setAttribute("rooms", manageHotelServ.getRooms(hotel));
 				req.setAttribute("hotel", hotel);
@@ -126,7 +137,6 @@ public class ManageHotelController extends HttpServlet {
 				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "This hotel doesn't exist.");
 			}
 		}else{
-			Hotel hotel = manageHotelServ.getHotel(hotelId);
 			if(hotel!=null){
 				String name = req.getParameter("name"),
 				address = req.getParameter("address"),
@@ -134,6 +144,8 @@ public class ManageHotelController extends HttpServlet {
 				
 				int location = Integer.parseInt(req.getParameter("location")),
 					noOfRooms = Integer.parseInt(req.getParameter("noOfRooms"));
+				
+				String[] facilities = req.getParameterValues("facilities");
 
 				if(name!=null && address!=null && description!=null){
 					hotel.setName(name);
@@ -141,6 +153,33 @@ public class ManageHotelController extends HttpServlet {
 					hotel.setLocation(location);
 					hotel.setNoOfRooms(noOfRooms);
 					hotel.setDescription(validationServ.removeScripts(description));
+					
+					ArrayList<HotelFacility> hotelFacilities = (ArrayList<HotelFacility>) manageHotelServ.getHotelFacilities(hotel);
+					
+					if(facilities != null){
+						for(String facility : facilities){
+							System.out.println(facility);
+							if(manageHotelServ.getHotelFacility(hotel.getHotelId(), Integer.parseInt(facility)) == null)
+								manageHotelServ.addFacility(hotel.getHotelId(), Integer.parseInt(facility));
+						}
+						
+						//	Remove the facilities deselected
+						for(HotelFacility hotelFacility : hotelFacilities){
+							boolean found = false;
+							for(String facility : facilities){
+								if(hotelFacility.getFacility() == Integer.parseInt(facility))
+									found = true;
+							}
+							if(!found){
+								manageHotelServ.deleteFacility(hotelFacility);
+							}
+						}
+					}
+					else{	// The hotel has no facilities or remove all facilities	
+						for(HotelFacility hotelFacility : hotelFacilities){
+							manageHotelServ.deleteFacility(hotelFacility);
+						}
+					}
 					
 					if(!manageHotelServ.updateHotel(hotel)){
 						//add error message

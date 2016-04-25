@@ -4,11 +4,15 @@ import java.util.List;
 
 import dao.HotelDAO;
 import dao.HotelDAOImpl;
+import dao.HotelFacilityDAO;
+import dao.HotelFacilityDAOImpl;
 import dao.RoomDAO;
 import dao.RoomDAOImpl;
 import dao.SearchDAO;
 import dao.SearchDAOImpl;
+import model.Facility;
 import model.Hotel;
+import model.HotelFacility;
 import model.Room;
 import sqlwhere.core.Select;
 import sqlwhere.core.Where;
@@ -22,6 +26,7 @@ public class ManageHotelService {
 	SearchDAO searchDAO = new SearchDAOImpl();
 	RoomDAO roomDAO = new RoomDAOImpl();
 	HotelDAO hotelDAO = new HotelDAOImpl();
+	HotelFacilityDAO hotelFacilitiesDAO = new HotelFacilityDAOImpl();
 	
 	public Hotel getHotel(int hotelId){
 		return hotelDAO.getHotelById(hotelId);
@@ -52,8 +57,23 @@ public class ManageHotelService {
 		return roomDAO.getRooms(where);
 	}
 	
-	public List<Room> getBedrooms(Room room){
-		Where where = new Where(new Equal("type", "Bedroom")).and(new Equal("belongs_to", room.getRoomId()));
-		return roomDAO.getRooms(where);
+	public boolean addFacility(Integer hotelId, Integer facilityId){
+		HotelFacility hotelFacility = new HotelFacility();
+		hotelFacility.setHotel(hotelId);
+		hotelFacility.setFacility(facilityId);
+		return hotelFacilitiesDAO.createHotelFacility(hotelFacility);
+	}
+	
+	public boolean deleteFacility(HotelFacility hotelFacility){
+		return hotelFacilitiesDAO.deleteHotelFacility(hotelFacility);
+	}
+	
+	public HotelFacility getHotelFacility(Integer hotelId, Integer facilityId){
+		Where where = new Where(new Equal("hotel", hotelId)).and(new Equal("facility", facilityId));
+		return hotelFacilitiesDAO.getHotelFacility(where);
+	}
+	
+	public List<HotelFacility> getHotelFacilities(Hotel hotel){
+		return hotelFacilitiesDAO.getHotelFacilities(hotel);
 	}
 }

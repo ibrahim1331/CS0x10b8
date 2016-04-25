@@ -12,7 +12,9 @@ public interface FacilityDAO {
 	
 	Facility getFacility(Where where);
 	
-	List<Facility> getAllFacilities();
+	List<Facility> getAllHotelFacilities();
+	
+	List<Facility> getAllRoomFacilities();
 	
 	List<Facility> getFacilities(String category);
 	
