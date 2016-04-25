@@ -275,6 +275,10 @@ public class BookingController extends HttpServlet {
 		
 		User user = (User) req.getSession().getAttribute("loginUser");
 		
+		if(tempBookings==null){
+			res.sendError(HttpServletResponse.SC_BAD_REQUEST, "no temp booking is made");
+			return;
+		}
 		for(Booking b: tempBookings){
 			if(user!=null){
 				b.setCustomerId(user.getUserId());

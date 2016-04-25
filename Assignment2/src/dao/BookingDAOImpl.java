@@ -37,11 +37,11 @@ public class BookingDAOImpl implements BookingDAO{
 			
 			rs = pstmt.executeQuery();
 			
+			this.populateBookingArray(bookings, rs);
+			
 			DBHelper.close(con);
             DBHelper.close(pstmt);
             DBHelper.close(rs);
-			
-			this.populateBookingArray(bookings, rs);
 		} catch (SQLException ex) {
         	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
