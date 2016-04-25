@@ -59,10 +59,10 @@
 				</div>
 			</c:if>
 			<div class="ui top attached tabular menu">
-				<a class="item" data-tab="hotel">Hotel</a>
-				<a class="active item" data-tab="rooms">Rooms</a>
+				<a class="active item" data-tab="hotel">Hotel</a>
+				<a class="item" data-tab="rooms">Rooms</a>
 			</div>
-			<div class="ui bottom attached tab segment" data-tab="hotel">
+			<div class="ui bottom attached active tab segment" data-tab="hotel">
 				<form class="ui form" method="post" name="update" action="${pageContext.request.contextPath}/manage-hotel/edit?edit=1&hotel_id=${requestScope.hotel.hotelId}">
 		  			<div class="eight wide field">
 		  				<label>Hotel Name</label>
@@ -101,7 +101,7 @@
 		  			<div class="ui error message"></div>
 		  		</form>
 	  		</div>
-	  		<div class="ui bottom attached active tab segment" data-tab="rooms">
+	  		<div class="ui bottom attached tab segment" data-tab="rooms">
 	  			<a href="${pageContext.request.contextPath }/manage-room/add?hotel_id=${requestScope.hotel.hotelId}" class="ui blue button">Add Room</a>
 	  			<c:if test="${requestScope.rooms.size() > 0 }">
 					<div class="ui vertical fluid menu">

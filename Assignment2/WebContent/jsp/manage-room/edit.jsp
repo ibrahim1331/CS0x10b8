@@ -101,7 +101,7 @@
   			
 	  			<div class="six wide field">
 	  				<label>Recommended</label>
-  					<input type="number" min="0" value="${requestScope.room.recommended}" placeholder="Recommended" name="recommended" />
+  					<input type="number" min="0" value="${requestScope.room.recommended}" placeholder="Recommended" name="recommended" readonly/>
 	  			</div>
   			</div>
   			

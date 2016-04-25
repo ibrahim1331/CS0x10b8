@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Hotel Go - Hotel</title>
 <jsp:include page="../include/include.jsp"></jsp:include>
 
 <style>
@@ -21,7 +21,7 @@
 	<div class="ui attached segment">
 		<div class="ui container">
 			<h1 class="ui header">
-				<i class="add user icon"></i>
+				<i class="building icon"></i>
 				<div class="content">
 					Manage Hotels
 					<div class="sub header">Add, Edit or Remove hotels.</div>

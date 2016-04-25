@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Hotel Go - Hotel</title>
+	<title>Hotel Go - Room</title>
 	<jsp:include page="../include/include.jsp"></jsp:include>
 
 	<script>
@@ -81,10 +81,10 @@
 							$
 						</div>
 		  				<c:if test="${not empty sessionScope.inputBefore}">
-		  					<input type="text" placeholder="$0.00" name="price" value="${sessionScope.inputBefore.price }"/>
+		  					<input type="text" placeholder="0.00" name="price" value="${sessionScope.inputBefore.price }"/>
 		  				</c:if>
 		  				<c:if test="${empty sessionScope.inputBefore}">
-		  					<input type="text" placeholder="$0.00" name="price"/>
+		  					<input type="text" placeholder="0.00" name="price"/>
 		  				</c:if>
 		  				<div class="ui basic label">.00</div>
 	  				</div>

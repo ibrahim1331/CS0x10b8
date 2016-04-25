@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 import model.Booking;
 import model.Hotel;
 import model.User;
+import utils.Columns;
 import utils.DBHelper;
 
 import service.ValidationService;
@@ -86,17 +87,23 @@ public class BookingDAOImpl implements BookingDAO{
 		
 		if (rs != null && rs.next()) {
 			booking = new Booking();
-			booking.setBookingId(rs.getInt("booking_id"));
-			booking.setBookingNumber(rs.getInt("booking_number"));
-			booking.setCustomerId(rs.getInt("customer_id"));
-			booking.setRoomId(rs.getInt("room_id"));
-			booking.setNoOfPeople(rs.getInt("no_of_people"));
-			booking.setCheckInDate(rs.getTimestamp("check_in_date"));
-			booking.setCheckOutDate(rs.getTimestamp("check_out_date"));
-			booking.setPurpose(rs.getString("purpose"));
-			booking.setBookingDate(rs.getTimestamp("booking_date"));
-			booking.setPin(rs.getString("pin"));
-			booking.setIsCancelled(rs.getBoolean("is_cancelled"));
+			booking.setBookingId(rs.getInt(Columns.Table.Booking.BOOKING_ID));
+			booking.setBookingNumber(rs.getInt(Columns.Table.Booking.BOOKING_NUMBER));
+			booking.setCustomerId(rs.getInt(Columns.Table.Booking.CUSTOMER_ID));
+			if(rs.wasNull()){
+				booking.setCustomerId(null);
+			}
+			booking.setRoomId(rs.getInt(Columns.Table.Booking.ROOM_ID));
+			booking.setNoOfPeople(rs.getInt(Columns.Table.Booking.NO_OF_PEOPLE));
+			booking.setCheckInDate(rs.getTimestamp(Columns.Table.Booking.CHECK_IN_DATE));
+			booking.setCheckOutDate(rs.getTimestamp(Columns.Table.Booking.CHECK_OUT_DATE));
+			booking.setPurpose(rs.getString(Columns.Table.Booking.PURPOSE));
+			booking.setBookingDate(rs.getTimestamp(Columns.Table.Booking.BOOKING_DATE));
+			booking.setPin(rs.getString(Columns.Table.Booking.PIN));
+			if(rs.wasNull()){
+				booking.setPin(null);
+			}
+			booking.setIsCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
         }
 		
 		return booking;
@@ -359,17 +366,23 @@ public class BookingDAOImpl implements BookingDAO{
 	private void populateBookingArray(ArrayList<Booking> bookings, ResultSet rs) throws SQLException {
 		while(rs != null && rs.next()){
 			Booking booking = new Booking();
-			booking.setBookingId(rs.getInt("booking_id"));
-			booking.setBookingNumber(rs.getInt("booking_number"));
-			booking.setCustomerId(rs.getInt("customer_id"));
-			booking.setRoomId(rs.getInt("room_id"));
-			booking.setNoOfPeople(rs.getInt("no_of_people"));
-			booking.setCheckInDate(rs.getTimestamp("check_in_date"));
-			booking.setCheckOutDate(rs.getTimestamp("check_out_date"));
-			booking.setPurpose(rs.getString("purpose"));
-			booking.setBookingDate(rs.getTimestamp("booking_date"));
-			booking.setPin(rs.getString("pin"));
-			booking.setIsCancelled(rs.getBoolean("is_cancelled"));
+			booking.setBookingId(rs.getInt(Columns.Table.Booking.BOOKING_ID));
+			booking.setBookingNumber(rs.getInt(Columns.Table.Booking.BOOKING_NUMBER));
+			booking.setCustomerId(rs.getInt(Columns.Table.Booking.CUSTOMER_ID));
+			if(rs.wasNull()){
+				booking.setCustomerId(null);
+			}
+			booking.setRoomId(rs.getInt(Columns.Table.Booking.ROOM_ID));
+			booking.setNoOfPeople(rs.getInt(Columns.Table.Booking.NO_OF_PEOPLE));
+			booking.setCheckInDate(rs.getTimestamp(Columns.Table.Booking.CHECK_IN_DATE));
+			booking.setCheckOutDate(rs.getTimestamp(Columns.Table.Booking.CHECK_OUT_DATE));
+			booking.setPurpose(rs.getString(Columns.Table.Booking.PURPOSE));
+			booking.setBookingDate(rs.getTimestamp(Columns.Table.Booking.BOOKING_DATE));
+			booking.setPin(rs.getString(Columns.Table.Booking.PIN));
+			if(rs.wasNull()){
+				booking.setPin(null);
+			}
+			booking.setIsCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
 			bookings.add(booking);
 		}
 	}

@@ -54,9 +54,10 @@ public class ManageRoomController extends HttpServlet {
 
 		Logger.getLogger(this.getClass().getName()).log(Level.INFO, "processRequest, operation="+operation);
 		
-		if(operation == null){
-			this.showRoomList(req, res);
-		} else if(operation.equals("/edit")) {
+//		if(operation == null){
+//			this.showRoomList(req, res);
+//		} else 
+		if(operation.equals("/edit")) {
 			this.editRoom(req, res);
 		} else if(operation.equals("/add")){
 			this.addRoom(req, res);
@@ -67,10 +68,10 @@ public class ManageRoomController extends HttpServlet {
 		}
 	}
 	
-	private void showRoomList(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		req.setAttribute("rooms", roomDAO.getAllRooms());
-		req.getRequestDispatcher("/jsp/manage-room/index.jsp").forward(req, res);
-	}
+//	private void showRoomList(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+//		req.setAttribute("rooms", roomDAO.getAllRooms());
+//		req.getRequestDispatcher("/jsp/manage-room/index.jsp").forward(req, res);
+//	}
 	
 	private void addRoom(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setAttribute("locations", locationDAO.getAllLocations());
@@ -146,15 +147,13 @@ public class ManageRoomController extends HttpServlet {
 				req.setAttribute("hotelId", hotelId);
 				String type = req.getParameter("type"),
 				roomNo = req.getParameter("roomNo"),
-				discount = req.getParameter("discount"),
-				recommended = req.getParameter("recommended");
+				discount = req.getParameter("discount");
 				
 				int price = Integer.parseInt(req.getParameter("price")),
 					capacity = Integer.parseInt(req.getParameter("capacity")),
 					size = Integer.parseInt(req.getParameter("size"));
 
-				if(type!=null && roomNo!=null && discount!=null
-						&& recommended!=null){
+				if(type!=null && roomNo!=null && discount!=null){
 					String originalRoomNo = room.getRoomNo();
 					
 					room.setType(type);
@@ -168,11 +167,6 @@ public class ManageRoomController extends HttpServlet {
 						room.setDiscount(null);
 					else
 						room.setDiscount(Integer.parseInt(discount));
-					
-					if(recommended.equals(""))	
-						room.setRecommended(null);
-					else
-						room.setRecommended(Integer.parseInt(recommended));
 					
 					if(!originalRoomNo.equals(roomNo) && manageRoomServ.getRoom(roomNo, hotelId)!=null){
 						//add error message
