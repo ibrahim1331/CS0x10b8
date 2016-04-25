@@ -13,6 +13,7 @@ import model.Booking;
 import model.BookingMeta;
 import model.BookingView;
 import model.Search;
+import model.TempBooking;
 import sqlwhere.core.Where;
 import sqlwhere.operators.compare.Equal;
 import sqlwhere.operators.compare.GreaterThan;
@@ -54,11 +55,11 @@ public class BookingService {
 		return bookingViews;
 	}
 	
-	public BookingMeta createBookings(List<Booking> bookings){
+	public BookingMeta createBookings(List<TempBooking> bookings){
 		int bookingNumber = this.getBookingNumber();
 		String pin = AppHelper.generatePin();
 		
-		List<Booking> failed = new ArrayList<>();
+		List<TempBooking> failed = new ArrayList<>();
 		
 		for(Booking b: bookings){
 			Search roomView = this.getSearch(b.getRoomId());
@@ -67,7 +68,7 @@ public class BookingService {
 			b.setBookingNumber(bookingNumber);
 			b.setPin(pin);
 			if(!this.validate(b) || !bookingDAO.createBooking(b)){
-				failed.add(b);
+				failed.add((TempBooking) b);
 			}
 		}
 		

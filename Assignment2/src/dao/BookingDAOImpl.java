@@ -24,15 +24,22 @@ public class BookingDAOImpl implements BookingDAO{
 	public List<Booking> getBookings(Where where){
 		ArrayList<Booking> bookings = new ArrayList<>();
 		
+		Connection con;
+		ResultSet rs;
+		PreparedStatement pstmt;
 		try{
-			Connection con = DBHelper.getConnection();
+			con = DBHelper.getConnection();
 			Select select = new Select("*").from("booking").where(where).orderBy(Columns.Table.Booking.BOOKING_ID, true);
-			PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
 				pstmt.setObject(es.getKey(), es.getValue());
 			}
 			
-			ResultSet rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery();
+			
+			DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
 			
 			this.populateBookingArray(bookings, rs);
 		} catch (SQLException ex) {

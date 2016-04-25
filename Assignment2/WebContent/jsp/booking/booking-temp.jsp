@@ -81,10 +81,16 @@ $(document).ready(function(){
 				<c:forEach var="booking" items="${sessionScope.tempBookings }" varStatus="loop">
 					<c:set var="totalPrice" value="${totalPrice + booking.price}"/>
 					<a class="item" href="${pageContext.request.contextPath}/booking/temp/update?i=${loop.index}">
-						<div class="header">${booking.roomId}</div>
-						<p>For ${booking.noOfPeople} person(s)</p>
-						<p>From <span class="date">${booking.checkInDate}</span> to <span class="date">${booking.checkOutDate}</span></p>
-						<p>Purpose: ${booking.purpose}</p>
+						<div class="ui basic segment">
+							<h3 class="ui left floated header">${booking.roomNo}, ${booking.hotelName}</h3>
+							<h1 class="ui right floated header">$${booking.price }</h1>
+						</div>
+						<div class="ui basic segment">
+							<p>For ${booking.noOfPeople} person(s)</p>
+							<p>From <span class="date">${booking.checkInDate}</span> to <span class="date">${booking.checkOutDate}</span></p>
+							<p>Purpose: ${booking.purpose}</p>
+						</div>
+						
 					</a>
 				</c:forEach> 
 			</div>

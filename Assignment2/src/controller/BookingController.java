@@ -16,9 +16,9 @@ import model.Booking;
 import model.BookingMeta;
 import model.BookingView;
 import model.Search;
+import model.TempBooking;
 import model.User;
 import service.BookingService;
-import service.SearchService;
 import utils.AppHelper;
 
 public class BookingController extends HttpServlet {
@@ -60,7 +60,7 @@ public class BookingController extends HttpServlet {
 		if(operation==null || operation.equals("/")){
 			this.showBookingList(req, res);
 		} else if(operation.equals("/save")){
-			this.saveRecord(req, res);
+			this.saveTempBooking(req, res);
 		} else if(operation.equals("/create")){
 			this.createBooking(req, res);
 		} else if(operation.equals("/record")){
@@ -227,12 +227,12 @@ public class BookingController extends HttpServlet {
 		req.getRequestDispatcher("/jsp/booking/booking-temp.jsp").forward(req, res);
 	}
 	
-	private void saveRecord(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		List<Booking> tempBookings;
+	private void saveTempBooking(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		List<TempBooking> tempBookings;
 		if(req.getSession().getAttribute("tempBookings")!=null){
-			tempBookings = (List<Booking>) req.getSession().getAttribute("tempBookings");
+			tempBookings = (List<TempBooking>) req.getSession().getAttribute("tempBookings");
 		} else {
-			tempBookings = new ArrayList<Booking>();
+			tempBookings = new ArrayList<TempBooking>();
 		}
 		int roomId;
 		try{
@@ -248,7 +248,10 @@ public class BookingController extends HttpServlet {
 		if(from==null || to==null || purpose==null){
 			res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required information.");
 		} else {
-			Booking booking = new Booking();
+			TempBooking booking = new TempBooking();
+			Search search = service.getSearch(roomId);
+			booking.setHotelName(search.getHotelName());
+			booking.setRoomNo(search.getRoomNo());
 			booking.setBookingDate(AppHelper.getCurrentTimestamp());
 			booking.setCheckInDate(from);
 			booking.setCheckOutDate(to);
@@ -268,7 +271,7 @@ public class BookingController extends HttpServlet {
 	}
 	
 	private void createAllBookings(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		List<Booking> tempBookings = (List<Booking>) req.getSession().getAttribute("tempBookings");
+		List<TempBooking> tempBookings = (List<TempBooking>) req.getSession().getAttribute("tempBookings");
 		
 		User user = (User) req.getSession().getAttribute("loginUser");
 		
@@ -288,7 +291,11 @@ public class BookingController extends HttpServlet {
 			req.setAttribute("failed", meta.getFailed());
 				
 			//after created remove the list from session
-			req.getSession().removeAttribute("tempBookings");
+			if(meta.getFailed().isEmpty()){
+				req.getSession().removeAttribute("tempBookings");
+			} else{
+				req.getSession().setAttribute("tempBookings", meta.getFailed());
+			}
 			req.getRequestDispatcher("/jsp/booking/booking-success.jsp").forward(req, res);
 		}
 	}

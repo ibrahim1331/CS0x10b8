@@ -15,6 +15,10 @@ $(document).ready(function(){
 	
 	$(".tabular.menu .item").tab();
 	
+	$(".date").each(function(idx, ele){
+		$(ele).text(new Date($(ele).text()).format("yyyy-mm-dd hh:MM:ss TT"))
+	})
+	
 	//hack
 	$(".ui.reset.button").each(function(idx, ele){$(ele).on("click",function(){$(this).parent().form("reset")})})
 })
@@ -25,16 +29,31 @@ $(document).ready(function(){
 <div class="ui attached segment">
 	<div class="ui container">
 		<div class="ui text container">
-			<div class="ui one column grid">
-				<div class="column">
+			<div class="ui two column grid">
+				<div class="centered column">
 					<h1 class="ui centered header">Success! Your booking is created.</h1>
 					<p class="ui centered header">The PIN number refering to this booking record is :</>
-					<h1 class="ui centered header">${requestScope.pin}</h1>
-					<p>Please remember the PIN. You can use this to find the exact booking record if you need to modify or cancel in the future.</p>
-					<c:if test="${not empty requestScope.failed && !requestScope.failed.isEmpty()}">
-						<p>${requestScope.failed.size()} reservation(s) cannot be done because the room is already reserved by other users.</p>
-					</c:if>			
+					<h1 class="ui huge centered header">${requestScope.pin}</h1>
+					<p>Please remember the PIN. You can use this to find the exact booking record if you need to modify or cancel in the future.</p>			
 				</div>
+				<c:if test="${not empty requestScope.failed}">
+				<div class="centered column">
+					<p>${requestScope.failed.size()} reservation(s) cannot be done because the room is already reserved by other users.</p>
+					<p>Please view the booking(s) in the <a href="${pageContext.request.contextPath}/booking/temp">temp booking list</a>.</p>
+					<div class="ui vertical fluid menu">
+					<c:forEach var="temp" items="${requestScope.failed}">
+						<div class="item">
+							<h3 class="ui header">${temp.roomNo}, ${temp.hotelName}</h3>
+							<p>For ${temp.noOfPeople } person(s)</p>
+							<p>From <span class="date">${temp.checkInDate}</span><span class="date">${temp.checkOutDate}</span></p>
+							<p>Purpose: ${temp.purpose}</p>
+						</div>
+					</c:forEach>
+					</div>
+					
+				</div>
+				</c:if>
+				
 			</div>
 		</div>
 		
