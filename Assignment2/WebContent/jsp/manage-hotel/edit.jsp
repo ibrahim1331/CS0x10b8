@@ -95,7 +95,7 @@
 		  			
 		  			<div class="field">
 		  				<label>Facilities</label>
-						<div class="ui grid">
+						<div class="ui blue segment grid">
 						<c:forEach var="facility" items="${requestScope.facilities}">
 								<div class="four wide column">
 									<div class="field">

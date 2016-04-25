@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,25 +10,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.HotelDAO;
-import dao.HotelDAOImpl;
-import dao.LocationDAO;
-import dao.LocationDAOImpl;
+import dao.FacilityDAO;
+import dao.FacilityDAOImpl;
 import dao.RoomDAO;
 import dao.RoomDAOImpl;
+import dao.RoomFacilityDAO;
+import dao.RoomFacilityDAOImpl;
 import model.Hotel;
+import model.HotelFacility;
 import model.Room;
-import service.ManageHotelService;
+import model.RoomFacility;
 import service.ManageRoomService;
-import service.ValidationService;
 
 public class ManageRoomController extends HttpServlet {
-	HotelDAO hotelDAO = new HotelDAOImpl();
 	RoomDAO roomDAO = new RoomDAOImpl();
-	LocationDAO locationDAO = new LocationDAOImpl();
-	ManageHotelService manageHotelServ = new ManageHotelService();
+	FacilityDAO facilityDAO = new FacilityDAOImpl();
+	RoomFacilityDAO roomFacilityDAO = new RoomFacilityDAOImpl();
 	ManageRoomService manageRoomServ = new ManageRoomService();
-	ValidationService validationServ = new ValidationService();
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -74,7 +73,6 @@ public class ManageRoomController extends HttpServlet {
 //	}
 	
 	private void addRoom(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		req.setAttribute("locations", locationDAO.getAllLocations());
 		int hotelId = Integer.parseInt(req.getParameter("hotel_id"));
 		req.setAttribute("hotelId", hotelId);
 
@@ -129,9 +127,11 @@ public class ManageRoomController extends HttpServlet {
 	
 	private void editRoom(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
 		int roomId = Integer.parseInt((String) req.getParameter("room_id"));
-		
+		Room room = manageRoomServ.getRoom(roomId);
+		req.setAttribute("facilities", facilityDAO.getAllRoomFacilities());
+		req.setAttribute("roomFacilities", roomFacilityDAO.getRoomFacilities(room));
+
 		if(req.getParameter("edit")==null){
-			Room room = manageRoomServ.getRoom(roomId);
 			if(room!=null){
 				req.setAttribute("room", room);
 				req.getRequestDispatcher("/jsp/manage-room/edit.jsp").forward(req, res);
@@ -139,8 +139,6 @@ public class ManageRoomController extends HttpServlet {
 				res.sendError(HttpServletResponse.SC_BAD_REQUEST, "This room doesn't exist.");
 			}
 		}else{
-			Room room = manageRoomServ.getRoom(roomId);
-			
 			if(room!=null){
 				Hotel hotel = manageRoomServ.getHotel(room.getHotelId());
 				int hotelId = hotel.getHotelId();
@@ -152,7 +150,9 @@ public class ManageRoomController extends HttpServlet {
 				int price = Integer.parseInt(req.getParameter("price")),
 					capacity = Integer.parseInt(req.getParameter("capacity")),
 					size = Integer.parseInt(req.getParameter("size"));
-
+				
+				String[] facilities = req.getParameterValues("facilities");
+				
 				if(type!=null && roomNo!=null && discount!=null){
 					String originalRoomNo = room.getRoomNo();
 					
@@ -167,6 +167,32 @@ public class ManageRoomController extends HttpServlet {
 						room.setDiscount(null);
 					else
 						room.setDiscount(Integer.parseInt(discount));
+					
+					ArrayList<RoomFacility> roomFacilities = (ArrayList<RoomFacility>) manageRoomServ.getRoomFacilities(room);
+					
+					if(facilities != null){
+						for(String facility : facilities){
+							if(manageRoomServ.getRoomFacility(room.getRoomId(), Integer.parseInt(facility)) == null)
+								manageRoomServ.addFacility(room.getRoomId(), Integer.parseInt(facility));
+						}
+						
+						//	Remove the facilities deselected
+						for(RoomFacility roomFacility : roomFacilities){
+							boolean found = false;
+							for(String facility : facilities){
+								if(roomFacility.getFacility() == Integer.parseInt(facility))
+									found = true;
+							}
+							if(!found){
+								manageRoomServ.deleteFacility(roomFacility);
+							}
+						}
+					}
+					else{	// The room has no facilities or remove all facilities	
+						for(RoomFacility roomFacility : roomFacilities){
+							manageRoomServ.deleteFacility(roomFacility);
+						}
+					}
 					
 					if(!originalRoomNo.equals(roomNo) && manageRoomServ.getRoom(roomNo, hotelId)!=null){
 						//add error message

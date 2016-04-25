@@ -18,7 +18,9 @@
 			$(".ui.dropdown").dropdown();
 			
 			$(".tabular.menu .item").tab();
-				
+			
+			$('.ui.checkbox').checkbox();
+			
 			//hack
 			$(".ui.reset.button").each(function(idx, ele){$(ele).on("click",function(){$(this).parent().form("reset")})})
 			
@@ -104,6 +106,44 @@
   					<input type="number" min="0" value="${requestScope.room.recommended}" placeholder="Recommended" name="recommended" readonly/>
 	  			</div>
   			</div>
+  			
+  			<div class="field">
+  				<label>Facilities</label>
+				<div class="ui blue segment grid">
+				<c:forEach var="facility" items="${requestScope.facilities}">
+						<div class="four wide column">
+							<div class="field">
+								<c:if test="${fn:length(requestScope.roomFacilities) gt 0}">
+									<c:set var="matched"  value="false"/>
+									<c:forEach var="roomFacility" items="${requestScope.roomFacilities}">
+										<c:if test="${roomFacility.facility == facility.facilityId }">
+											<c:set var="matched" value="true"/>
+									    </c:if>
+							   		</c:forEach>
+							   		<c:if test="${matched eq true}">
+								    	<div class="ui checkbox checked">
+											<input name="facilities" type="checkbox" value="${facility.facilityId}" tabindex="0" class="hidden" checked>
+											<label>${facility.name}</label>
+									    </div>
+								    </c:if>
+								    <c:if test="${matched eq false}">
+										<div class="ui checkbox">
+											<input name="facilities" type="checkbox" value="${facility.facilityId}" tabindex="0" class="hidden">
+											<label>${facility.name}</label>
+									    </div>
+								    </c:if>
+							    </c:if>
+							    <c:if test="${fn:length(requestScope.roomFacilities) eq 0}">
+									<div class="ui checkbox">
+										<input name="facilities" type="checkbox" value="${facility.facilityId}" tabindex="0" class="hidden">
+										<label>${facility.name}</label>
+								    </div>
+							    </c:if>
+						   </div>
+						</div>
+				</c:forEach>
+				</div>
+			</div>
   			
   			<button class="ui green button" type="submit">Update</button>
   			<button class="ui reset button" type="reset">Reset</button>

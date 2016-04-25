@@ -6,25 +6,19 @@ import dao.HotelDAO;
 import dao.HotelDAOImpl;
 import dao.RoomDAO;
 import dao.RoomDAOImpl;
-import dao.SearchDAO;
-import dao.SearchDAOImpl;
+import dao.RoomFacilityDAO;
+import dao.RoomFacilityDAOImpl;
 import model.Hotel;
 import model.Room;
-import model.Search;
+import model.RoomFacility;
 import sqlwhere.core.Where;
 import sqlwhere.operators.compare.Equal;
-import sqlwhere.operators.compare.GreaterThan;
-import sqlwhere.operators.compare.NotNull;
-import sqlwhere.operators.compare.Null;
-import sqlwhere.operators.logical.And;
 import sqlwhere.operators.logical.Not;
-import sqlwhere.operators.logical.Or;
-import utils.Columns;
 
 public class ManageRoomService {
-	SearchDAO searchDAO = new SearchDAOImpl();
 	RoomDAO roomDAO = new RoomDAOImpl();
 	HotelDAO hotelDAO = new HotelDAOImpl();
+	RoomFacilityDAO roomFacilitiesDAO = new RoomFacilityDAOImpl();
 	
 	public Hotel getHotel(int hotelId){
 		return hotelDAO.getHotelById(hotelId);
@@ -32,22 +26,6 @@ public class ManageRoomService {
 	
 	public List<Hotel> getHotels(){
 		return hotelDAO.getAllHotels();
-	}
-	
-	public List<Search> getRecommendedRooms(int hotelId){
-		Where where = new Where(new And(new NotNull(Columns.View.SearchView.RECOMMENDED)
-										, new GreaterThan(Columns.View.SearchView.RECOMMENDED, 0)))
-				.and(new Equal(Columns.View.SearchView.HOTEL_ID, hotelId))
-				.and(new Null(Columns.View.SearchView.BELONGS_TO));
-		return searchDAO.search(where);
-	}
-	
-	public List<Search> getNonRecommendedRooms(int hotelId){
-		Where where = new Where(new Or(new Null(Columns.View.SearchView.RECOMMENDED)
-										, new Equal(Columns.View.SearchView.RECOMMENDED, 0)))
-				.and(new Equal(Columns.View.SearchView.HOTEL_ID, hotelId))
-				.and(new Null(Columns.View.SearchView.BELONGS_TO));
-		return searchDAO.search(where);
 	}
 	
 	public List<Room> getRooms(){
@@ -83,5 +61,25 @@ public class ManageRoomService {
 	
 	public boolean deleteRoom(Room room){
 		return roomDAO.deleteRoom(room);
+	}
+	
+	public boolean addFacility(Integer roomId, Integer facilityId){
+		RoomFacility roomFacility = new RoomFacility();
+		roomFacility.setRoom(roomId);
+		roomFacility.setFacility(facilityId);
+		return roomFacilitiesDAO.createRoomFacility(roomFacility);
+	}
+	
+	public boolean deleteFacility(RoomFacility roomFacility){
+		return roomFacilitiesDAO.deleteRoomFacility(roomFacility);
+	}
+	
+	public RoomFacility getRoomFacility(Integer roomId, Integer facilityId){
+		Where where = new Where(new Equal("room", roomId)).and(new Equal("facility", facilityId));
+		return roomFacilitiesDAO.getRoomFacility(where);
+	}
+	
+	public List<RoomFacility> getRoomFacilities(Room room){
+		return roomFacilitiesDAO.getRoomFacilities(room);
 	}
 }
