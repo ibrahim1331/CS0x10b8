@@ -82,7 +82,7 @@ $(document).ready(function(){
 			</div>
 			<div class="four wide field">
 				<label>Purpose</label>
-				<input type="text" name="purpose" value="${requestScope.bookingView.purpose }" maxlength="20"/>
+				<input type="text" name="purpose" value="${requestScope.booking.purpose }" maxlength="20"/>
 			</div>
 		
 			<a class="ui button" href="${pageContext.request.contextPath }/booking/temp">Back</a>

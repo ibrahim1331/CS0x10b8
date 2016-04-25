@@ -94,8 +94,7 @@ public class BookingService {
 	}
 	
 	public boolean updateBooking(Booking booking){
-		this.validate(booking);
-		if(bookingDAO.updateBooking(booking)){
+		if(this.validate(booking) && bookingDAO.updateBooking(booking)){
 			return true;
 		}
 		return false;
@@ -118,6 +117,7 @@ public class BookingService {
 		// overlapping = startA < endB && endA > startB
 		//if there is any -> false, this room cannot be reserved
 		Where where = new Where(new Equal(Columns.Table.Booking.ROOM_ID, booking.getRoomId()))
+				.and(new Equal(Columns.Table.Booking.IS_CANCELLED, false))
 				.and(new LessThan(Columns.Table.Booking.CHECK_IN_DATE, booking.getCheckOutDate()))
 				.and(new GreaterThan(Columns.Table.Booking.CHECK_OUT_DATE, booking.getCheckInDate()));
 		
