@@ -175,7 +175,7 @@ public class RoomDAOImpl implements RoomDAO{
 		try {
             if (room != null) {
             	Connection con = DBHelper.getConnection();
-            	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [room] ([type], [price], [hotel_id], [capacity], [size], [room_no], [belongs_to], [discount], [recommended]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [room] ([type], [price], [hotel_id], [capacity], [size], [room_no], [discount], [recommended]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 pstmt.setString(1, room.getType());
                 pstmt.setInt(2, room.getPrice());
                 pstmt.setInt(3, room.getHotelId());
@@ -186,20 +186,15 @@ public class RoomDAOImpl implements RoomDAO{
                 	pstmt.setNull(5, java.sql.Types.INTEGER);
                 }
                 pstmt.setString(6, room.getRoomNo());
-                if(room.getBelongsTo()!=null){
-                	pstmt.setInt(7, room.getBelongsTo());
-                } else {
-                	pstmt.setNull(7, java.sql.Types.INTEGER);
-                }
                 if(room.getDiscount()!=null){
-                	pstmt.setInt(8, room.getDiscount());
+                	pstmt.setInt(7, room.getDiscount());
                 } else {
-                	pstmt.setNull(8, java.sql.Types.NUMERIC);
+                	pstmt.setNull(7, java.sql.Types.NUMERIC);
                 }
                 if(room.getRecommended()!=null){
-                	pstmt.setInt(9, room.getRecommended());
+                	pstmt.setInt(8, room.getRecommended());
                 } else {
-                	pstmt.setNull(9, java.sql.Types.INTEGER);
+                	pstmt.setNull(8, java.sql.Types.INTEGER);
                 }
                 
                 // execute the SQL statement
@@ -228,7 +223,7 @@ public class RoomDAOImpl implements RoomDAO{
 		try {
             if (room != null) {
             	Connection con = DBHelper.getConnection();
-                PreparedStatement pstmt = con.prepareStatement("UPDATE [room] SET [type] = ?, [price] = ?, [hotel_id] = ?, [capacity] = ?, [size] = ?, [room_no] = ?, [belongs_to] = ?, [discount] = ?, [recommended] = ? WHERE [room_id] = ?");
+                PreparedStatement pstmt = con.prepareStatement("UPDATE [room] SET [type] = ?, [price] = ?, [hotel_id] = ?, [capacity] = ?, [size] = ?, [room_no] = ?, [discount] = ?, [recommended] = ? WHERE [room_id] = ?");
                 pstmt.setString(1, room.getType());
                 pstmt.setInt(2, room.getPrice());
                 pstmt.setInt(3, room.getHotelId());
@@ -239,22 +234,17 @@ public class RoomDAOImpl implements RoomDAO{
                 	pstmt.setNull(5, java.sql.Types.INTEGER);
                 }
                 pstmt.setString(6, room.getRoomNo());
-                if(room.getBelongsTo()!=null){
-                	pstmt.setInt(7, room.getBelongsTo());
-                } else {
-                	pstmt.setNull(7, java.sql.Types.INTEGER);
-                }
                 if(room.getDiscount()!=null){
-                	pstmt.setInt(8, room.getDiscount());
+                	pstmt.setInt(7, room.getDiscount());
                 } else {
-                	pstmt.setNull(8, java.sql.Types.NUMERIC);
+                	pstmt.setNull(7, java.sql.Types.NUMERIC);
                 }
                 if(room.getRecommended()!=null){
-                	pstmt.setInt(9, room.getRecommended());
+                	pstmt.setInt(8, room.getRecommended());
                 } else {
-                	pstmt.setNull(9, java.sql.Types.INTEGER);
+                	pstmt.setNull(8, java.sql.Types.INTEGER);
                 }
-                pstmt.setInt(10, room.getRoomId());
+                pstmt.setInt(9, room.getRoomId());
                 
                 // execute the SQL statement
                 int rows = pstmt.executeUpdate();

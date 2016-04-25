@@ -21,6 +21,25 @@ $(document).ready(function(){
 			    .split(" ").slice(0, -1).join(" ") + "...")
 	})
 	
+	$("#fromDate").calendar({
+		endCalendar: $("#toDate"),
+		formatter: {
+			date: function(date, settings){
+				if(!date) return;
+				return date.format("yyyy-mm-dd");
+			} 
+		}
+	});
+	$("#toDate").calendar({
+		startCalendar: $("#fromDate"),
+		formatter: {
+			date: function(date, settings){
+				if(!date) return;
+				return date.format("yyyy-mm-dd");
+			} 
+		} 
+	})
+	
 	//hack
 	$(".ui.reset.button").each(function(idx, ele){$(ele).on("click",function(){$(this).parent().form("reset")})})
 })
@@ -37,8 +56,30 @@ $(document).ready(function(){
 					<div class="centered row">
 						<div class="column">
 							<div class="ui fluid action input">
-								<input type="text" name="city" placeholder="Search..." required value="${requestScope.result}"/>
+								<input type="text" name="city" placeholder="Search..." value="${requestScope.result}"/>
 								<button type="submit" class="ui button" >Search</button>	
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ui two column centered grid">
+					<div class="centered row">
+						<div class="column">
+							<div class="inline fields">
+								<div class="ui fluid calendar field" id="fromDate">
+									<label>Check-in Date</label>
+									<div class="ui input left icon">
+										<i class="calendar icon"></i>
+										<input type="text" name="fromDate" placeholder="Check-in Date"/>
+									</div>
+								</div>
+								<div class="ui fluid calendar field" id="toDate">
+									<label>Check-out Date</label>
+									<div class="ui input left icon">
+										<i class="calendar icon"></i>
+										<input type="text" name="toDate" placeholder="Check-out Date"/>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -55,7 +96,7 @@ $(document).ready(function(){
 					</div>
 					<div class="content">
 						<div class="header">
-							<a href="roomResult?id=${hotel.hotelId}">${hotel.name}</a>
+							<a href="roomResult?id=${hotel.hotelId}&fromDate=${fromDate}&toDate=${toDate}">${hotel.name}</a>
 						</div>
 						<div class="description">
 							${hotel.description}

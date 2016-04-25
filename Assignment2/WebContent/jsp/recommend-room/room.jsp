@@ -17,7 +17,7 @@ $(document).ready(function(){
 	
 	$("form").form({
 		fields:{
-			recommend: 'empty'
+			recommend: ['empty','integer[0...]']
 		},
 		inline: true
 	})
