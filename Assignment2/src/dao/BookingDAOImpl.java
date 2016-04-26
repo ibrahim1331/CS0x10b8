@@ -160,6 +160,7 @@ public class BookingDAOImpl implements BookingDAO{
                 	saved = true;
                 }
                 
+                DBHelper.close(pstmt);
                 DBHelper.close(con);
             }
         } catch (SQLException ex) {

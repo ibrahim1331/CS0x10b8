@@ -76,11 +76,11 @@ $(document).ready(function(){
 			<div class="ui vertical fluid menu">
 				<c:set var="totalPrice" value="${0}"/>
 				<c:forEach var="booking" items="${requestScope.bookingView }">
-					<c:set var="totalPrice" value="${totalPrice + (booking.isCancelled?0:booking.bookingPrice)}"/>
-					<a class="item" href="${pageContext.request.contextPath}/booking/update?id=${booking.bookingId}" ${booking.isCancelled?'disabled':''}>
+					<c:set var="totalPrice" value="${totalPrice + (booking.cancelled?0:booking.bookingPrice)}"/>
+					<a class="item" href="${pageContext.request.contextPath}/booking/update?id=${booking.bookingId}" ${booking.cancelled?'disabled':''}>
 						<div class="ui basic segment">
 							<h3 class="ui left floated header">${booking.roomNo }, ${booking.hotelName}</h3>
-							<c:if test="${booking.isCancelled }">
+							<c:if test="${booking.cancelled }">
 								<h3 class="ui left floated header">(Cancelled)</h3>
 							</c:if>
 							<h2 class="ui right floated header">$${booking.bookingPrice}</h2>

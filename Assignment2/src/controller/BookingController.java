@@ -93,7 +93,7 @@ public class BookingController extends HttpServlet {
 		}
 		BookingView bookingView = service.getBookingViewById(bookingId);
 		
-		if(bookingView.getIsCancelled()){
+		if(bookingView.getCancelled()){
 			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "The booking is cancelled.");
 			return;
 		}
@@ -144,7 +144,7 @@ public class BookingController extends HttpServlet {
 		}
 		BookingView bookingView = service.getBookingViewById(bookingId);
 		
-		if(bookingView.getIsCancelled()){
+		if(bookingView.getCancelled()){
 			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "The booking is cancelled.");
 			return;
 		}

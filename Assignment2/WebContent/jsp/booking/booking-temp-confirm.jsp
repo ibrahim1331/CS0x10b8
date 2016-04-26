@@ -135,8 +135,8 @@ $(".ui.dropdown").dropdown();
 					</select>
 				</div>
 				<div class="four wide field">
-					<label>Number of People (Max: <span id="maxNoOfPeople">${requestScope.bookingView.roomCapacity}</span>)</label>
-					<input type="number" min="1" max="${requestScope.bookingView.roomCapacity}" name="noOfPeople" value="${requestScope.booking.noOfPeople}"/>
+					<label>Number of People (Max: <span id="maxNoOfPeople">${requestScope.roomView.roomCapacity}</span>)</label>
+					<input type="number" min="1" max="${requestScope.roomView.roomCapacity}" name="noOfPeople" value="${requestScope.booking.noOfPeople}"/>
 				</div>
 			</div>
 			<div class="two fields">
@@ -162,7 +162,7 @@ $(".ui.dropdown").dropdown();
 			<p>Price: $<span id="price">${booking.price}</span></p>
 		
 			<a class="ui button" href="${pageContext.request.contextPath }/booking/temp">Back</a>
-			<button class="ui green submit button">Change</button>
+			<button class="ui green change submit button">Change</button>
 			<a class="ui red button" href="${pageContext.request.contextPath}/booking/temp/remove?i=${requestScope.i}">Remove</a>
 			<span id="checkRoomMessage" style="display:none">
 				<i class="red remove icon"></i>
