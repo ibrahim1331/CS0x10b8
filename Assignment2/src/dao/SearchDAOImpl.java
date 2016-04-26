@@ -54,21 +54,51 @@ public class SearchDAOImpl implements SearchDAO {
 		while(rs != null && rs.next()){
 			Search searchResult = new Search();
 			searchResult.setHotelId(rs.getInt(Columns.View.SearchView.HOTEL_ID));
+			if(rs.wasNull()){
+				searchResult.setHotelId(null);
+			}
 			searchResult.setHotelName(rs.getString(Columns.View.SearchView.HOTEL_NAME));
 			searchResult.setHotelAddress(rs.getString(Columns.View.SearchView.ADDRESS));
 			searchResult.setNoOfRooms(rs.getInt(Columns.View.SearchView.NO_OF_ROOMS));
+			if(rs.wasNull()){
+				searchResult.setNoOfRooms(null);
+			}
 			searchResult.setHotelRating(rs.getFloat(Columns.View.SearchView.RATING));
+			if(rs.wasNull()){
+				searchResult.setHotelRating(null);
+			}
 			searchResult.setHotelDescription(rs.getString(Columns.View.SearchView.DESCRIPTION));
 			searchResult.setHotelDateJoined(rs.getTimestamp(Columns.View.SearchView.JOIN_DATE));
 			searchResult.setRoomId(rs.getInt(Columns.View.SearchView.ROOM_ID));
+			if(rs.wasNull()){
+				searchResult.setRoomId(null);
+			}
 			searchResult.setRoomType(rs.getString(Columns.View.SearchView.TYPE));
 			searchResult.setRoomPrice(rs.getInt(Columns.View.SearchView.ROOM_PRICE));
+			if(rs.wasNull()){
+				searchResult.setRoomPrice(null);
+			}
 			searchResult.setRoomCapacity(rs.getInt(Columns.View.SearchView.ROOM_CAPACITY));
+			if(rs.wasNull()){
+				searchResult.setRoomCapacity(null);
+			}
 			searchResult.setRoomSize(rs.getInt(Columns.View.SearchView.ROOM_SIZE));
+			if(rs.wasNull()){
+				searchResult.setRoomSize(null);
+			}
 			searchResult.setRoomNo(rs.getString(Columns.View.SearchView.ROOM_NO));
 			searchResult.setDiscount(rs.getInt(Columns.View.SearchView.DISCOUNT));
+			if(rs.wasNull()){
+				searchResult.setDiscount(null);
+			}
 			searchResult.setRecommended(rs.getInt(Columns.View.SearchView.RECOMMENDED));
+			if(rs.wasNull()){
+				searchResult.setRecommended(null);
+			}
 			searchResult.setLocationId(rs.getInt(Columns.View.SearchView.LOCATION_ID));
+			if(rs.wasNull()){
+				searchResult.setLocationId(null);
+			}
 			searchResult.setLocationName(rs.getString(Columns.View.SearchView.LOCATION_NAME));
 			searchResult.setCountry(rs.getString(Columns.View.SearchView.COUNTRY));
 			result.add(searchResult);
