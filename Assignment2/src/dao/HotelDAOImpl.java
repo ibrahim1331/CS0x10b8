@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +17,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import model.Hotel;
+import sqlwhere.core.Select;
 import sqlwhere.core.Where;
 import utils.Columns;
 import utils.DBHelper;
@@ -237,7 +239,31 @@ public class HotelDAOImpl implements HotelDAO{
 
 	@Override
 	public List<Hotel> getHotels(Where where) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Hotel> hotels = new ArrayList<>();
+		try{
+			Connection con = DBHelper.getConnection();
+			Select select = new Select("*").from("hotel").where(where);
+			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
+			System.out.println(select.getIndexMap());
+			
+			PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
+	        	pstmt.setObject(es.getKey(), es.getValue());
+	        }
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        this.populateHotelArray(hotels, rs);
+	        
+	        DBHelper.close(con);
+	        DBHelper.close(rs);
+	        DBHelper.close(pstmt);
+			
+		} catch(SQLException e){
+			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
+		} catch (NamingException e) {
+			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
+		}
+		
+		return hotels;
 	}
 }
