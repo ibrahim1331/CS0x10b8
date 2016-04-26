@@ -16,7 +16,5 @@ public interface FacilityDAO {
 	
 	List<Facility> getAllRoomFacilities();
 	
-	List<Facility> getFacilities(String category);
-	
 	List<Facility> getFacilities(Where where);
 }

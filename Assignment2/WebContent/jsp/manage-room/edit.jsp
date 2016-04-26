@@ -8,7 +8,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Hotel Go - Room</title>
 	<jsp:include page="../include/include.jsp"></jsp:include>
-
+	
 	<script>
 		$(document).ready(function(){
 			$('.message .close').on('click', function() {
@@ -39,10 +39,10 @@
 	</script>
 	
 	<style>
-	.room:hover{
-		cursor: pointer;
-	}
-</style>
+		.room:hover{
+			cursor: pointer;
+		}
+	</style>
 </head>
 <body>
 	<jsp:include page="../include/header.jsp"></jsp:include>
@@ -103,7 +103,7 @@
   			
 	  			<div class="six wide field">
 	  				<label>Recommended</label>
-  					<input type="number" min="0" value="${requestScope.room.recommended}" placeholder="Recommended" name="recommended" readonly/>
+  					<input type="number" min="0" value="${requestScope.room.recommended}" placeholder="Recommended" name="recommended" disabled readonly/>
 	  			</div>
   			</div>
   			
@@ -144,7 +144,7 @@
 				</c:forEach>
 				</div>
 			</div>
-  			
+			
   			<button class="ui green button" type="submit">Update</button>
   			<button class="ui reset button" type="reset">Reset</button>
   			<div class="ui error message"></div>

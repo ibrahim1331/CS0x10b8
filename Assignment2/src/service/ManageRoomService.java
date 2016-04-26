@@ -4,12 +4,15 @@ import java.util.List;
 
 import dao.HotelDAO;
 import dao.HotelDAOImpl;
+import dao.RoomBedDAO;
+import dao.RoomBedDAOImpl;
 import dao.RoomDAO;
 import dao.RoomDAOImpl;
 import dao.RoomFacilityDAO;
 import dao.RoomFacilityDAOImpl;
 import model.Hotel;
 import model.Room;
+import model.RoomBed;
 import model.RoomFacility;
 import sqlwhere.core.Where;
 import sqlwhere.operators.compare.Equal;
@@ -19,6 +22,7 @@ public class ManageRoomService {
 	RoomDAO roomDAO = new RoomDAOImpl();
 	HotelDAO hotelDAO = new HotelDAOImpl();
 	RoomFacilityDAO roomFacilitiesDAO = new RoomFacilityDAOImpl();
+	RoomBedDAO roomBedDAO = new RoomBedDAOImpl();
 	
 	public Hotel getHotel(int hotelId){
 		return hotelDAO.getHotelById(hotelId);
@@ -81,5 +85,25 @@ public class ManageRoomService {
 	
 	public List<RoomFacility> getRoomFacilities(Room room){
 		return roomFacilitiesDAO.getRoomFacilities(room);
+	}
+	
+	public List<RoomBed> getRoomBeds(Room room){
+		return roomBedDAO.getRoomBeds(room);
+	}
+	
+	public RoomBed getRoomBed(Integer roomBedId){
+		Where where = new Where(new Equal("id", roomBedId));
+		return roomBedDAO.getRoomBed(where);
+	}
+	
+	public boolean addRoomBed(Integer roomId, Integer bedId){
+		RoomBed roomBed = new RoomBed();
+		roomBed.setBed(bedId);
+		roomBed.setRoom(roomId);
+		return roomBedDAO.createRoomBed(roomBed);
+	}
+	
+	public boolean deleteRoomBed(RoomBed roomBed){
+		return roomBedDAO.deleteRoomBed(roomBed);
 	}
 }

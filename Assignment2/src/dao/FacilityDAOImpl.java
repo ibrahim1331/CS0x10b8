@@ -152,34 +152,6 @@ public class FacilityDAOImpl implements FacilityDAO{
 	}
 
 	@Override
-	public List<Facility> getFacilities(String category) {
-		ArrayList<Facility> facilities = new ArrayList<Facility>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [facility] WHERE [category] = ?");
-            pstmt.setString(1, category);
-           
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateFacilityArray(facilities, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return facilities;
-	}
-
-	@Override
 	public List<Facility> getFacilities(Where where) {
 		ArrayList<Facility> facilities = new ArrayList<Facility>();
 		

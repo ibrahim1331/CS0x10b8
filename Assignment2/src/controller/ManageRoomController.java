@@ -10,8 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.BedDAO;
+import dao.BedDAOImpl;
 import dao.FacilityDAO;
 import dao.FacilityDAOImpl;
+import dao.RoomBedDAO;
+import dao.RoomBedDAOImpl;
 import dao.RoomDAO;
 import dao.RoomDAOImpl;
 import dao.RoomFacilityDAO;
@@ -19,13 +23,16 @@ import dao.RoomFacilityDAOImpl;
 import model.Hotel;
 import model.HotelFacility;
 import model.Room;
+import model.RoomBed;
 import model.RoomFacility;
 import service.ManageRoomService;
 
 public class ManageRoomController extends HttpServlet {
 	RoomDAO roomDAO = new RoomDAOImpl();
 	FacilityDAO facilityDAO = new FacilityDAOImpl();
+	BedDAO bedDAO = new BedDAOImpl();
 	RoomFacilityDAO roomFacilityDAO = new RoomFacilityDAOImpl();
+	RoomBedDAO roomBedDAO = new RoomBedDAOImpl();
 	ManageRoomService manageRoomServ = new ManageRoomService();
 	
 	private static final long serialVersionUID = 1L;
@@ -129,7 +136,9 @@ public class ManageRoomController extends HttpServlet {
 		int roomId = Integer.parseInt((String) req.getParameter("room_id"));
 		Room room = manageRoomServ.getRoom(roomId);
 		req.setAttribute("facilities", facilityDAO.getAllRoomFacilities());
+		req.setAttribute("beds", bedDAO.getAllBeds());
 		req.setAttribute("roomFacilities", roomFacilityDAO.getRoomFacilities(room));
+		req.setAttribute("roomBeds", roomBedDAO.getRoomBeds(room));
 
 		if(req.getParameter("edit")==null){
 			if(room!=null){
@@ -153,6 +162,8 @@ public class ManageRoomController extends HttpServlet {
 				
 				String[] facilities = req.getParameterValues("facilities");
 				
+				String[] beds = req.getParameterValues("bedType");
+				
 				if(type!=null && roomNo!=null && discount!=null){
 					String originalRoomNo = room.getRoomNo();
 					
@@ -169,6 +180,8 @@ public class ManageRoomController extends HttpServlet {
 						room.setDiscount(Integer.parseInt(discount));
 					
 					ArrayList<RoomFacility> roomFacilities = (ArrayList<RoomFacility>) manageRoomServ.getRoomFacilities(room);
+					
+					ArrayList<RoomBed> roomBeds = (ArrayList<RoomBed>) manageRoomServ.getRoomBeds(room);
 					
 					if(facilities != null){
 						for(String facility : facilities){
@@ -191,6 +204,31 @@ public class ManageRoomController extends HttpServlet {
 					else{	// The room has no facilities or remove all facilities	
 						for(RoomFacility roomFacility : roomFacilities){
 							manageRoomServ.deleteFacility(roomFacility);
+						}
+					}
+					
+					if(beds != null){
+						for(String bed : beds){
+							System.out.println(bed);
+							if(manageRoomServ.getRoomBed(Integer.parseInt(bed)) == null)
+								manageRoomServ.addRoomBed(room.getRoomId(), Integer.parseInt(bed));
+						}
+						
+						//	Remove the beds deleted
+						for(RoomBed roomBed : roomBeds){
+							boolean found = false;
+							for(String bed : beds){
+								if(roomBed.getBed() == Integer.parseInt(bed))
+									found = true;
+							}
+							if(!found){
+								manageRoomServ.deleteRoomBed(roomBed);
+							}
+						}
+					}
+					else{	// The room has no beds or remove all beds	
+						for(RoomBed roomBed : roomBeds){
+							manageRoomServ.deleteRoomBed(roomBed);
 						}
 					}
 					
