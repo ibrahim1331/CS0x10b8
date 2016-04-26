@@ -29,7 +29,7 @@
 				fields:{
 					roomNo: 'empty',
 					type: 'empty',
-					price: 'empty',
+					price: 'number',
 					size: 'empty',
 					capacity: 'empty'
 				},

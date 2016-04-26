@@ -30,7 +30,7 @@
 					name: 'empty',
 					address: 'empty',
 					location: 'empty',
-					noOfRooms: 'empty',
+					noOfRooms: 'integer[1..4]',
 					description: 'empty'
 				},
 				inline: true,
