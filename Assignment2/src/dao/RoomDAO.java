@@ -2,13 +2,16 @@ package dao;
 
 import java.util.List;
 
-import model.Hotel;
 import model.Room;
 import sqlwhere.core.Select;
 import sqlwhere.core.Where;
 
 public interface RoomDAO {
 	Room getRoomById(int id);
+	
+	Room getRoomByNo(String roomNo);
+	
+	Room getRoom(Where where);
 	
 	List<Room> getRooms(Where where);
 	

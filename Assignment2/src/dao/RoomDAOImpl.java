@@ -83,32 +83,6 @@ public class RoomDAOImpl implements RoomDAO{
 		return room;
 	}
 	
-	public List<Room> getBedrooms(Room room){
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		
-		try {
-            Connection con = DBHelper.getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [belongs_to] = ? [room_id] ASC");
-            pstmt.setInt(1, room.getRoomId());
-            
-            // execute the SQL statement
-            ResultSet rs= pstmt.executeQuery();
-            
-            // populate the bookings ArrayList
-            populateRoomArray(rooms, rs);
-            
-            DBHelper.close(con);
-            DBHelper.close(pstmt);
-            DBHelper.close(rs);
-        } catch (SQLException ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-		
-		return rooms;
-	}
-	
 	private void populateRoomArray(ArrayList<Room> rooms, ResultSet rs) throws SQLException {
 		while(rs != null && rs.next()){
 			Room room = new Room();
@@ -294,4 +268,63 @@ public class RoomDAOImpl implements RoomDAO{
 		return deleted;
 	}
 
+	@Override
+	public Room getRoomByNo(String roomNo) {
+		Room room = null;
+		
+		try {
+            Connection con = DBHelper.getConnection();
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [room] WHERE [room_no] = ?");
+            pstmt.setString(1, roomNo);
+            
+            // execute the SQL statement
+            ResultSet rs= pstmt.executeQuery();
+            
+            room = this.populateRoom(rs);
+            
+            DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
+        } catch (SQLException ex) {
+        	room = null;
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+        	room = null;
+        	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+		
+		return room;
+	}
+
+	@Override
+	public Room getRoom(Where where) {
+		Room room = new Room();
+		
+		try{
+			Connection con = DBHelper.getConnection();
+			Select select = new Select("*").from("room").where(where);
+
+			
+			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
+			System.out.println(select.getIndexMap());
+			
+			PreparedStatement pstmt = con.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	        for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
+	        	pstmt.setObject(es.getKey(), es.getValue());
+	        }
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        room = this.populateRoom(rs);
+	        
+	        DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
+		} catch (SQLException ex){
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception ex){
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+		}
+		
+		return room;
+	}
 }

@@ -9,7 +9,6 @@ public class Room {
 	private Integer capacity;
 	private Integer size;
 	private Integer discount;
-	private Integer belongsTo;
 	private Integer recommended;
 	
 	public Integer getRoomId() {
@@ -59,12 +58,6 @@ public class Room {
 	}
 	public void setDiscount(Integer discount) {
 		this.discount = discount;
-	}
-	public Integer getBelongsTo() {
-		return belongsTo;
-	}
-	public void setBelongsTo(Integer belongsTo) {
-		this.belongsTo = belongsTo;
 	}
 	public Integer getRecommended() {
 		return recommended;

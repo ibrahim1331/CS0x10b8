@@ -59,7 +59,7 @@ public class Columns {
 		}
 		
 		public class HotelFacility{
-			public static final String HOTEL = "home";
+			public static final String HOTEL = "hotel";
 			public static final String FACILITY = "facility";
 		}
 		
@@ -85,7 +85,6 @@ public class Columns {
 			public static final String ID = "id";
 			public static final String ROOM = "room";
 			public static final String BED = "bed";
-			public static final String QUANTITY = "quantity";
 		}
 		
 		public class RoomFacility{

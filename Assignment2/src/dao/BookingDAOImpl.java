@@ -99,7 +99,7 @@ public class BookingDAOImpl implements BookingDAO{
 			booking.setPurpose(rs.getString(Columns.Table.Booking.PURPOSE));
 			booking.setBookingDate(rs.getTimestamp(Columns.Table.Booking.BOOKING_DATE));
 			booking.setPin(rs.getString(Columns.Table.Booking.PIN));
-			booking.setCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
+			booking.setIsCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
 			booking.setPrice(rs.getInt(Columns.Table.Booking.PRICE));
         }
 		
@@ -122,7 +122,7 @@ public class BookingDAOImpl implements BookingDAO{
 			booking.setPurpose(rs.getString(Columns.Table.Booking.PURPOSE));
 			booking.setBookingDate(rs.getTimestamp(Columns.Table.Booking.BOOKING_DATE));
 			booking.setPin(rs.getString(Columns.Table.Booking.PIN));
-			booking.setCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
+			booking.setIsCancelled(rs.getBoolean(Columns.Table.Booking.IS_CANCELLED));
 			booking.setPrice(rs.getInt(Columns.Table.Booking.PRICE));
 			bookings.add(booking);
 		}
@@ -149,7 +149,7 @@ public class BookingDAOImpl implements BookingDAO{
                 pstmt.setString(7, booking.getPurpose());
                 pstmt.setTimestamp(8, booking.getBookingDate());
                 pstmt.setString(9, booking.getPin());
-                pstmt.setBoolean(10, booking.isCancelled());
+                pstmt.setBoolean(10, booking.getIsCancelled());
                 pstmt.setInt(11, booking.getPrice());
                 
                 
@@ -192,7 +192,7 @@ public class BookingDAOImpl implements BookingDAO{
                 pstmt.setString(7, booking.getPurpose());
                 pstmt.setTimestamp(8, booking.getBookingDate());
                 pstmt.setString(9, booking.getPin());
-                pstmt.setBoolean(10, booking.isCancelled());
+                pstmt.setBoolean(10, booking.getIsCancelled());
                 pstmt.setInt(11, booking.getPrice());
                 pstmt.setInt(12, booking.getBookingId());
                 

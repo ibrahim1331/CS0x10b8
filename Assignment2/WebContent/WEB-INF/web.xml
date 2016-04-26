@@ -31,6 +31,14 @@
   	<servlet-class>controller.RecommendRoomController</servlet-class>
   </servlet>
   <servlet>
+  	<servlet-name>ManageHotelController</servlet-name>
+  	<servlet-class>controller.ManageHotelController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ManageRoomController</servlet-name>
+  	<servlet-class>controller.ManageRoomController</servlet-class>
+  </servlet>
+  <servlet>
   	<servlet-name>BookingController</servlet-name>
   	<servlet-class>controller.BookingController</servlet-class>
   </servlet>
@@ -73,6 +81,16 @@
   </servlet-mapping>
   
   <servlet-mapping>
+  	<servlet-name>ManageHotelController</servlet-name>
+  	<url-pattern>/manage-hotel/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>ManageRoomController</servlet-name>
+  	<url-pattern>/manage-room/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
   	<servlet-name>BookingController</servlet-name>
   	<url-pattern>/booking/*</url-pattern>
   </servlet-mapping>
@@ -92,8 +110,11 @@
   <filter-mapping>
   	<filter-name>LoginFilter</filter-name>
   	<url-pattern>/user/*</url-pattern>
+  	<url-pattern>/booking/*</url-pattern>
   	<url-pattern>/manage-user/*</url-pattern>
   	<url-pattern>/recommend-room/*</url-pattern>
+  	<url-pattern>/manage-hotel/*</url-pattern>
+  	<url-pattern>/manage-room/*</url-pattern>
   </filter-mapping>
   
   <!-- Default Error Page -->

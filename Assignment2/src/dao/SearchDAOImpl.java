@@ -57,7 +57,7 @@ public class SearchDAOImpl implements SearchDAO {
 			searchResult.setHotelName(rs.getString(Columns.View.SearchView.HOTEL_NAME));
 			searchResult.setHotelAddress(rs.getString(Columns.View.SearchView.ADDRESS));
 			searchResult.setNoOfRooms(rs.getInt(Columns.View.SearchView.NO_OF_ROOMS));
-			searchResult.setHotelRating(rs.getInt(Columns.View.SearchView.RATING));
+			searchResult.setHotelRating(rs.getFloat(Columns.View.SearchView.RATING));
 			searchResult.setHotelDescription(rs.getString(Columns.View.SearchView.DESCRIPTION));
 			searchResult.setHotelDateJoined(rs.getTimestamp(Columns.View.SearchView.JOIN_DATE));
 			searchResult.setRoomId(rs.getInt(Columns.View.SearchView.ROOM_ID));

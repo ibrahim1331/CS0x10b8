@@ -93,7 +93,7 @@ public class BookingController extends HttpServlet {
 		}
 		BookingView bookingView = service.getBookingViewById(bookingId);
 		
-		if(bookingView.getCancelled()){
+		if(bookingView.getIsCancelled()){
 			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "The booking is cancelled.");
 			return;
 		}
@@ -144,7 +144,7 @@ public class BookingController extends HttpServlet {
 		}
 		BookingView bookingView = service.getBookingViewById(bookingId);
 		
-		if(bookingView.getCancelled()){
+		if(bookingView.getIsCancelled()){
 			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "The booking is cancelled.");
 			return;
 		}
@@ -271,7 +271,7 @@ public class BookingController extends HttpServlet {
 			booking.setPurpose(purpose);
 			booking.setRoomId(roomId);
 			booking.setNoOfPeople(noOfPeople);
-			booking.setCancelled(false);
+			booking.setIsCancelled(false);
 			int price = service.getSearch(roomId).getRoomPrice();
 			booking.setPrice(price);
 			tempBookings.add(booking);
@@ -391,7 +391,7 @@ public class BookingController extends HttpServlet {
 				booking.setPurpose(purpose);
 				booking.setRoomId(roomId);
 				booking.setNoOfPeople(noOfPeople);
-				booking.setCancelled(false);
+				booking.setIsCancelled(false);
 				User user = (User) req.getSession().getAttribute("loginUser");
 				if(user!=null){
 					booking.setCustomerId(user.getUserId());

@@ -3,8 +3,6 @@ package dao;
 import java.util.List;
 
 import model.Booking;
-import model.Hotel;
-import model.User;
 import sqlwhere.core.Where;
 
 public interface BookingDAO {

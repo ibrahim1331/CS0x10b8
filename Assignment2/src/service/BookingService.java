@@ -118,7 +118,7 @@ public class BookingService {
 	}
 	
 	public boolean cancelBooking(Booking booking){
-		booking.setCancelled(true);
+		booking.setIsCancelled(true);
 		if(bookingDAO.updateBooking(booking)){
 			return true;
 		}

@@ -6,61 +6,37 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Map.Entry;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import model.Hotel;
-import sqlwhere.core.Select;
 import sqlwhere.core.Where;
 import utils.Columns;
 import utils.DBHelper;
 
 public class HotelDAOImpl implements HotelDAO{
-	
-	@Override
-	public ArrayList<Hotel> getHotels(Where where){
-		ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-		
-		try{
-			Connection conn = DBHelper.getConnection();
-			Select select = new Select("*").from("hotel").where(where);
-			Logger.getLogger(this.getClass().getName()).log(Level.INFO, select.getStatement());
-			System.out.println(select.getIndexMap());
-			PreparedStatement pstmt = conn.prepareStatement(select.getStatement(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			for(Entry<Integer, Object> es: select.getIndexMap().entrySet()){
-				pstmt.setObject(es.getKey(), es.getValue());
-			}
-			ResultSet rs = pstmt.executeQuery();
-			
-			this.populateHotelArray(hotels, rs);
-			
-			DBHelper.close(conn);
-			DBHelper.close(pstmt);
-			DBHelper.close(rs);
-            
-		} catch (SQLException e) {
-			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
-		} catch (NamingException e) {
-			Logger.getLogger(HotelDAOImpl.class.getName()).log(Level.SEVERE, null, e);
-		}
-		
-		return hotels;
-	}
 
 	@Override
 	public ArrayList<Hotel> getAllHotels() {
 		ArrayList<Hotel> hotels = new ArrayList<Hotel>();
 		
 		try{
-			Connection con = DBHelper.getConnection();
+			Context initCtx = new InitialContext();
+            Context envCtx = (Context)initCtx.lookup("java:comp/env");
+            DataSource ds = (DataSource)envCtx.lookup("jdbc/hotelbooking");
+            Connection con = ds.getConnection();
 	        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = stmt.executeQuery("SELECT * FROM [hotel] ORDER BY [hotel_id] ASC");
             
             this.populateHotelArray(hotels, rs);
             
-            DBHelper.close(con);
+          	DBHelper.close(con);
             DBHelper.close(stmt);
             DBHelper.close(rs);
             
@@ -105,7 +81,7 @@ public class HotelDAOImpl implements HotelDAO{
 		
 		try{
 			Connection con = DBHelper.getConnection();
-	        PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [hotel] WHERE [name] like ?");
+	        PreparedStatement pstmt = con.prepareStatement("SELECT * FROM [hotel] WHERE [name] = ?");
             pstmt.setString(1, "%"+name+"%");
             
             // execute the SQL statement
@@ -113,7 +89,7 @@ public class HotelDAOImpl implements HotelDAO{
 
             hotel = this.populateHotel(rs);
             
-            DBHelper.close(con);
+           	DBHelper.close(con);
             DBHelper.close(pstmt);
             DBHelper.close(rs);
             
@@ -236,7 +212,7 @@ public class HotelDAOImpl implements HotelDAO{
 			hotel.setLocation(rs.getInt(Columns.Table.Hotel.LOCATION));
 			hotel.setName(rs.getString(Columns.Table.Hotel.NAME));
 			hotel.setNoOfRooms(rs.getInt(Columns.Table.Hotel.NO_OF_ROOMS));
-			hotel.setRating(rs.getInt(Columns.Table.Hotel.RATING));
+			hotel.setRating(rs.getFloat(Columns.Table.Hotel.RATING));
 			hotels.add(hotel);
 		}
 	}
@@ -253,10 +229,15 @@ public class HotelDAOImpl implements HotelDAO{
 			hotel.setLocation(rs.getInt(Columns.Table.Hotel.LOCATION));
 			hotel.setName(rs.getString(Columns.Table.Hotel.NAME));
 			hotel.setNoOfRooms(rs.getInt(Columns.Table.Hotel.NO_OF_ROOMS));
-			hotel.setRating(rs.getInt(Columns.Table.Hotel.RATING));
+			hotel.setRating(rs.getFloat(Columns.Table.Hotel.RATING));
 		}
 		
 		return hotel;
 	}
 
+	@Override
+	public List<Hotel> getHotels(Where where) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

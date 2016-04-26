@@ -85,20 +85,13 @@ public class BookingViewDAOImpl implements BookingViewDAO {
 			booking.setBookingId(rs.getInt(Columns.View.BookingView.BOOKING_ID));
 			booking.setBookingNumber(rs.getInt(Columns.View.BookingView.BOOKING_NUMBER));
 			booking.setCustomerId(rs.getInt(Columns.View.BookingView.CUSTOMER_ID));
-			if(rs.wasNull()){
-				booking.setCustomerId(null);
-			}
 			booking.setNoOfPeople(rs.getInt(Columns.View.BookingView.NO_OF_PEOPLE));
 			booking.setCheckInDate(rs.getTimestamp(Columns.View.BookingView.CHECK_IN_DATE));
 			booking.setCheckOutDate(rs.getTimestamp(Columns.View.BookingView.CHECK_OUT_DATE));
 			booking.setPurpose(rs.getString(Columns.View.BookingView.PURPOSE));
-			booking.setBookingPrice(rs.getInt(Columns.View.BookingView.BOOKING_PRICE));
 			booking.setBookingDate(rs.getTimestamp(Columns.View.BookingView.BOOKING_DATE));
 			booking.setPin(rs.getString(Columns.View.BookingView.PIN));
-			booking.setCancelled(rs.getBoolean(Columns.View.BookingView.IS_CANCELLED));
-			if(rs.wasNull()){
-				booking.setCancelled(null);
-			}
+			booking.setIsCancelled(rs.getBoolean(Columns.View.BookingView.IS_CANCELLED));
 			
 			booking.setHotelId(rs.getInt(Columns.View.BookingView.HOTEL_ID));
 			booking.setHotelName(rs.getString(Columns.View.BookingView.HOTEL_NAME));
@@ -116,14 +109,8 @@ public class BookingViewDAOImpl implements BookingViewDAO {
 			booking.setRoomPrice(rs.getInt(Columns.View.BookingView.ROOM_PRICE));
 			booking.setRoomCapacity(rs.getInt(Columns.View.BookingView.ROOM_CAPACITY));
 			booking.setRoomSize(rs.getInt(Columns.View.BookingView.ROOM_SIZE));
-			if(rs.wasNull()){
-				booking.setRoomSize(null);
-			}
 			booking.setRoomNo(rs.getString(Columns.View.BookingView.ROOM_NO));
 			booking.setDiscount(rs.getInt(Columns.View.BookingView.DISCOUNT));
-			if(rs.wasNull()){
-				booking.setBelongsTo(null);
-			}
 			booking.setRecommended(rs.getInt(Columns.View.BookingView.RECOMMENDED));
 			booking.setLocationId(rs.getInt(Columns.View.BookingView.LOCATION_ID));
 			booking.setLocationName(rs.getString(Columns.View.BookingView.LOCATION_NAME));
