@@ -28,7 +28,7 @@
 				<a href="${pageContext.request.contextPath}/recommend-room" class="item">Recommend Featured Hotels</a>
 			</c:if>
 			<c:if test="${sessionScope.loginUser.role == 'Manager'}">
-				<a href="#" class="item">Hotels</a>
+				<a href="${pageContext.request.contextPath}/manage-hotel" class="item">Hotels</a>
 			</c:if>
 			<c:if test="${sessionScope.loginUser.role == 'Chief_Manager'}">
 				<a href="${pageContext.request.contextPath}/manage-user" class="item">Hotel Managers</a>
