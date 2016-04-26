@@ -125,7 +125,7 @@ public class ManageHotelController extends HttpServlet {
 		int hotelId = Integer.parseInt((String) req.getParameter("hotel_id")); 
 		Hotel hotel = manageHotelServ.getHotel(hotelId);
 		req.setAttribute("locations", locationDAO.getAllLocations());
-		req.setAttribute("facilities", facilitiesDAO.getAllRoomFacilities());
+		req.setAttribute("facilities", facilitiesDAO.getAllHotelFacilities());
 		req.setAttribute("hotelFacilities", hotelFacilityDAO.getHotelFacilities(hotel));
 
 		if(req.getParameter("edit")==null){
