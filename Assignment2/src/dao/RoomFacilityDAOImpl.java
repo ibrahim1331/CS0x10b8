@@ -147,6 +147,7 @@ public class RoomFacilityDAOImpl implements RoomFacilityDAO{
                 }
                 
                 DBHelper.close(con);
+                DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
         	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

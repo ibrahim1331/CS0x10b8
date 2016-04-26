@@ -23,10 +23,6 @@ public class Hotel {
 	public String getName() {
 		return name;
 	}
-
-	public void setHotelId(int hotelId) {
-		this.hotelId = hotelId;
-	}
 	
 	public void setName(String name) {
 		this.name = name;

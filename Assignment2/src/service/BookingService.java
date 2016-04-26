@@ -95,8 +95,11 @@ public class BookingService {
 	}
 	
 	public String createBooking(Booking booking){
-		String pin = AppHelper.generatePin();
+		Room room = roomDAO.getRoomById(booking.getRoomId());
+		int price = booking.getCustomerId()==null?room.getPrice():room.getPrice()*room.getDiscount()/100;
+		booking.setPrice(price);
 		booking.setBookingNumber(this.getBookingNumber());
+		String pin = AppHelper.generatePin();
 		booking.setPin(pin);
 		if(this.validate(booking) && bookingDAO.createBooking(booking)){
 			return pin;

@@ -92,6 +92,10 @@ public class FacilityDAOImpl implements FacilityDAO{
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        facility = this.populateFacility(rs);
+	        
+	        DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
 		} catch (SQLException ex){
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (Exception ex){

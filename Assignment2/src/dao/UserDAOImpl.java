@@ -33,7 +33,9 @@ public class UserDAOImpl implements UserDAO {
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        this.populateUserArray(records, rs);
-	        
+	        DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
 		} catch (SQLException ex){
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (Exception ex){
@@ -193,6 +195,7 @@ public class UserDAOImpl implements UserDAO {
                 }
                 
                 DBHelper.close(con);
+                DBHelper.close(pstmt);
             }
         } catch (SQLException ex) {
         	Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);

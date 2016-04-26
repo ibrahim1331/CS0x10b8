@@ -113,10 +113,22 @@ public class HotelDAOImpl implements HotelDAO{
 				Connection con = DBHelper.getConnection();
             	PreparedStatement pstmt = con.prepareStatement("INSERT INTO [hotel] ([name], [location], [address], [no_of_rooms], [rating], [description], [join_date]) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 pstmt.setString(1, hotel.getName());
-                pstmt.setInt(2, hotel.getLocation());
+                if(hotel.getLocation()!=null){
+                	pstmt.setInt(2, hotel.getLocation());
+                } else {
+                	pstmt.setNull(2, java.sql.Types.INTEGER);
+                }
                 pstmt.setString(3, hotel.getAddress());
-                pstmt.setInt(4, hotel.getNoOfRooms());
-                pstmt.setFloat(5, hotel.getRating());
+                if(hotel.getNoOfRooms()!=null){
+                	pstmt.setInt(4, hotel.getNoOfRooms());
+                } else {
+                	pstmt.setNull(4, java.sql.Types.INTEGER);
+                }
+                if(hotel.getRating()!=null){
+                	pstmt.setFloat(5, hotel.getRating());
+                } else {
+                	pstmt.setNull(5, java.sql.Types.FLOAT);
+                }
                 pstmt.setString(6, hotel.getDescription());
                 pstmt.setTimestamp(7, hotel.getDateJoined());
                 
@@ -147,11 +159,23 @@ public class HotelDAOImpl implements HotelDAO{
 			if(hotel != null){
 				Connection con = DBHelper.getConnection();
             	PreparedStatement pstmt = con.prepareStatement("UPDATE [hotel] SET [name]= ?, [location]= ?, [address]= ?, [no_of_rooms]= ?, [rating]= ?, [description]= ?, [join_date]= ? WHERE [hotel_id] = ?");
-                pstmt.setString(1, hotel.getName());
-                pstmt.setInt(2, hotel.getLocation());
+            	pstmt.setString(1, hotel.getName());
+                if(hotel.getLocation()!=null){
+                	pstmt.setInt(2, hotel.getLocation());
+                } else {
+                	pstmt.setNull(2, java.sql.Types.INTEGER);
+                }
                 pstmt.setString(3, hotel.getAddress());
-                pstmt.setInt(4, hotel.getNoOfRooms());
-                pstmt.setFloat(5, hotel.getRating());
+                if(hotel.getNoOfRooms()!=null){
+                	pstmt.setInt(4, hotel.getNoOfRooms());
+                } else {
+                	pstmt.setNull(4, java.sql.Types.INTEGER);
+                }
+                if(hotel.getRating()!=null){
+                	pstmt.setFloat(5, hotel.getRating());
+                } else {
+                	pstmt.setNull(5, java.sql.Types.FLOAT);
+                }
                 pstmt.setString(6, hotel.getDescription());
                 pstmt.setTimestamp(7, hotel.getDateJoined());
                 pstmt.setInt(8, hotel.getHotelId());
@@ -211,10 +235,22 @@ public class HotelDAOImpl implements HotelDAO{
 			hotel.setDateJoined(rs.getTimestamp(Columns.Table.Hotel.JOIN_DATE));
 			hotel.setDescription(rs.getString(Columns.Table.Hotel.DESCRIPTION));
 			hotel.setHotelId(rs.getInt(Columns.Table.Hotel.HOTEL_ID));
+			if(rs.wasNull()){
+				hotel.setHotelId(null);
+			}
 			hotel.setLocation(rs.getInt(Columns.Table.Hotel.LOCATION));
+			if(rs.wasNull()){
+				hotel.setLocation(null);
+			}
 			hotel.setName(rs.getString(Columns.Table.Hotel.NAME));
 			hotel.setNoOfRooms(rs.getInt(Columns.Table.Hotel.NO_OF_ROOMS));
+			if(rs.wasNull()){
+				hotel.setNoOfRooms(null);
+			}
 			hotel.setRating(rs.getFloat(Columns.Table.Hotel.RATING));
+			if(rs.wasNull()){
+				hotel.setRating(null);
+			}
 			hotels.add(hotel);
 		}
 	}
@@ -228,10 +264,22 @@ public class HotelDAOImpl implements HotelDAO{
 			hotel.setDateJoined(rs.getTimestamp(Columns.Table.Hotel.JOIN_DATE));
 			hotel.setDescription(rs.getString(Columns.Table.Hotel.DESCRIPTION));
 			hotel.setHotelId(rs.getInt(Columns.Table.Hotel.HOTEL_ID));
+			if(rs.wasNull()){
+				hotel.setHotelId(null);
+			}
 			hotel.setLocation(rs.getInt(Columns.Table.Hotel.LOCATION));
+			if(rs.wasNull()){
+				hotel.setLocation(null);
+			}
 			hotel.setName(rs.getString(Columns.Table.Hotel.NAME));
 			hotel.setNoOfRooms(rs.getInt(Columns.Table.Hotel.NO_OF_ROOMS));
+			if(rs.wasNull()){
+				hotel.setNoOfRooms(null);
+			}
 			hotel.setRating(rs.getFloat(Columns.Table.Hotel.RATING));
+			if(rs.wasNull()){
+				hotel.setRating(null);
+			}
 		}
 		
 		return hotel;

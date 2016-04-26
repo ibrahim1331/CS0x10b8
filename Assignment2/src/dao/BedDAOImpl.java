@@ -89,6 +89,10 @@ public class BedDAOImpl implements BedDAO{
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        bed = this.populateBed(rs);
+	        
+	        DBHelper.close(con);
+            DBHelper.close(pstmt);
+            DBHelper.close(rs);
 		} catch (SQLException ex){
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (Exception ex){
