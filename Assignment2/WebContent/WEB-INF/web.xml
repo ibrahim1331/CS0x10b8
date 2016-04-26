@@ -110,7 +110,6 @@
   <filter-mapping>
   	<filter-name>LoginFilter</filter-name>
   	<url-pattern>/user/*</url-pattern>
-  	<url-pattern>/booking/*</url-pattern>
   	<url-pattern>/manage-user/*</url-pattern>
   	<url-pattern>/recommend-room/*</url-pattern>
   	<url-pattern>/manage-hotel/*</url-pattern>
