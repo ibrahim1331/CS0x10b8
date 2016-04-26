@@ -51,17 +51,54 @@ $(".ui.dropdown").dropdown();
 	
 	$("form[name='booking']")
 	.form({
-		fields:{
-			roomId: 'empty',
-			noOfPeople: ['empty','integer[1..${requestScope.roomView.roomCapacity}]'],
-			fromDate: 'empty',
-			toDate: 'empty',
-			purpose: 'empty'
-		},
+		fields: getValidationObject(${requestScope.roomView.roomCapacity}),
 		inline: true
-	})
+	});
 	
 	$("#checkRoom").on("click",checkRoom)
+	
+	function getValidationObject(i){
+		return {
+			roomId: {
+				identifier: 'roomId',
+				rules: [{
+					type: 'empty',
+					prompt: 'Please provide the room you wish to book!'
+				}]
+			},
+			noOfPeople: {
+				identifier: 'noOfPeople',
+				rules: [{
+					type:'empty',
+					prompt: 'Please provide number of people.'
+				},{
+					type: 'integer[1..'+i+']',
+					prompt: 'Please input a number within range {ruleValue}'
+				}]
+			},
+			fromDate: {
+				identifier: 'fromDate',
+				rules: [{
+					type: 'empty',
+					prompt: 'Please fill in your check-in date!'
+				}]
+			},
+			toDate: {
+				identifier: 'toDate',
+				rules: [{
+					type: 'empty',
+					prompt: 'Please fill in your check-out date!'
+				}]
+			},
+			purpose: {
+				identifer: 'purpose',
+				rules: [{
+					type: 'empty',
+					prompt: 'Please fill in your purpose of booking this room!'
+				}]
+			}
+		}
+	}
 	
 	function changeRoom(roomId){
 		var data = {roomId: roomId};
@@ -73,7 +110,13 @@ $(".ui.dropdown").dropdown();
 		}).then(function(data){
 			$("#maxNoOfPeople").text(data.roomCapacity);
 			$("input[name='noOfPeople']").attr("max",data.roomCapacity);
-			$("#price").text(data.roomPrice)
+			$("#price").text(data.roomPrice);
+			$("form[name='booking']")
+			.form('destroy')
+			.form({
+				fields: getValidationObject(data.roomCapacity),
+				inline: true
+			});
 		})
 	}
 	

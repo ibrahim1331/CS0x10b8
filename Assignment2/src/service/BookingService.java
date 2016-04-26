@@ -111,9 +111,6 @@ public class BookingService {
 		Room room = roomDAO.getRoomById(booking.getRoomId());
 		int price = booking.getCustomerId()==null?room.getPrice():room.getPrice()*room.getDiscount()/100;
 		booking.setPrice(price);
-		if(booking.getCustomerId()!=null){
-			
-		}
 		if(this.validate(booking) && bookingDAO.updateBooking(booking)){
 			return true;
 		}
@@ -153,6 +150,10 @@ public class BookingService {
 				.and(new Equal(Columns.Table.Booking.IS_CANCELLED, false))
 				.and(new LessThan(Columns.Table.Booking.CHECK_IN_DATE, booking.getCheckOutDate()))
 				.and(new GreaterThan(Columns.Table.Booking.CHECK_OUT_DATE, booking.getCheckInDate()));
+		
+		if(booking.getBookingId()!=null){
+			where.and(new NotEqual(Columns.Table.Booking.BOOKING_ID, booking.getBookingId()));
+		}
 		
 		return bookingDAO.getBookings(where).isEmpty();
 	}
