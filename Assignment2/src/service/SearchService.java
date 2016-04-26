@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import dao.BookingDAO;
 import dao.BookingDAOImpl;
@@ -69,7 +68,18 @@ public class SearchService {
 			
 			List<BookingView> bookingViews = bookingViewDAO.getBookings(whereBooking);
 			
-			List<Integer> hotelIds = bookingViews.stream().map(bv->bv.getHotelId()).distinct().collect(Collectors.toList());
+			List<Integer> hotelIds = new ArrayList<>();
+			for(BookingView bv: bookingViews){
+				if(!hotelIds.contains(bv.getHotelId())){
+					hotelIds.add(bv.getHotelId());
+				}
+			}
+//			List<Object> hotelIds = bookingViews.stream().map(new Function<BookingView, Object>() {
+//				@Override
+//				public Object apply(BookingView bv) {
+//					return bv.getHotelId();
+//				}
+//			}).distinct().collect(Collectors.toList());
 			
 			Where whereHotel = new Where(new Like(Columns.Table.Hotel.NAME, "%"+name+"%"));
 			
@@ -94,7 +104,18 @@ public class SearchService {
 		
 		List<BookingView> bookingView = bookingViewDAO.getBookings(where);
 		
-		List<Integer> roomIds = bookingView.stream().map(bv->bv.getRoomId()).distinct().collect(Collectors.toList());
+		List<Integer> roomIds = new ArrayList<>();
+		for(BookingView bv: bookingView){
+			if(!roomIds.contains(bv.getRoomId())){
+				roomIds.add(bv.getRoomId());
+			}
+		}
+//		List<Object> roomIds = bookingView.stream().map(new Function<BookingView, Object>() {
+//			@Override
+//			public Integer apply(BookingView bv) {
+//				return bv.getRoomId();
+//			}
+//		}).distinct().collect(Collectors.toList());
 		
 		Where whereRoom = new Where(new Equal(Columns.Table.Room.HOTEL_ID, hotelId))
 				.and(new GreaterThan(Columns.Table.Room.RECOMMENDED, 0));
@@ -124,7 +145,18 @@ public class SearchService {
 		
 		List<BookingView> bookingView = bookingViewDAO.getBookings(where);
 		
-		List<Integer> roomIds = bookingView.stream().map(bv->bv.getRoomId()).distinct().collect(Collectors.toList());
+		List<Integer> roomIds = new ArrayList<>();
+		for(BookingView bv: bookingView){
+			if(!roomIds.contains(bv.getRoomId())){
+				roomIds.add(bv.getRoomId());
+			}
+		}
+//		List<Object> roomIds = bookingView.stream().map(new Function<BookingView, Object>() {
+//			@Override
+//			public Object apply(BookingView bv) {
+//				return bv.getRoomId();
+//			}
+//		}).distinct().collect(Collectors.toList());
 		
 		Where whereRoom = new Where(new Null(Columns.Table.Room.RECOMMENDED))
 				.or(new Equal(Columns.Table.Room.RECOMMENDED, 0))

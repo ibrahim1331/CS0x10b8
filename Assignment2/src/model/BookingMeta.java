@@ -4,7 +4,7 @@ import java.util.List;
 
 public class BookingMeta {
 	private String pin;
-	private List<Booking> failed;
+	private List<TempBooking> failed;
 	private boolean allFailed;
 	public String getPin() {
 		return pin;
@@ -12,10 +12,10 @@ public class BookingMeta {
 	public void setPin(String pin) {
 		this.pin = pin;
 	}
-	public List<Booking> getFailed() {
+	public List<TempBooking> getFailed() {
 		return failed;
 	}
-	public void setFailed(List<Booking> failed) {
+	public void setFailed(List<TempBooking> failed) {
 		this.failed = failed;
 	}
 	public boolean isAllFailed() {

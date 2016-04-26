@@ -87,13 +87,13 @@ $(document).ready(function(){
 					<button class="ui button">Search</button>
 			</div>
 		</form>
-		<c:if test="${requestScope.recommendingRooms.size() eq 0 && requestScope.nonRecommendingRooms.size() eq 0}">
+		<c:if test="${empty requestScope.recommendingRooms && empty requestScope.nonRecommendingRooms}">
 			<h3 class="ui header">No rooms</h3>
 		</c:if>
-		<c:if test="${requestScope.recommendingRooms.size() > 0 || requestScope.nonRecommendingRooms.size() > 0}">
+		<c:if test="${not empty requestScope.recommendingRooms || not empty requestScope.nonRecommendingRooms}">
 			<h3 class="ui header">Available rooms</h3>
 			<div class="ui vertical fluid menu">
-				<c:if test="${requestScope.recommendingRooms.size() > 0}">
+				<c:if test="${not empty requestScope.recommendingRooms}">
 					<c:forEach var="room" items="${requestScope.recommendingRooms }">
 					<a class="item" href="${pageContext.request.contextPath }/booking/create?id=${room.roomId}&fromDate=${requestScope.fromDate}&toDate=${requestScope.toDate}">
 						<div class="ui green label">${room.capacity} person(s)</div>
@@ -107,7 +107,7 @@ $(document).ready(function(){
 					</a>
 					</c:forEach>
 				</c:if>	
-				<c:if test="${requestScope.nonRecommendingRooms.size() != 0}">
+				<c:if test="${not empty requestScope.nonRecommendingRooms}">
 					<c:forEach var="room" items="${requestScope.nonRecommendingRooms }">
 					<a class="item" href="${pageContext.request.contextPath }/booking/create?id=${room.roomId}&fromDate=${requestScope.fromDate}&toDate=${requestScope.toDate}">
 						<div class="ui green label">${room.capacity} person(s)</div>

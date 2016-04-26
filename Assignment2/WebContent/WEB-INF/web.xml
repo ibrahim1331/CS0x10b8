@@ -43,6 +43,11 @@
   	<servlet-class>controller.BookingController</servlet-class>
   </servlet>
   
+  <servlet>
+  	<servlet-name>RestBookingController</servlet-name>
+  	<servlet-class>controller.RestBookingController</servlet-class>
+  </servlet>
+  
   <!-- Servlet Mapping -->
   
   <servlet-mapping>
@@ -88,6 +93,11 @@
   <servlet-mapping>
   	<servlet-name>BookingController</servlet-name>
   	<url-pattern>/booking/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>RestBookingController</servlet-name>
+  	<url-pattern>/rest/booking/*</url-pattern>
   </servlet-mapping>
     
   <!-- Filter -->

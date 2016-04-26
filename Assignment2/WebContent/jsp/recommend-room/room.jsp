@@ -17,7 +17,7 @@ $(document).ready(function(){
 	
 	$("form").form({
 		fields:{
-			recommend: 'empty'
+			recommend: ['empty','integer[0...]']
 		},
 		inline: true
 	})
@@ -64,10 +64,10 @@ $(document).ready(function(){
 			Hotel list
 		</a>
 		<h3>Recommending Rooms</h3>
-		<c:if test="${requestScope.recommendingRooms.size() eq 0 }">
+		<c:if test="${empty requestScope.recommendingRooms }">
 			<div>No entries</div>
 		</c:if>
-		<c:if test="${requestScope.recommendingRooms.size() > 0 }">
+		<c:if test="${not empty requestScope.recommendingRooms}">
 		<div class="ui vertical fluid menu">
 			<c:forEach var="room" items="${requestScope.recommendingRooms}">
 				<div class="item">
@@ -90,10 +90,10 @@ $(document).ready(function(){
 		</c:if>
 		
 		<h3>Non-recommending Rooms</h3>
-		<c:if test="${requestScope.nonRecommendingRooms.size() eq 0 }">
+		<c:if test="${empty requestScope.nonRecommendingRooms}">
 			<div>No entries</div>
 		</c:if>
-		<c:if test="${requestScope.nonRecommendingRooms.size() > 0 }">
+		<c:if test="${not empty requestScope.nonRecommendingRooms}">
 		<div class="ui vertical fluid menu">
 			<c:forEach var="room" items="${requestScope.nonRecommendingRooms}">
 				<div class="item">
